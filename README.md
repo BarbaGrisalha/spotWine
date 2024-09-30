@@ -1,4 +1,4 @@
-# Projeto NomeDoSeuProjeto
+# Projeto SpotWine
 
 ## 1. Contexto de Aplicação do Projeto
 O projeto foi desenvolvido para aplicação no **Centro de Inovação do Curso de Engenharia de Software da Universidade de Brasília**. O foco principal é proporcionar aos alunos um ambiente para desenvolverem habilidades práticas e colaborarem em projetos reais, alinhados aos requisitos do mercado de trabalho.
