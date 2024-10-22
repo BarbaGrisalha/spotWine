@@ -34,4 +34,5 @@ O projeto foi desenvolvido para aplicação na **ESTG - IPLeiria**. O foco princ
     O objetivo desta iniciativa é aproveitar essa demanda de consumo aliada ao excesso das caves/produtores de vinho.
     O que se espera é conectar os produtores aos consumidores oferecendo preço competitivo, garantia de qualidade, logística de entrega. 
     2. Objetivo
-    O projeto tem por objetivo principal o escoamento da produção de vinhos dos produtos diretamente aos consumidores e para tal utilizar plataformas de pagamento e plataformas logísticas para entrega com acompanhamento/rastreamento garantindo o seguro sobre o valor pago. Para tal existe uma comissão que pode variar conforme a quantidade de produto adquirido. As invoices/faturas serão enviadas por email
+    O projeto tem por objetivo principal o escoamento da produção de vinhos dos produtos diretamente aos consumidores e 
+    para tal utilizar plataformas de pagamento e plataformas logísticas para entrega com acompanhamento/rastreamento garantindo o seguro sobre o valor pago. Para tal existe uma comissão que pode variar conforme a quantidade de produto adquirido. As invoices/faturas serão enviadas por email
