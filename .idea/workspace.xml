@@ -448,7 +448,6 @@
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/layout/activity_main.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../basic/var/www/index.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -591,7 +590,7 @@
       <option name="presentableId" value="Default" />
       <updated>1729631489132</updated>
       <workItem from="1729631490314" duration="783000" />
-      <workItem from="1729634008979" duration="670000" />
+      <workItem from="1729634008979" duration="1042000" />
     </task>
     <servers />
   </component>
