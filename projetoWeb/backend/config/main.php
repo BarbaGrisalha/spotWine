@@ -37,14 +37,18 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+        //Configuração do authManager para poder gerir as Roles(Consumidor, Produtor e Administrador)
+        'authManager' =>[
+            'class'=>'yii\rbac\DbManager',
+        ],
+
     ],
     'params' => $params,
 ];

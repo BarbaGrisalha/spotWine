@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56d1a053-790b-4a82-9eb0-bb772e790692" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/.idea/Linguagem PHP.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/cyberspace/backend/assets/AdminLTE-2.4.18/.npmignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/cyberspace/backend/assets/AdminLTE-2.4.18/.travis.yml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/cyberspace/backend/assets/AdminLTE-2.4.18/Gruntfile.js" afterDir="false" />
@@ -431,8 +432,47 @@
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/cyberspace/frontend/views/layouts/main_old.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha03SIS/frontend/web/.htaccess" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha04/views/post/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha04sis/backend/modules/api/ModuleAPI.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha04sis/backend/modules/api/controllers/DefaultController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha04sis/backend/modules/api/views/default/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha04sis/backend/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha04sis/ficha04sis" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha04sis/frontend/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha05advanced/backend/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha05advanced/console/controllers/RbacController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/ficha05advanced/frontend/web/.htaccess" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/views/movimento/calculator.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/views/movimento/create.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/restaurante/restaurante/backend/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../LinguagemPHP/restaurante/restaurante/frontend/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/booksProject/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/migrations.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/app/src/main/java/pt/ipleiria/estg/dei/books/ListaLivrosFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/app/src/main/java/pt/ipleiria/estg/dei/books/adaptadores/ListaLivrosAdaptador.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../projectAndroid/ficha_05_List_Views_booksProject/app/src/main/res/layout/fragment_lista_livros.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/content.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/header.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/left.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/main-login.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/main_original.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/backend/views/site/developing.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/backend/web/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/console/migrations/m241029_231118_reset_and_insert_admin_user.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/console/migrations/m241029_233633_add_rbac_add_adm_permissions.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/content.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/header.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/left.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main-login.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main_original.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/web/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Linguagem PHP/.idea/Linguagem PHP.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Linguagem PHP/HomeBudget/budgetV01/controllers/LancamentoController.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Linguagem PHP/teste-template/models/EntryForm.php" beforeDir="false" />
@@ -441,13 +481,34 @@
       <change beforePath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/controllers/MovimentoController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/controllers/MovimentoController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/models/MovimentoSearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/models/MovimentoSearch.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/views/movimento/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/views/movimento/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/views/movimento/view.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../LinguagemPHP/homebudget/views/movimento/view.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/java/pt/ipleiria/estg/dei/amsi/books/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/java/pt/ipleiria/estg/dei/amsi/books/LoginActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/java/pt/ipleiria/estg/dei/amsi/books/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/java/pt/ipleiria/estg/dei/amsi/books/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/layout/activity_detalhes_estatico.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/layout/activity_detalhes_estatico.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/values-night/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/values-night/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectAndroid/Books/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Books/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../projectAndroid/Guess_Number/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/config/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/console/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/console/config/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/config/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/site/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/site/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/site/signup.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/site/signup.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../basic/var/www/index.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -455,9 +516,23 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ComposerConfigs">
+    <option name="configs">
+      <option value="$PROJECT_DIR$/projetoWeb/frontend/web/assets/500bc274/composer.json" />
+      <option value="$PROJECT_DIR$/projetoWeb/frontend/web/assets/ba057ccf/composer.json" />
+      <option value="$PROJECT_DIR$/projetoWeb/backend/web/assets/ba057ccf/composer.json" />
+      <option value="$PROJECT_DIR$/projetoWeb/backend/web/assets/500bc274/composer.json" />
+      <option value="$PROJECT_DIR$/projetoWeb/frontend/web/assets/866664b7/composer.json" />
+      <option value="$PROJECT_DIR$/projetoWeb/frontend/web/assets/dfd9b6e9/composer.json" />
+      <option value="$PROJECT_DIR$/projetoWeb/backend/web/assets/866664b7/composer.json" />
+      <option value="$PROJECT_DIR$/projetoWeb/backend/web/assets/dfd9b6e9/composer.json" />
+    </option>
+  </component>
   <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
-    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
-    <execution />
+    <pharConfigPath>$PROJECT_DIR$/projetoWeb/composer.json</pharConfigPath>
+    <execution>
+      <executable path="composer" />
+    </execution>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -553,9 +628,102 @@
       <path value="$PROJECT_DIR$/vendor/phpunit/php-file-iterator" />
       <path value="$PROJECT_DIR$/vendor/phpunit/phpunit" />
       <path value="$PROJECT_DIR$/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/cebe/markdown" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/type" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2-gii" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2-debug" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/lines-of-code" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2-symfonymailer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2-bootstrap5" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/code-unit" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/psy/psysh" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2-faker" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/cli-parser" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2-composer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/complexity" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/fakerphp/faker" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/lib-asserts" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/codeception" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/module-filesystem" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/lib-web" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/stub" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/lib-innerbrowser" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/verify" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/module-asserts" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/composer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/codeception/module-yii2" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/behat/gherkin" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/browser-kit" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/dom-crawler" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/mime" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/mailer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/bower-asset/bootstrap" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/bower-asset/inputmask" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/bower-asset/jquery" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phpunit/php-invoker" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/bower-asset/punycode" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/bower-asset/yii2-pjax" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/phpspec/php-diff" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/yiisoft/yii2-bootstrap4" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/dmstr/yii2-adminlte-asset" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/npm-asset/bootstrap" />
+      <path value="$PROJECT_DIR$/projetoWeb/vendor/almasaeed2010/adminlte" />
     </include_path>
   </component>
   <component name="ProjectId" id="2noFOJYWVrEru42oe3zMRclonCN" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -563,9 +731,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/altamir/Documents/Linguagens/Projetos/spotWine&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/altamir/Documents/Linguagens/Projetos/spotWine/projetoWeb/backend/views/layouts&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -575,6 +744,19 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/projetoWeb/backend/views/layouts" />
+      <recent name="$PROJECT_DIR$/projetoWeb/frontend/views/layouts" />
+      <recent name="$PROJECT_DIR$/projetoWeb" />
+      <recent name="$PROJECT_DIR$/projetoWeb/backend/web" />
+      <recent name="$PROJECT_DIR$/projetoWeb/frontend/web" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/projetoWeb/backend/views/site" />
+      <recent name="$PROJECT_DIR$/projetoWeb/frontend/web" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="codeception.yml" type="CodeceptionConfigurationType" factoryName="Codeception">
       <PhpTestRunnerSettings scope="ConfigurationFile" />
@@ -590,11 +772,20 @@
       <option name="presentableId" value="Default" />
       <updated>1729631489132</updated>
       <workItem from="1729631490314" duration="783000" />
-      <workItem from="1729634008979" duration="1042000" />
+      <workItem from="1729634008979" duration="5443000" />
+      <workItem from="1730152461768" duration="18418000" />
+      <workItem from="1730217898354" duration="373000" />
+      <workItem from="1730218276487" duration="166000" />
+      <workItem from="1730218578077" duration="17579000" />
+      <workItem from="1730318604601" duration="680000" />
+      <workItem from="1730375719377" duration="63000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

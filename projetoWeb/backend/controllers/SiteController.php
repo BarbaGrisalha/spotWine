@@ -17,20 +17,25 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors()//Aqui defininos as regras e o RBAC
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
                 'rules' => [
+                    //Acesso para login e erro
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error','register'],
                         'allow' => true,
                     ],
+                    //Acesso completo para Altamir, João e Lucas
                     [
-                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' =>function($rule, $action){
+                            return in_array(Yii::$app->user->identity->username,['Altamir','João','Lucas']);  //TODO Retirar após a migração
+                        },
+                    //Nenhum acesso para visitantes não autenticados
                     ],
                 ],
             ],
@@ -101,4 +106,14 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+    /**
+     * Developing action.
+     *
+     * @return Response
+     */
+    public function actionDeveloping()
+    {
+        return $this->render('developing');
+    }
+
 }
