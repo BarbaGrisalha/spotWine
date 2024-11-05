@@ -13,13 +13,11 @@
                 [
                     'options' => ['class' => 'nav nav-pills nav-sidebar flex-column', 'data-widget' => 'treeview'],
                     'items' => [
-                        ['label' => 'Menu Yii2', 'header' => true],
+                        ['label' => 'Menu BackOffice', 'header' => true],//ok. Alterado
                         ['label' => 'Dashboard', 'iconType' => 'fa', 'icon' => 'home', 'url' => ['/site/index']],
-                        ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
-                        [
-                            'label' => 'Administration Tools',
-                            'icon' => 'share',
-                            'url' => '#',
+                      /*  ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],*/
+                      /*  [
+                            'label' => 'Administration Tools','icon' => 'share','url' => '#',
                             'items' => [
                                 ['label' => 'Gii', 'iconType' => 'far', 'icon' => 'file-code', 'url' => ['/gii'],],
                                 ['label' => 'Debug', 'icon' => 'tachometer-alt', 'url' => ['/debug'],],
@@ -45,7 +43,7 @@
                                     ],
                                 ],
                             ],
-                        ],
+                        ],*/
                     ],
                 ]
             ) ?>
