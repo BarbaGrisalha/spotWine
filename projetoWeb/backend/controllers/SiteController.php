@@ -23,19 +23,24 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::class,
                 'rules' => [
-                    //Acesso para login e erro
+                    // Acesso permitido para login e erro
                     [
-                        'actions' => ['login', 'error','register'],
+                        'actions' => ['login', 'error', 'register'],
                         'allow' => true,
                     ],
-                    //Acesso completo para Altamir, João e Lucas
+                    // Acesso completo para Altamir, João, Lucas e admin
                     [
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' =>function($rule, $action){
-                            return in_array(Yii::$app->user->identity->username,['Altamir','João','Lucas']);  //TODO Retirar após a migração
-                        },
-                    //Nenhum acesso para visitantes não autenticados
+                        'matchCallback' => function($rule, $action) {
+                            return in_array(Yii::$app->user->identity->username, ['Altamir', 'João', 'Lucas', 'admin']); // Inclui admin temporariamente
+                        }
+                    ],
+                    // Permitir acesso a 'index', 'developing' e 'logout' para qualquer usuário autenticado
+                    [
+                        'actions' => ['index', 'developing', 'logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
                 ],
             ],
