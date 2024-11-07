@@ -88,3 +88,17 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.report-container {
+    border: 2px solid #1a1a1a; /* cor da borda */
+    border-radius: 15px; /* bordas arredondadas */
+    padding: 20px; /* espaçamento interno */
+    margin-top: 20px; /* margem superior */
+    background-color: #e59f53; /* fundo claro */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* sombra para dar destaque */
+}
+
+#fecharRelatorio {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

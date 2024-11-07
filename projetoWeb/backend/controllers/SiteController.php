@@ -2,8 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\models\Producers;
 use common\models\LoginForm;
 use http\Client;
+use Psy\Util\Json;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -75,7 +77,13 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $clientes = Users::find()->all();
-        return $this->render('index',['clientes'=>$clientes]);
+
+        $produtores = Producers::find()->all();
+
+        return $this->render('index',[
+            'clientes'=>$clientes,
+            'produtores'=>$produtores,
+        ]);
     }
 
     /**
@@ -90,8 +98,8 @@ class SiteController extends Controller
         }
 
         $this->layout = 'blank';
-
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
@@ -122,6 +130,29 @@ class SiteController extends Controller
     public function actionDeveloping()
     {
         return $this->render('developing');
+    }
+
+    /**
+     * Relatório de Clientes action.
+     *
+     * @return Response
+     */
+
+    public function actionRelatorioCliente()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $clientes = Users::find()->asArray()->all();
+        return  $clientes;// Retorna a lista de clientes em JSON
+    }
+    public function actionRelatorioProdutores()
+    {
+        // Recupera todos os produtores do banco de dados
+        $produtores = Producer::find()->asArray()->all(); // Ou ajuste conforme necessário
+        // Passa os dados para a view
+        /*return $this->render('relatorio_produtores', [
+            'produtores' => $produtores,
+        ]);*/
+        return$produtores;
     }
 
 }

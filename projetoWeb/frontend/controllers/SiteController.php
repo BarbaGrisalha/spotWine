@@ -256,4 +256,10 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+    /**
+     * Relatorio Produtos
+     *
+     * @return mixed
+     */
+
 }
