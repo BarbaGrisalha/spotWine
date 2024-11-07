@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use common\models\LoginForm;
+use http\Client;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
+use backend\models\Users;
 
 /**
  * Site controller
@@ -72,7 +74,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $clientes = Users::find()->all();
+        return $this->render('index',['clientes'=>$clientes]);
     }
 
     /**
