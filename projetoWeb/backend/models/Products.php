@@ -103,6 +103,7 @@ class Products extends \yii\db\ActiveRecord
      */
     public function getProducer()
     {
+        //return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
         return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
     }
 

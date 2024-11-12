@@ -15,8 +15,8 @@
                     'items' => [
                         ['label' => 'Menu BackOffice', 'header' => true],//ok. Alterado
                         ['label' => 'Dashboard', 'iconType' => 'fa', 'icon' => 'home', 'url' => ['/site/index']],
-                      /*  ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],*/
-                      /*  [
+                             ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+                              [
                             'label' => 'Administration Tools','icon' => 'share','url' => '#',
                             'items' => [
                                 ['label' => 'Gii', 'iconType' => 'far', 'icon' => 'file-code', 'url' => ['/gii'],],
@@ -41,11 +41,19 @@
                                             ],
                                         ],
                                     ],
-                                ],
+                                    'label' => 'Database Relatorio',
+                                    'iconType' => 'far',
+                                    'icon' => 'circle',
+                                    'url' => '#',
+                                    'items' => [
+                                        ['label' => 'Relatório de Produtos', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-produtos'],],
+                                        ['label' => 'Relatório de Clienes', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-clientes'],],
+                                        ],
                             ],
-                        ],*/
+                        ],
                     ],
-                ]
+                ],
+               ]
             ) ?>
         </nav>
 

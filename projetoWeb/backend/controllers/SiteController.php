@@ -76,8 +76,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $clientes = Users::find()->all();
 
+        $clientes = Users::find()->all();
+       // dd('fsfdfdsfsdfdsfdsf');
         $produtores = Producers::find()->all();
 
         return $this->render('index',[
@@ -153,6 +154,16 @@ class SiteController extends Controller
             'produtores' => $produtores,
         ]);*/
         return$produtores;
+    }
+    public function actionCheckDbConnection(){
+        try{
+            Yii::$app->db->open();
+            $message = "Conexão com a base de dados executada!";
+            $status = "success";
+        }catch(\Exception $e){
+            $message = "Erro ao conectar a base de dados : " .$e->getMessage();
+            $status = "error";
+        }
     }
 
 }

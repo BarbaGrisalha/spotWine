@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\Users;
 use app\models\UserSearch;
+use http\Client;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -149,6 +150,12 @@ class UsersController extends Controller
         return $this->render('index',[
             'clientes'=>$clientes,
             'paginacao'=>$paginacao,
+        ]);
+    }
+    public function actionRelatorioClientes(){
+        $clientes = Client::find()->all();//o nome do model pode ser ajustado
+        return $this->render('relatorio-clientes',[
+            'clientes'=> $clientes,
         ]);
     }
 }
