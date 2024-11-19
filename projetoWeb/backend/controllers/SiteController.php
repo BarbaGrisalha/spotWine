@@ -31,20 +31,21 @@ class SiteController extends Controller
                     [
                         'actions' => ['login', 'error', 'register'],
                         'allow' => true,
+                        'roles' => ['?']
                     ],
                     // Acesso completo para Altamir, João, Lucas e admin
                     [
                         'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function($rule, $action) {
+                        'roles' => ['admin','produtor'],
+                        /*'matchCallback' => function($rule, $action) {
                             return in_array(Yii::$app->user->identity->username, ['Altamir', 'João', 'Lucas', 'admin']); // Inclui admin temporariamente
-                        }
+                        }*/
                     ],
                     // Permitir acesso a 'index', 'developing' e 'logout' para qualquer usuário autenticado
                     [
                         'actions' => ['index', 'developing', 'logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admim','produtor'],//se tiver @ é para todos os logados.
                     ],
                 ],
             ],
@@ -145,6 +146,12 @@ class SiteController extends Controller
         $clientes = Users::find()->asArray()->all();
         return  $clientes;// Retorna a lista de clientes em JSON
     }
+
+    /**
+     * Relatório de Produtores action.
+     *
+     * @return Response
+     */
     public function actionRelatorioProdutores()
     {
         // Recupera todos os produtores do banco de dados
@@ -155,6 +162,11 @@ class SiteController extends Controller
         ]);*/
         return$produtores;
     }
+    /**
+     * Check DB Connection action.
+     *
+     * @return Response
+     */
     public function actionCheckDbConnection(){
         try{
             Yii::$app->db->open();
@@ -165,5 +177,7 @@ class SiteController extends Controller
             $status = "error";
         }
     }
+
+    
 
 }

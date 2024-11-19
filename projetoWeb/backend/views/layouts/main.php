@@ -28,6 +28,7 @@ if (Yii::$app->controller->action->id === 'login') {
 
     $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 ?>
+    <script src="https://cdn.jsdelivr.net/npm/cart.js"></script> <!-- Aqui incluir o Chart.js via cdn para poder gerar os relatórios em pizza no backend -->
     <?php $this->beginPage() ?>
     <!DOCTYPE html>
     <html lang="<?= Yii::$app->language ?>">
