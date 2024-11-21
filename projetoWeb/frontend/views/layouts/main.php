@@ -30,7 +30,7 @@ AppAsset::register($this);
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <?= Html::tag('link', '', ['rel' => 'icon', 'href' => Url::to('@web/img/favicon.ico')]) ?>
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -44,7 +44,7 @@ AppAsset::register($this);
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <?= Html::cssFile('@web/css/style.css') ?>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -57,7 +57,10 @@ AppAsset::register($this);
     <script src="mail/contact.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <?= Html::jsFile('@web/js/main.js') ?>
+
+
+
 </head>
 
 <?php $this->beginBody(); ?>
@@ -113,7 +116,7 @@ AppAsset::register($this);
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <button class="dropdown-item" type="button">Sign in</button>
-                            <button class="dropdown-item" type="button">Sign up</button>
+                            <button xclass="dropdown-item" type="button">Sign up</button>
                         </div>
                     </div>
                 </a>
@@ -128,8 +131,8 @@ AppAsset::register($this);
             <nav class="navbar navbar-expand-lg navbar-dark py-3 py-lg-0 px-0 ">
                 <!-- Logo para dispositivos maiores -->
                 <div class="navbar-brand" style="width: 100px; height: auto; padding: 0; margin: 0;">
-                    <a href="index.html" class="text-decoration-none">
-                        <?= Html::img('img/logoSpotWine.png', ['style' => 'width: 100%; height: auto; display: block;']); ?>
+                    <a href="<?= \yii\helpers\Url::to(['/site/index'], true) ?>" class="text-decoration-none">
+                        <?= Html::img('@web/img/logoSpotWine.png', ['style' => 'width: 100%; height: auto; display: block;']); ?>
                     </a>
                 </div>
                 <!-- Botão para colapso -->
@@ -142,8 +145,8 @@ AppAsset::register($this);
                     <!-- Links de Navegação -->
                     <div class="navbar-nav mx-auto">
 
-                        <a href="#" class="nav-item nav-link active">Produtores</a>
-                        <a href="#" class="nav-item nav-link">Vinhos</a>
+                        <a href="#" class="nav-item nav-link active">Vinhos</a>
+                        <a href="#" class="nav-item nav-link">Produtores</a>
                         <a href="#" class="nav-item nav-link">Promoções</a>
                         <a href="#" class="nav-item nav-link">Concurso</a>
                         <a href="#" class="nav-item nav-link">Blogue</a>
@@ -200,54 +203,6 @@ AppAsset::register($this);
 
 <!-- Navbar End -->
 
-<!-- Search and filter -->
-<div class="container-fluid">
-    <div class="row align-items-center bg-body py-3 px-xl-5 d-none d-lg-flex">
-
-        <div class="col-lg-3 d-none d-lg-block">
-            <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
-                <h6 class="text-third m-0" ><i class="fa fa-bars mr-2 text-third"></i>Categories</h6>
-                <i class="fa fa-angle-down text-dark"></i>
-            </a>
-            <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
-                <div class="navbar-nav w-100">
-                    <div class="nav-item dropdown dropright">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Dresses <i class="fa fa-angle-right float-right mt-1"></i></a>
-                        <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
-                            <a href="" class="dropdown-item">Men's Dresses</a>
-                            <a href="" class="dropdown-item">Women's Dresses</a>
-                            <a href="" class="dropdown-item">Baby's Dresses</a>
-                        </div>
-                    </div>
-                    <a href="" class="nav-item nav-link">Shirts</a>
-                    <a href="" class="nav-item nav-link">Jeans</a>
-                    <a href="" class="nav-item nav-link">Swimwear</a>
-                    <a href="" class="nav-item nav-link">Sleepwear</a>
-                    <a href="" class="nav-item nav-link">Sportswear</a>
-                    <a href="" class="nav-item nav-link">Jumpsuits</a>
-                    <a href="" class="nav-item nav-link">Blazers</a>
-                    <a href="" class="nav-item nav-link">Jackets</a>
-                    <a href="" class="nav-item nav-link">Shoes</a>
-                </div>
-            </nav>
-        </div>
-        <div class="col-lg-4 col-6 text-left">
-            <form action="">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for products">
-                    <div class="input-group-append">
-                            <span class="input-group-text bg-transparent text-primary">
-                                <i class="fa fa-search"></i>
-                            </span>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-    </div>
-</div>
-<!-- Search and filter End -->
-
 <main role="main" class="flex-shrink-0 bg-body">
     <div class="container">
         <!-- exibe a navegação em trilhas EX: Página Inicial > Categoria > Subcategoria > Página Atual -->
@@ -259,12 +214,7 @@ AppAsset::register($this);
     </div>
 </main>
 
-<footer class="footer mt-auto py-3 text-muted">
-    <div class="container">
-        <p class="float-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
-        <p class="float-end"><?= Yii::powered() ?></p>
-    </div>
-</footer>
+
 
 <?= $this->render('footer') ?>
 

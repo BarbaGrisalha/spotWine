@@ -13,6 +13,7 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
+            'baseUrl' => '/frontend/web',
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
