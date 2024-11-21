@@ -115,7 +115,9 @@ AppAsset::register($this);
                             <h5 class="text-dark ml-2 mb-0">Account</h5>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">Sign in</button>
+                            <button class="dropdown-item" type="button">
+                                <?= Html::a('Logar', Url::to(['site/login']), ['class' => 'btn btn-primary'])?>
+                            </button>
                             <button xclass="dropdown-item" type="button">Sign up</button>
                         </div>
                     </div>
@@ -190,8 +192,12 @@ AppAsset::register($this);
                                 <h5 class="text-white ml-2 mb-0">Account</h5>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <button class="dropdown-item" type="button">Sign in</button>
-                                <button class="dropdown-item" type="button">Sign up</button>
+                                <button class="dropdown-item btn btn-secondary" type="button">
+                                    <?= Html::a('Login', Url::to(['site/login']))?>
+                                </button>
+                                <button class="dropdown-item btn btn-secondary" type="button">
+                                    <?= Html::a('Registar-Se', Url::to(['site/signup']))?>
+                                </button>
                             </div>
                         </div>
                     </div>

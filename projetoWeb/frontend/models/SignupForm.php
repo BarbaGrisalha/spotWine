@@ -5,6 +5,8 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use common\models\User;
+use common\models\UserDetails;
+
 
 /**
  * Signup form
@@ -15,6 +17,9 @@ class SignupForm extends Model
     public $email;
     public $password;
 
+    // Novos campos para user_details
+    public $nif;
+    public $phone_number;
 
     /**
      * {@inheritdoc}
@@ -23,9 +28,12 @@ class SignupForm extends Model
     {
         return [
             ['username', 'trim'],
-            ['username', 'required'],
+            [['username', 'email', 'password', 'nif', 'phone_number'], 'required'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
+            ['password', 'string', 'min' => 6],
+            ['nif', 'string', 'max' => 20],
+            ['phone_number', 'string', 'max' => 15],
 
             ['email', 'trim'],
             ['email', 'required'],
@@ -56,7 +64,22 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
-        return $user->save() && $this->sendEmail($user);
+        if ($user->save()) {
+            $userDetails = new UserDetails();
+            $userDetails->user_id = $user->id;
+            $userDetails->nif = $this->nif;
+            $userDetails->phone_number = $this->phone_number;
+            $userDetails->save();
+
+            // Atribuir um role padrão (Ex.: consumer)
+            $auth = \Yii::$app->authManager;
+            $role = $auth->getRole('consumer'); // Role padrão
+            $auth->assign($role, $user->id);
+
+            return $user;
+        }
+        return null;
+        // return $user->save() && $this->sendEmail($user);
     }
 
     /**

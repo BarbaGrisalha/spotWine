@@ -12,9 +12,28 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-        'api'=>[
-            'class'=>'backend\modules\api\ModuleAPI',
+        'api' => [
+            'class' => 'backend\modules\api\ModuleAPI',
         ],
+    ],
+    // Configuração de restrição de acesso
+    'as access' => [
+        'class' => 'yii\filters\AccessControl',
+        'rules' => [
+            [
+                'allow' => true,
+                'roles' => ['admin'], // Apenas usuários com a role 'admin' podem acessar
+            ],
+            [
+                'allow' => false, // Bloquear todos os outros
+            ],
+        ],
+        'denyCallback' => function ($rule, $action) {
+            if (Yii::$app->user->isGuest) {
+                return Yii::$app->response->redirect(['/site/login']); // Redireciona para login
+            }
+            throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta página.');
+        },
     ],
     'components' => [
         'request' => [
@@ -46,11 +65,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+
             ],
-        ],
-        //Configuração do authManager para poder gerir as Roles(Consumidor, Produtor e Administrador)
-        'authManager' =>[
-            'class'=>'yii\rbac\DbManager',
         ],
 
     ],

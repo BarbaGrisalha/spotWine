@@ -10,26 +10,32 @@ class RbacController extends Controller
 {
     public function actionInit()
     {
-        /** @var DbManager $auth */
         $auth = Yii::$app->authManager;
 
-        // Limpa roles e permissões existentes
+        // Limpar todas as roles e permissões existentes
         $auth->removeAll();
 
-        // Cria a role Administrador
+        // Criar permissões
+        $manageProducts = $auth->createPermission('manageProducts');
+        $manageProducts->description = 'Gerenciar produtos';
+        $auth->add($manageProducts);
+
+        $accessBackend = $auth->createPermission('accessBackend');
+        $accessBackend->description = 'Acessar painel administrativo';
+        $auth->add($accessBackend);
+
+        // Criar roles
+        $consumer = $auth->createRole('consumer');
+        $auth->add($consumer);
+
+        $producer = $auth->createRole('producer');
+        $auth->add($producer);
+        $auth->addChild($producer, $manageProducts); // Produtor pode gerenciar produtos
+
         $admin = $auth->createRole('admin');
         $auth->add($admin);
-
-        // Cria a role Produtor
-        $produtor = $auth->createRole('produtor');
-        $auth->add($produtor);
-
-        // Cria a role Consumidor
-        $consumidor = $auth->createRole('consumidor');
-        $auth->add($consumidor);
-
-        // Atribuir a role admin ao usuário com ID 1 (alterar conforme necessário)
-        $auth->assign($admin, 1);
+        $auth->addChild($admin, $producer); // Admin herda permissões de produtor
+        $auth->addChild($admin, $accessBackend); // Admin pode acessar o backend
 
         echo "Roles e permissões configuradas com sucesso.\n";
     }

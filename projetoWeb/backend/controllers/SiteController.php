@@ -113,6 +113,27 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                // Atribuir o role ao usuário
+                $auth = Yii::$app->authManager;
+                $role = $auth->getRole('consumer'); // Role padrão (ex.: consumer)
+                $auth->assign($role, $user->id);
+
+                Yii::$app->session->setFlash('success', 'Thank you for registering. Please check your email to verify your account.');
+                return $this->goHome();
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Logout action.
      *

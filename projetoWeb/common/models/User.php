@@ -29,7 +29,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
-
     /**
      * {@inheritdoc}
      */
@@ -57,6 +56,34 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
+    }
+
+    /**
+     * Relacionamento com UserDetails
+     */
+    public function getUserDetails()
+    {
+        return $this->hasOne(UserDetails::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Relacionamento com auth_assignment
+     */
+    public function getAuthAssignment()
+    {
+        return $this->hasOne(\yii\rbac\DbManager::class, ['user_id' => 'id'])
+            ->viaTable('auth_assignment', ['user_id' => 'id']);
+    }
+
+    /**
+     * Obter o nome do role
+     */
+    public function getRoleName()
+    {
+        $auth = Yii::$app->authManager;
+        $assignment = $auth->getAssignments($this->id);
+
+        return $assignment ? array_keys($assignment)[0] : 'Sem Role';
     }
 
     /**
@@ -103,18 +130,12 @@ class User extends ActiveRecord implements IdentityInterface
             'status' => self::STATUS_ACTIVE,
         ]);
     }
-
     /**
-     * Finds user by verification email token
-     *
-     * @param string $token verify email token
-     * @return static|null
+     * Generates new token for email verification
      */
-    public static function findByVerificationToken($token) {
-        return static::findOne([
-            'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
-        ]);
+    public function generateEmailVerificationToken()
+    {
+        $this->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**
@@ -195,19 +216,4 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
-    /**
-     * Generates new token for email verification
-     */
-    public function generateEmailVerificationToken()
-    {
-        $this->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    /**
-     * Removes password reset token
-     */
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
-    }
 }
