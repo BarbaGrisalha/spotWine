@@ -6,3 +6,5 @@
 
     # Caso contrário, redireciona para index.php
     RewriteRule . index.php
+
+    

@@ -10,12 +10,11 @@ use common\models\User;
 $this->title = 'SpotWine_Backend';
 ?>
 <div class="site-index">
-    <div class="jumbotron text-center bg-transparent">
+    <div class="text-center bg-transparent">
         <h1 class="display-4">Backend, Atenção!</h1>
         <p class="lead">You have successfully accessed the backend in your Yii-powered application.</p>
         <h1>Relatórios</h1>
     </div>
-
         <div class="body-content">
             <?php 
             // Criando o ActiveDataProvider para o GridView
@@ -58,6 +57,7 @@ $this->title = 'SpotWine_Backend';
                     </li>
                 <?php endforeach; ?>
 
+                <!--
                 <script>
                     // Em uma tag <script> ou arquivo JS externo
                     document.getElementById('gerarRelatorioClientes').addEventListener('click', function(event) {
@@ -69,6 +69,7 @@ $this->title = 'SpotWine_Backend';
                         document.getElementById('relatorioClientes').style.display = 'none'; // Oculta a div do relatório
                     });
                 </script>
+                -->
             </ul>
         </div>
 

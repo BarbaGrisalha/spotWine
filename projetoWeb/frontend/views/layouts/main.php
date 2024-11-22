@@ -186,21 +186,55 @@ AppAsset::register($this);
                         </a>
 
                         <!-- User Dropdown -->
-                        <div class="btn-group ml-3 d-flex align-items-center">
-                            <button type="button" class="btn btn-sm dropdown-toggle text-white d-flex align-items-center" data-toggle="dropdown">
-                                <i class="fas fa-user fa-lg text-secondary"></i>
-                                <h5 class="text-white ml-2 mb-0">Account</h5>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <button class="dropdown-item btn btn-secondary" type="button">
-                                    <?= Html::a('Login', Url::to(['site/login']))?>
-                                </button>
-                                <button class="dropdown-item btn btn-secondary" type="button">
-                                    <?= Html::a('Registar-Se', Url::to(['site/signup']))?>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    
+                        <div class="btn-group">
+                            <?php if (Yii::$app->user->isGuest): ?>
+                                <a class="btn btn-primary " href="<?= \yii\helpers\Url::to(['/site/signup']) ?>"><span class="text-white">Registo</span></a>
+                                <a class="btn btn-primary " href="<?= \yii\helpers\Url::to(['/site/login']) ?>"><span class="text-white">Login</span></a>
+                            <?php else: ?>
+                                <?php $idUser = Yii::$app->user->id; ?>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user-circle fa-lg mr-2 text-secondary"></i><?= Yii::$app->user->identity->username ?>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <?= Html::a(
+                                            '<i class="fas fa-user fa-lg text-secondary mr-2"></i> Ver Perfil',
+                                            ['/perfil/view', 'id' => $idUser],
+                                            ['class' => 'dropdown-item']
+                                        ) ?>
+                                        <?= Html::a(
+                                            '<i class="fas fa-edit fa-lg text-secondary mr-2"></i> Alterar Dados',
+                                            ['/perfil/update', 'id' => $idUser],
+                                            ['class' => 'dropdown-item']
+                                        ) ?>
+                                        <?= Html::a(
+                                            '<i class="fas fa-star fa-lg text-secondary mr-2"></i> Minhas Avaliações',
+                                            ['/avaliacao/index'],
+                                            ['class' => 'dropdown-item']
+                                        ) ?>
+                                        <?= Html::a(
+                                            '<i class="fas fa-file-invoice fa-lg text-secondary mr-2"></i> Minhas Faturas',
+                                            ['/fatura/index'],
+                                            ['class' => 'dropdown-item']
+                                        ) ?>
+                                        <?= Html::a(
+                                            '<i class="fas fa-key fa-lg text-secondary mr-2"></i> Alterar Password',
+                                            ['/perfil/alterar-password'],
+                                            ['class' => 'dropdown-item']
+                                        ) ?>
+                                        <?= Html::beginForm(['/site/logout'], 'post', ['id' => 'logout-form']) ?>
+                                            <?= Html::submitButton(
+                                                '<i class="fas fa-sign-out-alt fa-lg text-secondary mr-2"></i> Logout',
+                                                ['class' => 'dropdown-item']
+                                            ) ?>
+                                        <?= Html::endForm() ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                       </div>
+
+
                 </div>
             </nav>
         </div>

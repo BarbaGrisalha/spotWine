@@ -16,59 +16,42 @@ return [
             'class' => 'backend\modules\api\ModuleAPI',
         ],
     ],
-    // Configuração de restrição de acesso
-    'as access' => [
-        'class' => 'yii\filters\AccessControl',
-        'rules' => [
-            [
-                'allow' => true,
-                'roles' => ['admin'], // Apenas usuários com a role 'admin' podem acessar
-            ],
-            [
-                'allow' => false, // Bloquear todos os outros
-            ],
-        ],
-        'denyCallback' => function ($rule, $action) {
-            if (Yii::$app->user->isGuest) {
-                return Yii::$app->response->redirect(['/site/login']); // Redireciona para login
-            }
-            throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta página.');
-        },
-    ],
+
     'components' => [
-        'request' => [
-            'csrfParam' => '_csrf-backend',
-        ],
-        'user' => [
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
-        ],
-        'session' => [
-            // this is the name of the session cookie used for login on the backend
-            'name' => 'advanced-backend',
-        ],
-        'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
-                [
-                    'class' => \yii\log\FileTarget::class,
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
-        'errorHandler' => [
-            'errorAction' => 'site/error',
-        ],
-
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-
-            ],
-        ],
-
+    'errorHandler' => [
+        'errorAction' => 'site/error', // Define qual ação será chamada para erros
     ],
+    
+    'request' => [
+        'baseUrl' => '/backend/web', // Ajuste o baseUrl conforme sua estrutura de diretórios
+        'csrfParam' => '_csrf-backend',
+    ],
+    'user' => [
+        'identityClass' => 'common\models\User',
+        'enableAutoLogin' => true,
+        'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+    ],
+'session' => [
+    'name' => 'advanced-backend', // Diferente do frontend
+],
+
+
+    'session' => [
+        'name' => 'PHPBACKSESSID',
+    ],
+    'errorHandler' => [
+        'errorAction' => 'site/error',
+    ],
+    'urlManager' => [
+        'enablePrettyUrl' => true,
+        'showScriptName' => false,
+        'rules' => [
+            // Regras de URL
+        ],
+    ],
+],
+
+
+
     'params' => $params,
 ];

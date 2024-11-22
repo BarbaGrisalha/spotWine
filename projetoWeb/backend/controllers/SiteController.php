@@ -21,42 +21,47 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()//Aqui defininos as regras e o RBAC
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    // Acesso permitido para login e erro
-                    [
-                        'actions' => ['login', 'error', 'register'],
-                        'allow' => true,
-                        'roles' => ['?']
-                    ],
-                    // Acesso completo para Altamir, João, Lucas e admin
-                    [
-                        'allow' => true,
-                        'roles' => ['admin','produtor'],
-                        /*'matchCallback' => function($rule, $action) {
-                            return in_array(Yii::$app->user->identity->username, ['Altamir', 'João', 'Lucas', 'admin']); // Inclui admin temporariamente
-                        }*/
-                    ],
-                    // Permitir acesso a 'index', 'developing' e 'logout' para qualquer usuário autenticado
-                    [
-                        'actions' => ['index', 'developing', 'logout'],
-                        'allow' => true,
-                        'roles' => ['admim','produtor'],//se tiver @ é para todos os logados.
-                    ],
+    public function behaviors(){
+    return [
+        'access' => [
+            'class' => AccessControl::class,
+            'rules' => [
+                // Permitir acesso para login e erro para visitantes
+                [
+                    'actions' => ['login', 'error'],
+                    'allow' => true,
+                    'roles' => ['?'], // Visitantes
+                ],
+                // Permitir acesso para admin e produtor
+                [
+                    'allow' => true,
+                    'roles' => ['admin', 'producer'], // Apenas admin e produtor
+                ],
+                // Negar acesso para consumidores logados
+                [
+                    'actions' => ['login'],
+                    'allow' => false,
+                    'roles' => ['consumer'], // Usuários logados
+                    
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
-                ],
+            'denyCallback' => function ($rule, $action) {
+                if (Yii::$app->user->isGuest) {
+                    return Yii::$app->response->redirect(['site/login']);
+                }
+                throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta página.');
+                return render('site/login');
+            },
+        ],
+        'verbs' => [
+            'class' => VerbFilter::class,
+            'actions' => [
+                'logout' => ['post'], // Logout via POST
             ],
-        ];
-    }
+        ],
+    ];
+}
+
 
     /**
      * {@inheritdoc}
@@ -99,7 +104,6 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $this->layout = 'blank';
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
@@ -109,27 +113,6 @@ class SiteController extends Controller
         $model->password = '';
 
         return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionSignup()
-    {
-        $model = new SignupForm();
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                // Atribuir o role ao usuário
-                $auth = Yii::$app->authManager;
-                $role = $auth->getRole('consumer'); // Role padrão (ex.: consumer)
-                $auth->assign($role, $user->id);
-
-                Yii::$app->session->setFlash('success', 'Thank you for registering. Please check your email to verify your account.');
-                return $this->goHome();
-            }
-        }
-
-        return $this->render('signup', [
             'model' => $model,
         ]);
     }

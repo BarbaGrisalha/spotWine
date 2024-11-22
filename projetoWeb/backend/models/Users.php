@@ -27,10 +27,7 @@ class Users extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
-        return 'Users';
-    }
+    
 
     /**
      * {@inheritdoc}
@@ -52,13 +49,20 @@ class Users extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => 'User ID',
+            'user_id' => 'User_ID',
             'name' => 'Name',
             'email' => 'Email',
             'password' => 'Password',
             'role' => 'Role',
         ];
     }
+
+    public static function tableName()
+    {
+        return 'users'; // Certifique-se de usar a tabela correta
+    }
+
+    
 
     /**
      * Gets query for [[BlogPosts]].
@@ -114,22 +118,4 @@ class Users extends ActiveRecord
         return $this->id;
     }
 
-    /**
-     * Index .
-     *
-     *
-     */
-    public function actionIndex(){
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        //Obtém todos os clientes da base de dados
-        $clientes = Users::find()->all();
-        //Retorna a lista de clientes
-        return ArrayHelper::toArray($clientes,[
-            'common\models\Client'=>[//Atento para ajustar corretamente o namespace com o projeto
-                'id',
-                'name',
-                'email',
-                ],
-        ]);
-    }
 }
