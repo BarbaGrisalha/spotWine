@@ -23,7 +23,7 @@ return [
     ],
     
     'request' => [
-        'baseUrl' => '/backend/web', // Ajuste o baseUrl conforme sua estrutura de diretórios
+        #'baseUrl' => '/backend/web', // Ajuste o baseUrl conforme sua estrutura de diretórios
         'csrfParam' => '_csrf-backend',
     ],
     'user' => [

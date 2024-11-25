@@ -1,4 +1,5 @@
 <?php
+
 namespace backend\controllers;
 
 use Yii;
@@ -8,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-class UserController extends Controller{
+class UsersController extends Controller{
     public function behaviors()
     {
         return [
@@ -42,7 +43,7 @@ class UserController extends Controller{
     public function actionCreate()
     {
         $model = new User();
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }

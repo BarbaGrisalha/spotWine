@@ -9,7 +9,7 @@ use backend\models\Users;
 /**
  * UserSearch represents the model behind the search form of `backend\models\Users`.
  */
-class UsersSearch extends Users
+class UserSearch extends Users
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class UsersSearch extends Users
     public function rules()
     {
         return [
-            [['user_id'], 'integer'], // Substitua 'user_id' por 'id', se necessário
+            [['id'], 'integer'], // Substitua 'user_id' por 'id', se necessário
             [['name', 'email', 'role'], 'safe'],
         ];
     }
@@ -55,8 +55,10 @@ class UsersSearch extends Users
         }
 
         // Grid filtering conditions
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'role', $this->isbn]);
+        $query->andFilterWhere(['id' => $this->id]) // Substitua 'user_id' por 'id', se necessário
+            ->andFilterWhere(['like', 'name', $this->username])//substituído por username em vez de name
+            ->andFilterWhere(['like', 'email', $this->email]);
+            //->andFilterWhere(['like', 'role', $this->role]);//foi adicionada uma migration com a coluna role na tabela user que nºao está aqui.
 
         return $dataProvider;
     }

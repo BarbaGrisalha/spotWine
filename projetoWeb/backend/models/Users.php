@@ -44,12 +44,12 @@ class Users extends ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}s
      */
     public function attributeLabels()
     {
         return [
-            'user_id' => 'User_ID',
+            'user_id' => 'User ID',
             'name' => 'Name',
             'email' => 'Email',
             'password' => 'Password',
@@ -62,7 +62,11 @@ class Users extends ActiveRecord
         return 'users'; // Certifique-se de usar a tabela correta
     }
 
-    
+    // Relação com a tabela user_detail
+    public function getUserDetails()
+    {
+        return $this->hasOne(UserDetail::class, ['user_id' => 'id']);
+    }
 
     /**
      * Gets query for [[BlogPosts]].
@@ -118,4 +122,5 @@ class Users extends ActiveRecord
         return $this->id;
     }
 
+    
 }
