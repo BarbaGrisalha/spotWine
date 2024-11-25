@@ -23,7 +23,6 @@ return [
     ],
     
     'request' => [
-        #'baseUrl' => '/backend/web', // Ajuste o baseUrl conforme sua estrutura de diretórios
         'csrfParam' => '_csrf-backend',
     ],
     'user' => [
@@ -31,16 +30,8 @@ return [
         'enableAutoLogin' => true,
         'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
     ],
-'session' => [
-    'name' => 'advanced-backend', // Diferente do frontend
-],
-
-
     'session' => [
-        'name' => 'PHPBACKSESSID',
-    ],
-    'errorHandler' => [
-        'errorAction' => 'site/error',
+        'name' => 'advanced-backend', // Diferente do frontend
     ],
     'urlManager' => [
         'enablePrettyUrl' => true,
