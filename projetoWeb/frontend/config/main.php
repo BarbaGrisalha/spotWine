@@ -16,7 +16,6 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            'baseUrl' => '/frontend/web',
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
