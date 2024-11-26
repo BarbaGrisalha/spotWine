@@ -176,6 +176,6 @@ use dmstr\adminlte\widgets\Alert;
     <div class="float-right d-none d-sm-block">
         <b>Version</b> 3.0.2
     </div>
-    <strong>Copyright © 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+    <strong>Copyright © 2024 <a href="site/index">Spotwine</a>.</strong> All rights
     reserved.
 </footer>

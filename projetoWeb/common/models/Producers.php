@@ -1,11 +1,11 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 
 /**
- * This is the model class for table "Producers".
+ * This is the model class for table "producers".
  *
  * @property int $producer_id
  * @property int|null $user_id
@@ -15,6 +15,7 @@ use Yii;
  *
  * @property ContestParticipations[] $contestParticipations
  * @property Products[] $products
+ * @property Subscriptions[] $subscriptions
  * @property Users $user
  */
 class Producers extends \yii\db\ActiveRecord
@@ -36,8 +37,7 @@ class Producers extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             [['winery_name'], 'string', 'max' => 100],
             [['location', 'document_id'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute'
-                => ['user_id' => 'user_id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'user_id']],
         ];
     }
 
@@ -73,6 +73,16 @@ class Producers extends \yii\db\ActiveRecord
     public function getProducts()
     {
         return $this->hasMany(Products::class, ['producer_id' => 'producer_id']);
+    }
+
+    /**
+     * Gets query for [[Subscriptions]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubscriptions()
+    {
+        return $this->hasMany(Subscriptions::class, ['producer_id' => 'producer_id']);
     }
 
     /**

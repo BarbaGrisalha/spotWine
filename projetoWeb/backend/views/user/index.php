@@ -1,6 +1,7 @@
 <?php
 /** @var yii\web\View $this */
 
+use backend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -14,6 +15,7 @@ use common\models\UserDetails;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'SpotWine_Backend';
+AppAsset::register($this);
 ?>
 <div class="site-index">
     <div class="text-center bg-transparent">
@@ -83,8 +85,10 @@ $this->title = 'SpotWine_Backend';
                             }
                         },
                     ],
+
                 ],
             ],
+
         ]); ?>
 
     </div>

@@ -6,16 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="56d1a053-790b-4a82-9eb0-bb772e790692" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/config/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/common/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/common/config/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/console/controllers/RbacController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/console/controllers/RbacController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/models/SignupForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/models/SignupForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/site/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/site/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/site/signup.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/site/signup.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/controllers/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/models/Categories.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/models/Producers.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/models/ProducersSearch.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/models/Products.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/models/ProductsSearch.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/content.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/layouts/content.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/user/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/web/css/site.css" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/web/css/site.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,11 +266,11 @@
       <recent name="$PROJECT_DIR$/projetoWeb/frontend/web" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lucas\OneDrive\Documentos\GitHub\spotWine\projetoWeb\backend\controllers" />
       <recent name="C:\Users\lucas\OneDrive\Documentos\GitHub\spotWine\projetoWeb\frontend\web\img" />
       <recent name="C:\Users\lucas\OneDrive\Documentos\GitHub\spotWine\projetoWeb\frontend\views\layouts" />
       <recent name="C:\Users\lucas\OneDrive\Documentos\GitHub\spotWine\projetoWeb\frontend\views\site" />
       <recent name="C:\Users\lucas\OneDrive\Documentos\GitHub\spotWine\projetoWeb\frontend\web\images" />
-      <recent name="$PROJECT_DIR$/projetoWeb/backend/views/site" />
     </key>
   </component>
   <component name="RunManager">

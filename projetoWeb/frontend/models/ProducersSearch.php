@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace frontend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Products;
+use common\models\Producers;
 
 /**
- * ProductsSearch represents the model behind the search form of `app\models\Products`.
+ * ProducersSearch represents the model behind the search form of `common\models\Producers`.
  */
-class ProductsSearch extends Products
+class ProducersSearch extends Producers
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,8 @@ class ProductsSearch extends Products
     public function rules()
     {
         return [
-            [['product_id', 'producer_id', 'category_id', 'stock'], 'integer'],
-            [['name', 'description', 'image_url'], 'safe'],
-            [['price'], 'number'],
+            [['producer_id', 'user_id'], 'integer'],
+            [['winery_name', 'location', 'document_id'], 'safe'],
         ];
     }
 
@@ -41,7 +40,7 @@ class ProductsSearch extends Products
      */
     public function search($params)
     {
-        $query = Products::find();
+        $query = Producers::find();
 
         // add conditions that should always apply here
 
@@ -59,16 +58,13 @@ class ProductsSearch extends Products
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'product_id' => $this->product_id,
             'producer_id' => $this->producer_id,
-            'category_id' => $this->category_id,
-            'price' => $this->price,
-            'stock' => $this->stock,
+            'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'image_url', $this->image_url]);
+        $query->andFilterWhere(['like', 'winery_name', $this->winery_name])
+            ->andFilterWhere(['like', 'location', $this->location])
+            ->andFilterWhere(['like', 'document_id', $this->document_id]);
 
         return $dataProvider;
     }

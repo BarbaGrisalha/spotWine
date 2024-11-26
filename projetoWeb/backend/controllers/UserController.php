@@ -1,15 +1,13 @@
 <?php
-
 namespace backend\controllers;
 
 use common\models\User;
 use common\models\UserDetails;
 use common\models\UserSearch;
-use frontend\models\Book;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\web\NotFoundHttpException;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class UserController extends Controller
 {

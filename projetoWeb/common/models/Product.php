@@ -1,11 +1,11 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 
 /**
- * This is the model class for table "Products".
+ * This is the model class for table "products".
  *
  * @property int $product_id
  * @property int|null $producer_id
@@ -23,7 +23,7 @@ use Yii;
  * @property Promotions[] $promotions
  * @property Reviews[] $reviews
  */
-class Products extends \yii\db\ActiveRecord
+class Product extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -103,7 +103,6 @@ class Products extends \yii\db\ActiveRecord
      */
     public function getProducer()
     {
-        //return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
         return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
     }
 

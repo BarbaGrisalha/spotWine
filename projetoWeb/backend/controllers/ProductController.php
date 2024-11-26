@@ -2,16 +2,16 @@
 
 namespace backend\controllers;
 
-use app\models\Products;
-use app\models\ProductsSearch;
+use common\models\Product;
+use common\models\ProductSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ProductsController implements the CRUD actions for Product model.
+ * ProductController implements the CRUD actions for Product model.
  */
-class ProductsController extends Controller
+class ProductController extends Controller
 {
     /**
      * @inheritDoc
@@ -38,9 +38,9 @@ class ProductsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ProductsSearch();
+        $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-dd('hfjhgjkg');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -67,7 +67,7 @@ dd('hfjhgjkg');
      */
     public function actionCreate()
     {
-        $model = new Products();
+        $model = new Product();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -125,7 +125,7 @@ dd('hfjhgjkg');
      */
     protected function findModel($product_id)
     {
-        if (($model = Products::findOne(['product_id' => $product_id])) !== null) {
+        if (($model = Product::findOne(['product_id' => $product_id])) !== null) {
             return $model;
         }
 

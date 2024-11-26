@@ -1,17 +1,17 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
-use app\models\Products;
-use app\models\ProductsSearch;
+use common\models\Producers;
+use frontend\models\ProducersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ProductsController implements the CRUD actions for Product model.
+ * ProducersController implements the CRUD actions for Producers model.
  */
-class ProductsController extends Controller
+class ProducersController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,15 +32,15 @@ class ProductsController extends Controller
     }
 
     /**
-     * Lists all Product models.
+     * Lists all Producers models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new ProductsSearch();
+        $searchModel = new ProducersSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-dd('hfjhgjkg');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -48,30 +48,30 @@ dd('hfjhgjkg');
     }
 
     /**
-     * Displays a single Product model.
-     * @param int $product_id Product ID
+     * Displays a single Producers model.
+     * @param int $producer_id Producer ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($product_id)
+    public function actionView($producer_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($product_id),
+            'model' => $this->findModel($producer_id),
         ]);
     }
 
     /**
-     * Creates a new Product model.
+     * Creates a new Producers model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Products();
+        $model = new Producers();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'product_id' => $model->product_id]);
+                return $this->redirect(['view', 'producer_id' => $model->producer_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -83,18 +83,18 @@ dd('hfjhgjkg');
     }
 
     /**
-     * Updates an existing Product model.
+     * Updates an existing Producers model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $product_id Product ID
+     * @param int $producer_id Producer ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($product_id)
+    public function actionUpdate($producer_id)
     {
-        $model = $this->findModel($product_id);
+        $model = $this->findModel($producer_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'product_id' => $model->product_id]);
+            return $this->redirect(['view', 'producer_id' => $model->producer_id]);
         }
 
         return $this->render('update', [
@@ -103,29 +103,29 @@ dd('hfjhgjkg');
     }
 
     /**
-     * Deletes an existing Product model.
+     * Deletes an existing Producers model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $product_id Product ID
+     * @param int $producer_id Producer ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($product_id)
+    public function actionDelete($producer_id)
     {
-        $this->findModel($product_id)->delete();
+        $this->findModel($producer_id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Product model based on its primary key value.
+     * Finds the Producers model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $product_id Product ID
-     * @return Product the loaded model
+     * @param int $producer_id Producer ID
+     * @return Producers the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($product_id)
+    protected function findModel($producer_id)
     {
-        if (($model = Products::findOne(['product_id' => $product_id])) !== null) {
+        if (($model = Producers::findOne(['producer_id' => $producer_id])) !== null) {
             return $model;
         }
 
