@@ -34,9 +34,12 @@
                             'items' => [
                                 ['label' => 'Relatório de Produtos', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-produtos'],],
                                 ['label' => 'Relatório de Clienes', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-clientes'],],
-                                ['label' => 'Relatório Produtos/Produtor', 'url'=>['relatorio/relatorio-por-produtor'],],
+                                ['label' => 'Relatório Produtos/Produtor', 'iconType' => 'far', 'icon'=> 'dot-circle','url'=>['relatorio/relatorio-por-produtor'],],
                             ],
                         ],
+                        ['label' => 'Gestão de usuários','iconType' => 'far','icon' => 'dot-circle', 'url' =>['/users/index'],
+
+                        ]
                 ],
                ]
             ) ?>
