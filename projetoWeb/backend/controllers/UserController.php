@@ -5,7 +5,9 @@ namespace backend\controllers;
 use common\models\User;
 use common\models\UserDetails;
 use common\models\UserSearch;
+use frontend\models\Book;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\web\Controller;
 
@@ -14,7 +16,12 @@ class UserController extends Controller
     public function actionIndex()
     {
         $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => User::find(),
+            'pagination' => [
+                'pageSize' => 8,
+            ],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -51,7 +58,7 @@ class UserController extends Controller
             'userDetails' => $userDetails,
         ]);
     }
-    
+
     public function actionDeactivate($id)
     {
         $userDetails = UserDetails::findOne(['user_id' => $id]);
