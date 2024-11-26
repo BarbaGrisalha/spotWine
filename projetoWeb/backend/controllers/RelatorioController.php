@@ -58,7 +58,7 @@ class RelatorioController extends Controller
         $data = [];
 
         foreach ($categories as $category) {
-            $labels[] = 'Categoria ' . $category['category_id'];
+            $labels[] = 'categories ' . $category['category_id'];
             $data[] = (int)$category['total_stock'];
         }
 

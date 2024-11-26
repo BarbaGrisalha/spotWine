@@ -88,6 +88,11 @@ $this->title = 'SpotWine_Backend';
         ]); ?>
 
     </div>
+<<<<<<< Updated upstream
 </div>
+=======
+
+    </div>
+>>>>>>> Stashed changes
 
 </div>

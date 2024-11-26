@@ -24,7 +24,7 @@ class Producers extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'Producers';
+        return 'producers';
     }
 
     /**

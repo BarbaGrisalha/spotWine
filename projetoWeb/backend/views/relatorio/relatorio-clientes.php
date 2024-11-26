@@ -42,8 +42,9 @@ $this->title = "Relatório de Clientes";
     <ul>
         <?php foreach ($clientes as $cliente): ?>
             <li>
-                Nome: <?=Html::encode($cliente->username) ?><br>//alterei o nome para username em vez de name
+                Nome: <?=Html::encode($cliente->username) ?><br><!--alterei o nome para username em vez de name-->
                 Email: <?=Html::encode($cliente->email) ?><br>
+
 
             </li>
         <?php endforeach; ?>
