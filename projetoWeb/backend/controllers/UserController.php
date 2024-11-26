@@ -7,9 +7,21 @@ use common\models\UserDetails;
 use common\models\UserSearch;
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\Controller;
 
-class UserController extends \yii\web\Controller
+class UserController extends Controller
 {
+    public function actionIndex()
+    {
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionCreate()
     {
         $model = new User();
@@ -39,29 +51,77 @@ class UserController extends \yii\web\Controller
             'userDetails' => $userDetails,
         ]);
     }
-
-
-
-    public function actionDeactivate()
+    
+    public function actionDeactivate($id)
     {
-        return $this->render('deactivate');
+        $userDetails = UserDetails::findOne(['user_id' => $id]);
+
+        if ($userDetails) {
+            $userDetails->status = 0; // Desativa
+            if ($userDetails->save(false)) {
+                Yii::$app->session->setFlash('success', 'Usuário desativado com sucesso.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Falha ao desativar o usuário.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Detalhes do usuário não encontrados.');
+        }
+
+        return $this->redirect(['index']);
     }
 
-    public function actionIndex()
+    public function actionActivate($id)
     {
-        $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $userDetails = UserDetails::findOne(['user_id' => $id]);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        if ($userDetails) {
+            $userDetails->status = 1; // Ativa
+            if ($userDetails->save(false)) {
+                Yii::$app->session->setFlash('success', 'Usuário ativado com sucesso.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Falha ao ativar o usuário.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Detalhes do usuário não encontrados.');
+        }
+
+        return $this->redirect(['index']);
+    }
+
+
+    public function actionUpdate($id)
+    {
+        // Carrega o modelo User pelo ID
+        $model = $this->findModel($id);
+
+        // Carrega o modelo UserDetails relacionado
+        $userDetails = UserDetails::findOne(['user_id' => $id]) ?? new UserDetails(['user_id' => $id]);
+
+        // Verifica se os modelos existem
+        if (!$model) {
+            throw new NotFoundHttpException('Usuário não encontrado.');
+        }
+
+        // Carrega os dados enviados pelo formulário
+        if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
+
+            // Salva os dados de ambos os modelos
+            if ($model->save() && $userDetails->save()) {
+                Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Erro ao salvar os dados.');
+            }
+        }
+
+        // Renderiza a view de update
+        return $this->render('update', [
+            'model' => $model,
+            'userDetails' => $userDetails,
         ]);
     }
 
-    public function actionUpdate()
-    {
-        return $this->render('update');
-    }
+
 
     public function actionView($id)
     {
@@ -75,6 +135,15 @@ class UserController extends \yii\web\Controller
             'model' => $model,
         ]);
     }
+
+    protected function findModel($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        }
+        throw new NotFoundHttpException('The requested user does not exist.');
+    }
+
 
 
 }

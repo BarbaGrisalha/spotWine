@@ -16,6 +16,7 @@ class UserSearch extends User
      */
     public $nif; // Atributo relacionado à tabela user_details
     public $phone_number; // Atributo relacionado à tabela user_details
+    public $status;
 
     public function rules()
     {
@@ -43,7 +44,8 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find()->joinWith('userDetails'); // Relacione userDetails;
+        // Relacione userDetails;
+        $query = User::find()->joinWith('userDetails');  //Pode ser InnerJoinWith tbm que mostra apenas com userDetails
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,13 +59,17 @@ class UserSearch extends User
             return $dataProvider;
         }
         // Filtros na tabela `user`
-        $query->andFilterWhere(['id' => $this->id])
-        ->andFilterWhere(['like', 'username', $this->username])
-        ->andFilterWhere(['like', 'email', $this->email]);
+        $query->andFilterWhere(['user.id' => $this->id])
+            ->andFilterWhere(['like', 'username', $this->username])
+            ->andFilterWhere(['like', 'email', $this->email]);
 
         // Filtros na tabela `user_details`
         $query->andFilterWhere(['like', 'user_details.nif', $this->nif])
-        ->andFilterWhere(['like', 'user_details.phone_number', $this->phone_number]);
+            ->andFilterWhere(['like', 'user_details.phone_number', $this->phone_number]);
+
+        // Filtra o status explicitamente na tabela `user_details`
+        $query->andFilterWhere(['user_details.status' => $this->status]);
+
 
 
         return $dataProvider;

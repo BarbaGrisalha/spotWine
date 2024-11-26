@@ -32,25 +32,61 @@ $this->title = 'SpotWine_Backend';
                 'id',
                 'username',
                 'email',
-
                 // Colunas de `user_details`
                 [
                     'attribute' => 'userDetails.nif',
-
-                    'value' => 'userDetails.nif', // Use o caminho direto da relação
+                    'value' => 'userDetails.nif',
                 ],
-
                 [
                     'attribute' => 'phone_number',
                     'value' => function ($model) {
                         return $model->userDetails->phone_number ?? 'N/A';
                     },
-                    'filter' => Html::activeInput('text', $searchModel, 'phone_number', ['class' => 'form-control']),
+                ],
+                // Coluna de status
+                [
+                    'attribute' => 'status',
+                    'value' => function ($model) {
+                        return $model->userDetails && $model->userDetails->status == 1 ? 'Ativo' : 'Inativo';
+                    },
+                    'filter' => [
+                        1 => 'Ativo',
+                        0 => 'Inativo',
+                    ],
                 ],
 
-                ['class' => ActionColumn::class],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {update} {deactivate}', // Adiciona um botão personalizado
+                    'buttons' => [
+                        'deactivate' => function ($url, $model, $key) {
+                            if ($model->userDetails && $model->userDetails->status == 1) {
+                                return Html::a(
+                                    '<i class="fas fa-ban"></i>', // Ícone de desativar
+                                    ['user/deactivate', 'id' => $model->id], // URL para a actionDeactivate
+                                    [
+                                        'title' => 'Desativar',
+                                        'data-confirm' => 'Você tem certeza que deseja desativar este usuário?',
+                                        'data-method' => 'post', // Envia como POST para segurança
+                                    ]
+                                );
+                            } else {
+                                return Html::a(
+                                    '<i class="fas fa-check"></i>', // Ícone de ativar
+                                    ['user/activate', 'id' => $model->id], // URL para a actionActivate
+                                    [
+                                        'title' => 'Ativar',
+                                        'data-confirm' => 'Você tem certeza que deseja ativar este usuário?',
+                                        'data-method' => 'post',
+                                    ]
+                                );
+                            }
+                        },
+                    ],
+                ],
             ],
         ]); ?>
+
     </div>
 
 

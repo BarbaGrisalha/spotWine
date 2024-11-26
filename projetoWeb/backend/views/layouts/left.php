@@ -37,7 +37,7 @@
                                 ['label' => 'Relatório Produtos/Produtor', 'iconType' => 'far', 'icon'=> 'dot-circle','url'=>['relatorio/relatorio-por-produtor'],],
                             ],
                         ],
-                        ['label' => 'Gestão de usuários','iconType' => 'far','icon' => 'dot-circle', 'url' =>['/users/index'],
+                        ['label' => 'Gestão de usuários','iconType' => 'far','icon' => 'dot-circle', 'url' =>['/user/index'],
 
                         ]
                 ],
