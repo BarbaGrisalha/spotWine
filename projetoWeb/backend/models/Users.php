@@ -59,7 +59,7 @@ class Users extends ActiveRecord
 
     public static function tableName()
     {
-        return 'users'; // Certifique-se de usar a tabela correta
+        return 'user'; // Certifique-se de usar a tabela correta
     }
 
     // Relação com a tabela user_detail

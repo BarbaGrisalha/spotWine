@@ -52,24 +52,10 @@ $this->title = 'SpotWine_Backend';
             <ul>
                 <?php foreach ($clientes as $cliente): ?>
                     <li>
-                        Nome: <?= Html::encode($cliente->name) ?><br>
+                        Nome: <?= Html::encode($cliente->username) ?><br>//aqui alterei de name para username
                         Email: <?= Html::encode($cliente->email) ?>
                     </li>
                 <?php endforeach; ?>
-
-                <!--
-                <script>
-                    // Em uma tag <script> ou arquivo JS externo
-                    document.getElementById('gerarRelatorioClientes').addEventListener('click', function(event) {
-                        event.preventDefault(); // Impede a ação padrão do link
-                        document.getElementById('relatorioClientes').style.display = 'block'; // Exibe a div do relatório
-                    });
-
-                    document.getElementById('fecharRelatorio').addEventListener('click', function(event) {
-                        document.getElementById('relatorioClientes').style.display = 'none'; // Oculta a div do relatório
-                    });
-                </script>
-                -->
             </ul>
         </div>
 
