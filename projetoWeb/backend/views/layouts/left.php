@@ -23,36 +23,23 @@
                                 ['label' => 'Debug', 'icon' => 'tachometer-alt', 'url' => ['/debug'],],
                                 ['label' => 'Email', 'iconType' => 'fa','icon'=> 'envelope','url' =>['/site/developing']],
                                 ['label' => 'Calendar','iconType'=> 'fa','icon' => 'calendar','url'=>['/site/developing']],
-                                [
-                                    'label' => 'Database Administration',
-                                    'iconType' => 'far',
-                                    'icon' => 'circle',
-                                    'url' => '#',
-                                    'items' => [
-                                        ['label' => 'Level Two', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => '#',],
-                                        [
-                                            'label' => 'Profiles',
-                                            'iconType' => 'far',
-                                            'icon' => 'dot-circle',
-                                            'url' => '#',
-                                            'items' => [
-                                                ['label' => 'Level Three', 'icon' => 'dot-circle', 'url' => '#',],
-                                                ['label' => 'Level Three', 'icon' => 'dot-circle', 'url' => '#',],
-                                            ],
-                                        ],
-                                    ],
-                                    'label' => 'Database Relatorio',
-                                    'iconType' => 'far',
-                                    'icon' => 'circle',
-                                    'url' => '#',
-                                    'items' => [
-                                        ['label' => 'Relatório de Produtos', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-produtos'],],
-                                        ['label' => 'Relatório de Clienes', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-clientes'],],
-                                        ['label' => 'Relatório Produtos/Produtor', 'url'=>['relatorio/relatorio-por-produtor'],],
-                                        ],
-                            ],
+
                         ],
                     ],
+                        [
+                            'label' => 'Database Relatorio',
+                            'iconType' => 'far',
+                            'icon' => 'circle',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Relatório de Produtos', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-produtos'],],
+                                ['label' => 'Relatório de Clienes', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-clientes'],],
+                                ['label' => 'Relatório Produtos/Produtor', 'iconType' => 'far', 'icon'=> 'dot-circle','url'=>['relatorio/relatorio-por-produtor'],],
+                            ],
+                        ],
+                        ['label' => 'Gestão de usuários','iconType' => 'far','icon' => 'dot-circle', 'url' =>['/users/index'],
+
+                        ]
                 ],
                ]
             ) ?>
