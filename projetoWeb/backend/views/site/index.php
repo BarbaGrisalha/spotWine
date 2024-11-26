@@ -1,11 +1,17 @@
 <?php
 /** @var yii\web\View $this */
-/** @var array $clientes */
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
+use yii\grid\ActionColumn;
 use yii\data\ActiveDataProvider;
 use common\models\User;
+use common\models\UserDetails;
+
+/** @var yii\web\View $this */
+/** @var common\models\UserSearch $searchModel */
+/** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'SpotWine_Backend';
 ?>
@@ -16,29 +22,33 @@ $this->title = 'SpotWine_Backend';
         <h1>Relatórios</h1>
     </div>
         <div class="body-content">
-            <?php 
-            // Criando o ActiveDataProvider para o GridView
-            $dataProvider = new ActiveDataProvider([
-                'query' => User::find(),
-            ]);
+        <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'id',
+            'username',
+            'email',
 
-            // Renderizando o GridView
-            echo GridView::widget([
-                'dataProvider' => $dataProvider,
-                'columns' => [
-                    'id',
-                    'username',
-                    'email',
-                    [
-                        'attribute' => 'Role',
-                        'value' => function($model) {
-                            $assignment = Yii::$app->authManager->getAssignments($model->id);
-                            return $assignment ? array_keys($assignment)[0] : 'Sem Role';
-                        },
-                    ],
-                ],
-            ]); 
-            ?>
+            // Colunas de `user_details`
+            [
+                'attribute' => 'userDetails.nif',
+               
+                'value' => 'userDetails.nif', // Use o caminho direto da relação
+            ],
+            
+            [
+                'attribute' => 'phone_number',
+                'value' => function ($model) {
+                    return $model->userDetails->phone_number ?? 'N/A';
+                },
+                'filter' => Html::activeInput('text', $searchModel, 'phone_number', ['class' => 'form-control']),
+            ],
+
+            ['class' => ActionColumn::class],
+        ],
+    ]); ?>
         </div>
   
 
@@ -50,12 +60,12 @@ $this->title = 'SpotWine_Backend';
             <button id="fecharRelatorio" class="btn btn-danger" style="float: right;">Fechar Relatório</button>
             <h3>Relatório de Clientes</h3>
             <ul>
-                <?php foreach ($clientes as $cliente): ?>
+                <?#php foreach ($clientes as $cliente): ?>
                     <li>
-                        Nome: <?= Html::encode($cliente->name) ?><br>
-                        Email: <?= Html::encode($cliente->email) ?>
+                        Nome: <?#= Html::encode($cliente->name) ?><br>
+                        Email: <?#= Html::encode($cliente->email) ?>
                     </li>
-                <?php endforeach; ?>
+                <?#php endforeach; ?>
 
                 <!--
                 <script>

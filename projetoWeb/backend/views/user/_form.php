@@ -4,7 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\Users $model */
+/** @var common\models\User $model */
+/** @var common\models\UserDetails $userDetails */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -12,13 +13,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
+    <!-- Campos do modelo User -->
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'role')->dropDownList([ 'consumer' => 'Consumer', 'producer' => 'Producer', ], ['prompt' => '']) ?>
+    <!-- Campos do modelo UserDetails -->
+    <?= $form->field($userDetails, 'nif')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($userDetails, 'phone_number')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -27,3 +29,4 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+

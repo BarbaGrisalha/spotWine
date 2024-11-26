@@ -36,6 +36,7 @@ class UserDetails extends \yii\db\ActiveRecord
             [['phone_number'], 'string', 'max' => 15],
             [['user_id'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            ['status', 'in', 'range' => [0, 1]],
         ];
     }
 

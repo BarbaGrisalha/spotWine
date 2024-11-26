@@ -1,24 +1,27 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Users;
+use common\models\User;
 
 /**
  * UserSearch represents the model behind the search form of `backend\models\Users`.
  */
-class UserSearch extends Users
+class UserSearch extends User
 {
     /**
      * {@inheritdoc}
      */
+    public $nif; // Atributo relacionado à tabela user_details
+    public $phone_number; // Atributo relacionado à tabela user_details
+
     public function rules()
     {
         return [
             [['id'], 'integer'], // Substitua 'user_id' por 'id', se necessário
-            [['name', 'email', 'role'], 'safe'],
+            [['username', 'email','nif','phone_number'], 'safe'],
         ];
     }
 
@@ -40,7 +43,7 @@ class UserSearch extends Users
      */
     public function search($params)
     {
-        $query = Users::find();
+        $query = User::find()->joinWith('userDetails'); // Relacione userDetails;
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -53,12 +56,15 @@ class UserSearch extends Users
             // $query->where('0=1');
             return $dataProvider;
         }
+        // Filtros na tabela `user`
+        $query->andFilterWhere(['id' => $this->id])
+        ->andFilterWhere(['like', 'username', $this->username])
+        ->andFilterWhere(['like', 'email', $this->email]);
 
-        // Grid filtering conditions
-        $query->andFilterWhere(['id' => $this->id]) // Substitua 'user_id' por 'id', se necessário
-            ->andFilterWhere(['like', 'name', $this->username])//substituído por username em vez de name
-            ->andFilterWhere(['like', 'email', $this->email]);
-            //->andFilterWhere(['like', 'role', $this->role]);//foi adicionada uma migration com a coluna role na tabela user que nºao está aqui.
+        // Filtros na tabela `user_details`
+        $query->andFilterWhere(['like', 'user_details.nif', $this->nif])
+        ->andFilterWhere(['like', 'user_details.phone_number', $this->phone_number]);
+
 
         return $dataProvider;
     }

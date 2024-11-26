@@ -11,7 +11,9 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
-use backend\models\Users;
+use common\models\User;
+use common\models\UserSearch;
+
 
 /**
  * Site controller
@@ -83,14 +85,13 @@ class SiteController extends Controller
     public function actionIndex()
     {
 
-        $clientes = Users::find()->all();
-       // dd('fsfdfdsfsdfdsfdsf');
-        $produtores = Producers::find()->all();
+        $searchModel = new UserSearch();
+       $dataProvider = $searchModel->search($this->request->queryParams);
 
-        return $this->render('index',[
-            'clientes'=>$clientes,
-            'produtores'=>$produtores,
-        ]);
+       return $this->render('index', [
+           'searchModel' => $searchModel,
+           'dataProvider' => $dataProvider,
+       ]);
     }
 
     /**

@@ -20,7 +20,7 @@ use yii\helpers\Url;
             <a href="<?= Url::to(['/site/contact']) ?>" class="nav-link">Contact</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?= Url::to(['/users/index']) ?>" class="nav-link">Gestão de Usuários</a>
+            <a href="<?= Url::to(['/user/index']) ?>" class="nav-link">Gestão de Usuários</a>
         </li>
     </ul>
 

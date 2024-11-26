@@ -50,12 +50,29 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
+
+    public $password; // Campo temporário para o formulário
     public function rules()
     {
         return [
+            [['username', 'email', 'password'], 'required'], // Inclua password
+            [['email'], 'email'],
+            [['password'], 'string', 'min' => 6], // Regras para a senha
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if (!empty($this->password)) {
+                $this->setPassword($this->password); // Gera o hash antes de salvar
+                $this->generateAuthKey(); // Gera a chave de autenticação
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
