@@ -21,7 +21,7 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id'], 'integer'], // Substitua 'user_id' por 'id', se necessário
+            [['id', 'status'], 'integer'], // Substitua 'user_id' por 'id', se necessário
             [['username', 'email','nif','phone_number'], 'safe'],
         ];
     }
@@ -44,34 +44,29 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        // Relacione userDetails;
-        $query = User::find()->joinWith('userDetails');  //Pode ser InnerJoinWith tbm que mostra apenas com userDetails
+        $query = User::find()->joinWith('userDetails');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 5, // Define o tamanho da página
+            ],
         ]);
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // Uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
-        // Filtros na tabela `user`
-        $query->andFilterWhere(['user.id' => $this->id])
-            ->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'email', $this->email]);
 
-        // Filtros na tabela `user_details`
-        $query->andFilterWhere(['like', 'user_details.nif', $this->nif])
-            ->andFilterWhere(['like', 'user_details.phone_number', $this->phone_number]);
-
-        // Filtra o status explicitamente na tabela `user_details`
-        $query->andFilterWhere(['user_details.status' => $this->status]);
-
-
+        //Filtros de buscas
+        $query->andFilterWhere(['like', 'username', $this->username])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'user_details.nif', $this->nif])
+            ->andFilterWhere(['like', 'user_details.phone_number', $this->phone_number])
+            ->andFilterWhere(['user_details.status' => $this->status]);
 
         return $dataProvider;
     }
+
 }

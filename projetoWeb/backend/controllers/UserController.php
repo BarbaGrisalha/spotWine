@@ -14,12 +14,7 @@ class UserController extends Controller
     public function actionIndex()
     {
         $searchModel = new UserSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => User::find(),
-            'pagination' => [
-                'pageSize' => 5,
-            ],
-        ]);
+        $dataProvider = $searchModel->search($this->request->queryParams); // Utilize o método search()
 
         return $this->render('index', [
             'searchModel' => $searchModel,

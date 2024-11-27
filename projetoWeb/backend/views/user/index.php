@@ -14,12 +14,12 @@ use common\models\UserDetails;
 /** @var common\models\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'SpotWine_Backend';
+$this->title = 'Gestão de Utilizadores';
 AppAsset::register($this);
 ?>
 <div class="site-index">
     <div class="text-center bg-transparent">
-        <h1 class="display-4">Gestão de Utilizadores</h1>
+        <?=Html::tag('h1', Html::encode($this->title))?>
     </div>
     <div class="body-content">
         <p>
@@ -35,9 +35,15 @@ AppAsset::register($this);
                 'username',
                 'email',
                 // Colunas de `user_details`
+//                [
+//                    'attribute' => 'userDetails.nif',
+//                    'value' => 'userDetails.nif',
+//                ],
                 [
-                    'attribute' => 'userDetails.nif',
-                    'value' => 'userDetails.nif',
+                    'attribute' => 'nif',
+                    'value' => function ($model) {
+                        return $model->userDetails->nif ?? 'N/A';
+                    },
                 ],
                 [
                     'attribute' => 'phone_number',
@@ -48,15 +54,23 @@ AppAsset::register($this);
                 // Coluna de status
                 [
                     'attribute' => 'status',
+                    'format' => 'raw', // Permite HTML na célula
                     'value' => function ($model) {
-                        return $model->userDetails && $model->userDetails->status == 1 ? 'Ativo' : 'Inativo';
+                        // Verifica o status e define a classe CSS
+                        $statusClass = $model->userDetails && $model->userDetails->status == 1 ? 'badge badge-success' : 'badge badge-danger';
+                        $statusLabel = $model->userDetails && $model->userDetails->status == 1 ? 'Ativo' : 'Inativo';
+
+                        // Retorna o status com a classe CSS aplicada
+                        return Html::tag('span', $statusLabel, ['class' => $statusClass]);
                     },
                     'filter' => [
                         1 => 'Ativo',
                         0 => 'Inativo',
-                    ],
-                ],
+                    ], // Adiciona as opções do dropdown
+                    'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'], // Adiciona um placeholder
 
+
+                ],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{view} {update} {deactivate}', // Adiciona um botão personalizado
@@ -64,7 +78,7 @@ AppAsset::register($this);
                         'deactivate' => function ($url, $model, $key) {
                             if ($model->userDetails && $model->userDetails->status == 1) {
                                 return Html::a(
-                                    '<i class="fas fa-ban"></i>', // Ícone de desativar
+                                    '<i class="fas fa-ban text-red"></i>', // Ícone de desativar
                                     ['user/deactivate', 'id' => $model->id], // URL para a actionDeactivate
                                     [
                                         'title' => 'Desativar',
@@ -74,7 +88,7 @@ AppAsset::register($this);
                                 );
                             } else {
                                 return Html::a(
-                                    '<i class="fas fa-check"></i>', // Ícone de ativar
+                                    '<i class="fas fa-check text-green"></i>', // Ícone de ativar
                                     ['user/activate', 'id' => $model->id], // URL para a actionActivate
                                     [
                                         'title' => 'Ativar',
@@ -90,6 +104,8 @@ AppAsset::register($this);
             ],
 
         ]); ?>
+
+
 
     </div>
 </div>
