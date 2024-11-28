@@ -7,11 +7,13 @@
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use yii\bootstrap5\Breadcrumbs;
-use yii\bootstrap5\Html;
+//use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 
 
 AppAsset::register($this);
@@ -58,9 +60,6 @@ AppAsset::register($this);
 
     <!-- Template Javascript -->
     <?= Html::jsFile('@web/js/main.js') ?>
-
-
-
 </head>
 
 <?php $this->beginBody(); ?>
@@ -147,7 +146,7 @@ AppAsset::register($this);
                     <!-- Links de Navegação -->
                     <div class="navbar-nav mx-auto">
 
-                        <a href="#" class="nav-item nav-link active">Vinhos</a>
+                        <?=Html::a('Vinhos', Url::to(['/product/index']), ['class' => 'nav-item nav-link'])?>
                         <a href="#" class="nav-item nav-link">Produtores</a>
                         <a href="#" class="nav-item nav-link">Promoções</a>
                         <a href="#" class="nav-item nav-link">Concurso</a>

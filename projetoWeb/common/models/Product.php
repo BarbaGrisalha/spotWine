@@ -56,11 +56,11 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             'product_id' => 'Product ID',
-            'producer_id' => 'Producer ID',
-            'category_id' => 'Category ID',
-            'name' => 'Name',
-            'description' => 'Description',
-            'price' => 'Price',
+            'producer_id' => 'Produtor',
+            'category_id' => 'Categoria',
+            'name' => 'Nome',
+            'description' => 'Descrição',
+            'price' => 'Preço',
             'stock' => 'Stock',
             'image_url' => 'Image Url',
         ];
@@ -71,7 +71,7 @@ class Product extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getCategories()
     {
         return $this->hasOne(Categories::class, ['category_id' => 'category_id']);
     }
@@ -101,7 +101,7 @@ class Product extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getProducer()
+    public function getProducers()
     {
         return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
     }
