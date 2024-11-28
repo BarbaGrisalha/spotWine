@@ -34,7 +34,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return 'user'; // Nome da tabela no banco de dados
+        return '{{%user}}';
     }
 
     /**
@@ -51,29 +51,28 @@ class User extends ActiveRecord implements IdentityInterface
      * {@inheritdoc}
      */
 
-    public $password; // Campo temporário para o formulário
+//    public $password; // Campo temporário para o formulário
     public function rules()
     {
         return [
-            [['username', 'email', 'password'], 'required'], // Inclua password
+            [['username', 'email'], 'required'], // Inclua password
             [['email'], 'email'],
-            [['password'], 'string', 'min' => 6], // Regras para a senha
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if (!empty($this->password)) {
-                $this->setPassword($this->password); // Gera o hash antes de salvar
-                $this->generateAuthKey(); // Gera a chave de autenticação
-            }
-            return true;
-        }
-        return false;
-    }
+//    public function beforeSave($insert)
+//    {
+//        if (parent::beforeSave($insert)) {
+//            if (!empty($this->password)) {
+//                $this->setPassword($this->password); // Gera o hash antes de salvar
+//                $this->generateAuthKey(); // Gera a chave de autenticação
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
     /**
      * Relacionamento com UserDetails
@@ -231,6 +230,18 @@ class User extends ActiveRecord implements IdentityInterface
     public function generatePasswordResetToken()
     {
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
+    }
+
+    public static function findByVerificationToken($token) {
+        return static::findOne([
+            'verification_token' => $token,
+            'status' => self::STATUS_INACTIVE
+        ]);
     }
 
 }

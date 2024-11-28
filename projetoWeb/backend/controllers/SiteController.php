@@ -4,15 +4,12 @@ namespace backend\controllers;
 
 use backend\models\Producers;
 use common\models\LoginForm;
-use http\Client;
-use Psy\Util\Json;
+use common\models\UserSearch;
 use Yii;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
-use common\models\User;
-use common\models\UserSearch;
 
 
 /**
@@ -183,6 +180,7 @@ class SiteController extends Controller
         }
     }
 
-    
+
+
 
 }

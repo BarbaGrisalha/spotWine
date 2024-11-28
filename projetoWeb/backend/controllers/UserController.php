@@ -5,7 +5,6 @@ use common\models\User;
 use common\models\UserDetails;
 use common\models\UserSearch;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -27,7 +26,7 @@ class UserController extends Controller
         $model = new User();
         $userDetails = new UserDetails();
 
-        if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
+        if ($model->load($this->request->post()) && $userDetails->load(Yii::$app->request->post())) {
             // Salva o usuário e gera o hash da senha
             if ($model->save()) {
                 // Associa o user_id do novo usuário ao user_details

@@ -16,6 +16,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
+
 /**
  * Site controller
  */
@@ -154,9 +155,10 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
+        $model = new SignupForm(); // Formulário de registro
+
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            Yii::$app->session->setFlash('success', 'Registration successful. Please log in.');
             return $this->goHome();
         }
 
@@ -164,6 +166,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
 
     /**
      * Requests password reset.

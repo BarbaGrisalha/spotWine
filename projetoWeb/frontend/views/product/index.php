@@ -9,7 +9,7 @@ $this->title = 'Lista de Produtos';
 $this->params['breadcrumbs'][] = $this->title;
 
 /** @var yii\web\View $this */
-/** @var common\models\UserSearch $searchModel */
+/** @var \common\models\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 ?>
 
@@ -35,8 +35,6 @@ html::tag('h1', Html::encode($this->title)) ,
                },
            ],
 
-
-           'created_at:date',
            [
                'class' => 'yii\grid\ActionColumn',
                'template' => '{view}', // Apenas exibir detalhes

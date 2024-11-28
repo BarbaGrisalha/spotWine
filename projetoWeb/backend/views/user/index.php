@@ -2,16 +2,11 @@
 /** @var yii\web\View $this */
 
 use backend\assets\AppAsset;
-use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\data\ActiveDataProvider;
-use common\models\User;
-use common\models\UserDetails;
+use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var common\models\UserSearch $searchModel */
+/** @var \common\models\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Gestão de Utilizadores';

@@ -5,17 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56d1a053-790b-4a82-9eb0-bb772e790692" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/projetoWeb/common/models/Categories.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/controllers/ProductController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/models/ProductFrontSearch.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/_form.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/_search.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/create.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/update.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/view.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user-management/create.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user-management/deactivate.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user-management/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user-management/update.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user-management/view.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/common/models/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/common/models/Product.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/common/models/ProductSearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/common/models/ProductSearch.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/controllers/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/user/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/common/models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/common/models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/common/models/UserSearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/common/models/UserSearch.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/controllers/SiteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/controllers/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/models/SignupForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/models/SignupForm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/product/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -308,12 +314,23 @@
       <workItem from="1731965170584" duration="56811000" />
       <workItem from="1732198745415" duration="66000" />
       <workItem from="1732198820939" duration="64000" />
-      <workItem from="1732804093806" duration="8445000" />
+      <workItem from="1732804093806" duration="17992000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
