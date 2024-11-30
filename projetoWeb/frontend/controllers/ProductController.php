@@ -2,14 +2,14 @@
 
 namespace frontend\controllers;
 
-use common\models\ProductSearch;
+use frontend\models\ProductFrontSearch;
 use Yii;
 
 class ProductController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $searchModel = new ProductSearch();
+        $searchModel = new ProductFrontSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
         return $this->render('index', [
             'searchModel' => $searchModel,

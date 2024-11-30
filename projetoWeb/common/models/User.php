@@ -51,7 +51,7 @@ class User extends ActiveRecord implements IdentityInterface
      * {@inheritdoc}
      */
 
-//    public $password; // Campo temporário para o formulário
+ public $password; // Campo temporário para o formulário
     public function rules()
     {
         return [
@@ -61,18 +61,6 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
-
-//    public function beforeSave($insert)
-//    {
-//        if (parent::beforeSave($insert)) {
-//            if (!empty($this->password)) {
-//                $this->setPassword($this->password); // Gera o hash antes de salvar
-//                $this->generateAuthKey(); // Gera a chave de autenticação
-//            }
-//            return true;
-//        }
-//        return false;
-//    }
 
     /**
      * Relacionamento com UserDetails

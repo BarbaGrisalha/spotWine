@@ -96,13 +96,16 @@ class UserController extends Controller
         // Carrega o modelo UserDetails relacionado
         $userDetails = UserDetails::findOne(['user_id' => $id]) ?? new UserDetails(['user_id' => $id]);
 
-        // Verifica se os modelos existem
         if (!$model) {
             throw new NotFoundHttpException('Usuário não encontrado.');
         }
 
-        // Carrega os dados enviados pelo formulário
         if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
+
+            // Se o campo de senha foi preenchido, atualize a senha
+            if (!empty($model->password)) {
+                $model->setPassword($model->password); // Define o hash
+            }
 
             // Salva os dados de ambos os modelos
             if ($model->save() && $userDetails->save()) {
@@ -113,14 +116,11 @@ class UserController extends Controller
             }
         }
 
-        // Renderiza a view de update
         return $this->render('update', [
             'model' => $model,
             'userDetails' => $userDetails,
         ]);
     }
-
-
 
     public function actionView($id)
     {
