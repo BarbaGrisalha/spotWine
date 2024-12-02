@@ -1,24 +1,35 @@
 <?php
-/** @var yii\web\View $this */
 
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\ListView;
 
 $this->title = 'Lista de Produtos';
-
 $this->params['breadcrumbs'][] = $this->title;
-
-/** @var yii\web\View $this */
-/** @var \common\models\UserSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
 ?>
+<div class="product-search mb-4">
+    <?php $form = ActiveForm::begin([
+        'method' => 'get', // Envia os dados por GET
+    ]); ?>
 
+    <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Pesquisar por nome do produto'])->label(false) ?>
+
+    <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-primary']) ?>
+
+    <?php ActiveForm::end(); ?>
+</div>
 <?=ListView::widget([
     'dataProvider' => $dataProvider,
-    'itemView' => '_product',
+    'itemView' => '_product', // Cada produto será renderizado usando o arquivo _product.php
+    'layout' => "<div class='row'>{items}</div>\n{pager}", // Renderiza os itens dentro de um grid
+    'itemOptions' => ['class' => 'col-lg-3 col-md-4 col-sm-6 mb-4'], // Define as classes para cada item
+]); ?>
 
-]);
+
+
+
+<!--
 //html::tag('h1', Html::encode($this->title)) ,
 //    GridView::widget([
 //       'dataProvider' => $dataProvider,
@@ -47,6 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //       ]
 //    ])
 
-?>
+-->
 
 

@@ -6,6 +6,7 @@
 
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
+use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap5\Breadcrumbs;
 //use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
@@ -15,7 +16,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 
-
+BootstrapAsset::register($this);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>

@@ -1,35 +1,43 @@
-<?php header("Content-Type: text/css; charset=UTF-8"); ?>
-<link rel="stylesheet" href="/frontend/web/css/style.css"/>
-
 <?php
+
 use yii\helpers\Html;
 
 ?>
-
-<div class="card">
-    <?= Html::encode($model->name) ?>
-    <p>
-        <small> <?= Html::encode($model->price)?> </small>
-    </p>
-    <p>
-        <small> <?= Html::encode($model->categories->name) ?> </small>
-    </p>
-    <p>
-
-    </p>
-
-
-    <p>
-        <?= Html::a('Ver', ['product/index', 'id' => $model->product_id], ['class' => 'btnChapter']) ?>
-        <?= Html::a('Editar', ['product/update', 'id' => $model->product_id], ['class' => 'teste']) ?>
-        <?= Html::a('Deletar', ['product/delete', 'id' => $model->product_id],[
-            'class' => 'btnDelete',
-            //Com isso, ao clicar em "Deletar", o Yii vai automaticamente enviar uma requisição POST para a ação delete do controlador, conforme esperado pelo VerbFilter.
-            //O data-confirm também exibe uma mensagem de confirmação ao usuário antes de prosseguir.
-            'data' => [
-                'method' => 'post', // Força o método POST
-                'confirm' => 'Tem certeza de que deseja excluir este livro?', // Adiciona uma confirmação antes de excluir
-            ], ['class' => 'btnDelete'],
-        ]) ?>
-    </p>
-</div>
+<?= Html::a(
+    "<div class='product-item bg-light mb-4'>
+            <div class='product-img position-relative overflow-hidden'>
+                " . Html::img('@web/img/wineBottle.png', [
+        'class' => 'img-fluid w-100',
+        'alt' => 'Imagem garrafa de vinho'
+    ]) . "
+                <div class='product-action'>
+                    <a class='btn btn-outline-dark btn-square' href='#'><i class='fa fa-shopping-cart'></i></a>
+                    <a class='btn btn-outline-dark btn-square' href='#'><i class='far fa-heart'></i></a>
+                    <a class='btn btn-outline-dark btn-square' href='#'><i class='fa fa-sync-alt'></i></a>
+                    <a class='btn btn-outline-dark btn-square' href='#'><i class='fa fa-search'></i></a>
+                </div>
+            </div>
+            <div class='text-center py-4'>
+                <div class='d-flex align-items-center justify-content-center mt-2'>
+                    <small>Produtor: " . Html::encode($model->producers->winery_name ?? 'N/A') . "</small>
+                </div>
+                <span class='h6 text-decoration-none text-truncate'>" . Html::encode($model->name) . "</span>
+                <div class='d-flex align-items-center justify-content-center mt-2'>
+                    <small>Categoria: " . Html::encode($model->categories->name ?? 'N/A') . "</small>
+                </div>
+                <div class='d-flex align-items-center justify-content-center mb-1'>
+                    <small class='fa fa-star text-primary mr-1'></small>
+                    <small class='fa fa-star text-primary mr-1'></small>
+                    <small class='fa fa-star text-primary mr-1'></small>
+                    <small class='fa fa-star-half-alt text-primary mr-1'></small>
+                    <small class='far fa-star text-primary mr-1'></small>
+                    <small>(99)</small>
+                </div>
+                <div class='d-flex align-items-center justify-content-center mt-2'>
+                    <h5 class='text-primary'>" . Html::encode($model->price) . " €</h5>
+                </div>
+            </div>
+        </div>",
+    ['product/view', 'id' => $model->product_id], // Link para a página do produto
+    ['class' => 'text-decoration-none'] // Classe adicional para o link
+) ?>
