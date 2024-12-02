@@ -5,22 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56d1a053-790b-4a82-9eb0-bb772e790692" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/models/ProductFrontSearch.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/_form.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/_search.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/create.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/update.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/view.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projetoWeb/common/models/AuthAssignment.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/controllers/SiteController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projetoWeb/backend/controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/site/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projetoWeb/backend/views/user/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/backend/views/user/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projetoWeb/common/models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/common/models/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projetoWeb/common/models/UserSearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/common/models/UserSearch.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/controllers/SiteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/models/SignupForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/models/SignupForm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/layouts/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/product/_product.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/_product.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projetoWeb/frontend/views/product/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/projetoWeb/frontend/views/product/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -248,22 +240,22 @@
     <option name="sortByType" value="true" />
     <option name="sortKey" value="BY_TYPE" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/lucas/PSI_3Semestre/platSistemas/ficha04Prof",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.webide.settings.project.settings.php",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/lucas/PSI_3Semestre/platSistemas/ficha04Prof&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.webide.settings.project.settings.php&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/projetoWeb/backend/views/layouts" />
@@ -314,7 +306,7 @@
       <workItem from="1731965170584" duration="56811000" />
       <workItem from="1732198745415" duration="66000" />
       <workItem from="1732198820939" duration="64000" />
-      <workItem from="1732804093806" duration="17992000" />
+      <workItem from="1732804093806" duration="34827000" />
     </task>
     <servers />
   </component>

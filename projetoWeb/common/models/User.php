@@ -8,6 +8,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+
 /**
  * User model
  *
@@ -75,9 +76,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthAssignment()
     {
-        return $this->hasOne(\yii\rbac\DbManager::class, ['user_id' => 'id'])
-            ->viaTable('auth_assignment', ['user_id' => 'id']);
+        return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
     }
+
+
 
     /**
      * Obter o nome do role

@@ -26,6 +26,7 @@ class UserController extends Controller
         $model = new User();
         $userDetails = new UserDetails();
 
+
         if ($model->load($this->request->post()) && $userDetails->load(Yii::$app->request->post())) {
             // Salva o usuário e gera o hash da senha
             if ($model->save()) {

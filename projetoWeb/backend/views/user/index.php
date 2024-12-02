@@ -25,7 +25,6 @@ AppAsset::register($this);
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
                 'id',
                 'username',
                 'email',
@@ -46,6 +45,21 @@ AppAsset::register($this);
                         return $model->userDetails->phone_number ?? 'N/A';
                     },
                 ],
+                [
+                    'attribute' => 'role',
+                    'label' => 'Role',
+                    'value' => function ($model) {
+                        return $model->getRoleName(); // Retorna o nome do role
+                    },
+                    'filter' => [
+                        'admin' => 'Admin',
+                        'producer' => 'Producer',
+                        'consumer' => 'Consumer',
+                    ],
+                    'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'],
+                ],
+
+
                 // Coluna de status
                 [
                     'attribute' => 'status',
@@ -61,9 +75,8 @@ AppAsset::register($this);
                     'filter' => [
                         1 => 'Ativo',
                         0 => 'Inativo',
-                    ], // Adiciona as opções do dropdown
+                    ],
                     'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'], // Adiciona um placeholder
-
 
                 ],
                 [

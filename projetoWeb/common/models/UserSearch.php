@@ -16,12 +16,13 @@ class UserSearch extends User
     public $nif; // Atributo relacionado à tabela user_details
     public $phone_number; // Atributo relacionado à tabela user_details
     public $status;
+    public $role;
 
     public function rules()
     {
         return [
             [['id', 'status'], 'integer'], // Substitua 'user_id' por 'id', se necessário
-            [['username', 'email','nif','phone_number'], 'safe'],
+            [['username', 'email','nif','phone_number','role'], 'safe'],
         ];
     }
 
@@ -43,7 +44,14 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find()->joinWith('userDetails');
+        $query = User::find()
+            ->joinWith([
+                'userDetails', // Relação com detalhes do usuário
+                'authAssignment' => function ($query) {
+                    $query->alias('auth_assignment'); // Alias para a tabela auth_assignment
+                }
+            ]);
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -64,6 +72,10 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'user_details.nif', $this->nif])
             ->andFilterWhere(['like', 'user_details.phone_number', $this->phone_number])
             ->andFilterWhere(['user_details.status' => $this->status]);
+
+        // Filtro de Role (auth_assignment)
+        $query->andFilterWhere(['auth_assignment.item_name' => $this->role]);
+
 
         return $dataProvider;
     }
