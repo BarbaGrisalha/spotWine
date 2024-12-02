@@ -29,6 +29,9 @@ class UserController extends Controller
 
         if ($model->load($this->request->post()) && $userDetails->load(Yii::$app->request->post())) {
             // Salva o usuário e gera o hash da senha
+            $model->generateAuthKey();
+            $model->generateEmailVerificationToken();
+
             if ($model->save()) {
                 // Associa o user_id do novo usuário ao user_details
                 $userDetails->user_id = $model->id;

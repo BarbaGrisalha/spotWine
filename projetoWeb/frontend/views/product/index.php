@@ -7,16 +7,17 @@ use yii\widgets\ListView;
 
 $this->title = 'Lista de Produtos';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="product-search mb-4">
     <?php $form = ActiveForm::begin([
         'method' => 'get', // Envia os dados por GET
     ]); ?>
 
-    <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Pesquisar por nome do produto'])->label(false) ?>
+    <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Pesquisar por nome do produto',
+        'class' => 'form-control'])->label(false) ?>
 
-    <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-primary']) ?>
-
+    <?= Html::submitButton(?><span>'Pesquisar'</span>, ['class' => 'btn btn-primary']) ?>
     <?php ActiveForm::end(); ?>
 </div>
 <?=ListView::widget([
