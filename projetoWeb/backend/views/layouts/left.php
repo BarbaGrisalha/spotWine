@@ -11,19 +11,40 @@
         <nav class="mt-2">
             <?= dmstr\adminlte\widgets\Menu::widget(
                 [
-                    'options' => ['class' => 'nav nav-pills nav-sidebar flex-column', 'data-widget' => 'treeview'],
+                    'options' => ['class' => 'nav nav-pills nav-sidebar flex-column',
+                        'data-widget' => 'treeview'],
                     'items' => [
-                        ['label' => 'Menu BackOffice', 'header' => true],//ok. Alterado
-                        ['label' => 'Dashboard', 'iconType' => 'fa', 'icon' => 'home', 'url' => ['/site/index']],
-                             ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+                        ['label' => 'Menu BackOffice',
+                            'header' => true],//ok. Alterado
+                        ['label' => 'Dashboard',
+                            'iconType' => 'fa',
+                            'icon' => 'home',
+                            'url' => ['/site/index']],
+                             ['label' => 'Login',
+                                 'url' => ['site/login'],
+                                 'visible' => Yii::$app->user->isGuest],
                               [
-                            'label' => 'Administration Tools','icon' => 'share','url' => '#',
+                            'label' => 'Administration Tools',
+                                  'icon' => 'share',
+                                  'url' => '#',
                             'items' => [
-                                ['label' => 'Gii', 'iconType' => 'far', 'icon' => 'file-code', 'url' => ['/gii'],],
-                                ['label' => 'Debug', 'icon' => 'tachometer-alt', 'url' => ['/debug'],],
-                                ['label' => 'Email', 'iconType' => 'fa','icon'=> 'envelope','url' =>['/site/developing']],
-                                ['label' => 'Calendar','iconType'=> 'fa','icon' => 'calendar','url'=>['/site/developing']],
-
+                                ['label' => 'Gii',
+                                    'iconType' => 'far',
+                                    'icon' => 'file-code',
+                                    'url' => ['/gii'],
+                                    ],
+                                ['label' => 'Debug',
+                                    'icon' => 'tachometer-alt',
+                                    'url' => ['/debug'],
+                                    ],
+                                ['label' => 'Email',
+                                    'iconType' => 'fa',
+                                    'icon'=> 'envelope',
+                                    'url' =>['/site/developing']],
+                                ['label' => 'Calendar',
+                                    'iconType'=> 'fa',
+                                    'icon' => 'calendar',
+                                    'url'=>['/site/developing']],
                         ],
                     ],
                         [
@@ -32,13 +53,34 @@
                             'icon' => 'circle',
                             'url' => '#',
                             'items' => [
-                                ['label' => 'Relatório de Produtos', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-produtos'],],
-                                ['label' => 'Relatório de Clienes', 'iconType' => 'far', 'icon' => 'dot-circle', 'url' => ['relatorio/relatorio-clientes'],],
-                                ['label' => 'Relatório Produtos/Produtor', 'iconType' => 'far', 'icon'=> 'dot-circle','url'=>['relatorio/relatorio-por-produtor'],],
+                                ['label' => 'Relatório de Produtos',
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' => ['relatorio/relatorio-produtos'],
+                                    ],
+                                ['label' => 'Relatório de Clienes',
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' => ['relatorio/relatorio-clientes'],
+                                    'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
+                                    ],
+                                ['label' => 'Relatório Produtos/Produtor',
+                                    'iconType' => 'far',
+                                    'icon'=> 'dot-circle',
+                                    'url'=>['relatorio/relatorio-por-produtor'],
+                                    ],
                             ],
                         ],
-                        ['label' => 'Gestão de usuários','iconType' => 'far','icon' => 'dot-circle', 'url' =>['/user/index'],
-
+                        ['label' => 'Gestão de Produtores',
+                            'iconType' => 'far',
+                            'icon' => 'dot-circle',
+                            'url' =>['/user/index'],
+                            'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
+                        ],
+                        ['label' => 'Gestão dos Produtos',
+                            'iconType' => 'far',
+                            'icon' => 'dot-circle',
+                            'url' =>['/product/index'],
                         ]
                 ],
                ]

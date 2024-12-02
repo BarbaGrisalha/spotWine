@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use Yii;
 use common\models\Product;
 use common\models\ProductSearch;
 use yii\web\Controller;
@@ -68,6 +69,7 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
+        $user = Yii::$app->user->identity;
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -79,6 +81,7 @@ class ProductController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'user' => $user,
         ]);
     }
 

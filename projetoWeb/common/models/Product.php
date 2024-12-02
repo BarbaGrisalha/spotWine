@@ -125,4 +125,14 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Reviews::class, ['product_id' => 'product_id']);
     }
+
+    /**
+     * Gets query for [[User]] through [[Producers]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');
+    }
 }

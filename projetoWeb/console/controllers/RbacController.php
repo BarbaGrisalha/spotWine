@@ -16,6 +16,9 @@ class RbacController extends Controller
         $auth->removeAll();
 
         // Criar permissões
+        /*
+         * Notamos que primeiro é criada a permissão, depois ela é
+         * implementada a quem precisa dela **/
         $manageProducts = $auth->createPermission('manageProducts');
         $manageProducts->description = 'Gerenciar produtos';
         $auth->add($manageProducts);
@@ -23,6 +26,10 @@ class RbacController extends Controller
         $accessBackend = $auth->createPermission('accessBackend');
         $accessBackend->description = 'Acessar painel administrativo';
         $auth->add($accessBackend);
+
+        $createUsers = $auth->createPermission('createUsers');
+        $createUsers->description = 'Criar utilizador';
+        $auth->add($createUsers);
 
         // Criar roles
         $consumer = $auth->createRole('consumer');
@@ -36,6 +43,7 @@ class RbacController extends Controller
         $auth->add($admin);
         $auth->addChild($admin, $producer); // Admin herda permissões de produtor
         $auth->addChild($admin, $accessBackend); // Admin pode acessar o backend
+        $auth->addChild($admin,$createUsers);// Admin pode criar utilizadores.
 
         echo "Roles e permissões configuradas com sucesso.\n";
     }

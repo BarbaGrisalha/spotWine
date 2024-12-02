@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
-use app\models\Products;
-use app\models\ProductsSearch;
+use common\models\Product;
+use common\models\ProductsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -40,7 +40,7 @@ class ProductsController extends Controller
     {
         $searchModel = new ProductsSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-dd('hfjhgjkg');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -68,6 +68,7 @@ dd('hfjhgjkg');
     public function actionCreate()
     {
         $model = new Products();
+        $user = Yii::$app->user->identity;
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -79,6 +80,7 @@ dd('hfjhgjkg');
 
         return $this->render('create', [
             'model' => $model,
+            'user' => $user,
         ]);
     }
 

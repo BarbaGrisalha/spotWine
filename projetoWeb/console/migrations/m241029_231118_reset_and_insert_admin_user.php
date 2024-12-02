@@ -16,7 +16,7 @@ class m241029_231118_reset_and_insert_admin_user extends Migration
         $this->delete('{{%user}}');
 
         // Gerar valores necessários
-        $password = '#378959@Az';
+            $password = '#378959@Az';
         $passwordHash = Yii::$app->security->generatePasswordHash($password);
         $authKey = Yii::$app->security->generateRandomString();
         $currentTime = time();

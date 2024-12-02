@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $userDetails->status == 1 ? 'Ativo' : 'Inativo';
                     },
                 ],
+                'role',
             ],
         ]) ?>
     <?php else: ?>

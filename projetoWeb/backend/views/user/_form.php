@@ -9,11 +9,15 @@
     <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
+
     <?php if ($model->isNewRecord): ?>
         <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
     <?php else: ?>
         <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'value' => ''])->label('Nova Senha (deixe em branco para manter)') ?>
     <?php endif; ?>
+
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'value'=>'']) ?>
+
 
     <!-- Campos do modelo UserDetails -->
     <?= $form->field($userDetails, 'nif')->textInput(['maxlength' => true]) ?>

@@ -43,8 +43,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function behaviors()
     {
+
         return [
-            TimestampBehavior::class,
+            TimestampBehavior::class,[
+                'class' => \yii\behaviors\TimestampBehavior::class,
+                //'createdAt'=>'created_at',
+                //'updatedAt'=>'updated_at',
+            ],
         ];
     }
 
@@ -52,16 +57,46 @@ class User extends ActiveRecord implements IdentityInterface
      * {@inheritdoc}
      */
 
+
  public $password; // Campo temporário para o formulário
+
     public function rules()
     {
         return [
-            [['username', 'email'], 'required'], // Inclua password
+            [['username', 'email'],'required'], // Inclua password
+            [['password'],'required', 'on' =>'create'],
+            [['password'],'safe'],
             [['email'], 'email'],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['role','safe'],
         ];
     }
+
+
+//descomentei abaixo para poder alterar a password do produtor
+    public function beforeSave($insert)
+    {
+        /*if (parent::beforeSave($insert)) {
+            if (!empty($this->password)) {
+                $this->setPassword($this->password); // Gera o hash antes de salvar
+                $this->generateAuthKey(); // Gera a chave de autenticação
+            }*/
+        if (parent::beforeSave($insert)) {
+            // Se a senha foi fornecida, criptografá-la
+            if (!empty($this->password)) {
+                $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            } else {
+                // Se for uma atualização e a senha estiver vazia, manter a senha atual
+                if (!$this->isNewRecord) {
+                    unset($this->password); // Evita alterar o valor da senha
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * Relacionamento com UserDetails
@@ -70,13 +105,65 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(UserDetails::class, ['user_id' => 'id']);
     }
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    /**
+     * Generates "remember me" authentication key
+     */
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
 
     /**
      * Relacionamento com auth_assignment
      */
     public function getAuthAssignment()
     {
+
         return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
+
+        return $this->hasOne(\yii\rbac\Assignment::class, ['user_id' => 'id'])
+            ->viaTable('auth_assignment', ['user_id' => 'id']);
+
     }
 
 
@@ -95,28 +182,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
-    {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -186,35 +254,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return Yii::$app->security->validatePassword($password, $this->password_hash);
-    }
-
-    /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
-    }
-
-    /**
-     * Generates "remember me" authentication key
-     */
-    public function generateAuthKey()
-    {
-        $this->auth_key = Yii::$app->security->generateRandomString();
-    }
-
-    /**
      * Generates new password reset token
      */
     public function generatePasswordResetToken()
@@ -232,6 +271,25 @@ class User extends ActiveRecord implements IdentityInterface
             'verification_token' => $token,
             'status' => self::STATUS_INACTIVE
         ]);
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['username', 'email', 'password', 'status'];
+        $scenarios['update'] = ['username', 'email', 'status']; // password não é obrigatório no update
+        return $scenarios;
+    }
+
+    public function getProducer(): \yii\db\ActiveQuery
+    {
+        return $this->hasOne(Producers::class,['user_id'=> 'id']);
+    }
+
+    public function getRole(){
+        //return $this->hasOne(Producers::class,['user_id'=> 'id'])->role;
+
+        //return $this->hasOne(User::class, ['user_id' => 'id'])->role;
     }
 
 }

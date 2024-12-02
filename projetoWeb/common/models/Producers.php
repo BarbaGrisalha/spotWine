@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\models\Users;
 use Yii;
 
 /**
@@ -92,6 +93,6 @@ class Producers extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::class, ['user_id' => 'user_id']);
+        return $this->hasOne(Users::class, ['producer_id' => 'user_id']);
     }
 }

@@ -48,8 +48,12 @@ class SiteController extends Controller
                 if (Yii::$app->user->isGuest) {
                     return Yii::$app->response->redirect(['site/login']);
                 }
-                throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta página.');
-                return render('site/login');
+                //Exibir a página de erro personalizada
+                return Yii::$app->response->statusCode = 403;
+                return Yii::$app->controller->render('error',[
+                    'name' => 'Acesso Negado',
+                    'message' =>'Você não tem permissão para acessar esta pagina.',
+                ]);
             },
         ],
         'verbs' => [
@@ -60,8 +64,6 @@ class SiteController extends Controller
         ],
     ];
 }
-
-
     /**
      * {@inheritdoc}
      */

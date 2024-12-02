@@ -1,11 +1,14 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Producers;
+use common\models\Product;
 use common\models\User;
 use common\models\UserDetails;
 use common\models\UserSearch;
 use Yii;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 class UserController extends Controller
@@ -23,12 +26,18 @@ class UserController extends Controller
 
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('createUsers')) {
+            throw new ForbiddenHttpException('Você não tem permissão para criar utilizadores - UserController linha 29.');
+        }
         $model = new User();
         $userDetails = new UserDetails();
 
-
         if ($model->load($this->request->post()) && $userDetails->load(Yii::$app->request->post())) {
-            // Salva o usuário e gera o hash da senha
+
+            $model->setPassword($model->password); // Gera o hash da senha
+            $model->generatePasswordResetToken();
+
+            // Gera as chaves de autenticação e tokens
             $model->generateAuthKey();
             $model->generateEmailVerificationToken();
 
@@ -53,8 +62,20 @@ class UserController extends Controller
             'model' => $model,
             'userDetails' => $userDetails,
         ]);
-    }
 
+    }
+    public function actionView($id)
+    {
+        $model = User::findOne($id); // Busca o modelo principal User pelo ID
+
+        if (!$model) {
+            throw new NotFoundHttpException('O usuário solicitado não foi encontrado.');
+        }
+
+        return $this->render('view', [
+            'model' => $model,
+        ]);
+    }
     public function actionDeactivate($id)
     {
         $userDetails = UserDetails::findOne(['user_id' => $id]);
@@ -106,9 +127,15 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
 
+
             // Se o campo de senha foi preenchido, atualize a senha
             if (!empty($model->password)) {
                 $model->setPassword($model->password); // Define o hash
+            }
+
+
+            if(!empty($model->password)){
+                $model->setPassword($model->password);
             }
 
             // Salva os dados de ambos os modelos
@@ -125,20 +152,6 @@ class UserController extends Controller
             'userDetails' => $userDetails,
         ]);
     }
-
-    public function actionView($id)
-    {
-        $model = User::findOne($id); // Busca o modelo principal User pelo ID
-
-        if (!$model) {
-            throw new NotFoundHttpException('O usuário solicitado não foi encontrado.');
-        }
-
-        return $this->render('view', [
-            'model' => $model,
-        ]);
-    }
-
     protected function findModel($id)
     {
         if (($model = User::findOne($id)) !== null) {
@@ -147,6 +160,39 @@ class UserController extends Controller
         throw new NotFoundHttpException('The requested user does not exist.');
     }
 
+    public function actionCreateProducts()
+    {
+        // Verifica se o usuário tem permissão para criar produtos
+        if (!Yii::$app->user->can('createdProduct')) {
+            throw new ForbiddenHttpException('Você não tem permissão para criar produtos!');
+        }
 
+        // Cria uma nova instância de Product
+        $model = new Product();
+
+        // Verifica se os dados do formulário foram enviados e se o produto pode ser salvo
+        if ($model->load(Yii::$app->request->post())) {
+            // Atribui automaticamente o 'producer_id' se o usuário logado for um produtor
+            if (Yii::$app->user->identity->role === 'producer') {
+                $producer = Producers::findOne(['user_id' => Yii::$app->user->id]);
+                if ($producer) {
+                    $model->producer_id = $producer->id; // Relaciona o produto ao produtor logado
+                } else {
+                    throw new ForbiddenHttpException('Não foi possível identificar o produtor associado a este usuário.');
+                }
+            }
+
+            // Tenta salvar o produto no banco de dados
+            if ($model->save()) {
+                // Redireciona para a visualização do produto se salvo com sucesso
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        // Renderiza o formulário de criação do produto caso contrário
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
 
 }
