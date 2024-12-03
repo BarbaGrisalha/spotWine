@@ -3032,23 +3032,28 @@ input[type="button"].btn-block {
 }
 
 .dropdown-menu {
-  position: absolute;
-  top: 100%;
+  position: fixed !important;
+  top: 0;
   left: 0;
-  z-index: 1000;
-  display: none;
-  float: left;
-  min-width: 10rem;
-  padding: 0.5rem 0;
-  margin: 0.125rem 0 0;
-  font-size: 1rem;
-  color: #6C757D;
-  text-align: left;
-  list-style: none;
+  width: 50%;
+  height: 100%;
+  z-index: 1050;
   background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%); /* Inicialmente fora da tela (em cima) */
+  opacity: 0; /* Inicialmente invisível */
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease; /* Transições suaves */
+  pointer-events: none; /* Desativa interações quando oculto */
 }
+
+.dropdown-menu.show {
+  transform: translateY(0); /* Move para a posição visível */
+  opacity: 1; /* Torna visível */
+  pointer-events: auto; /* Permite interações */
+}
+
 
 .dropdown-menu-left {
   right: auto;
@@ -3196,10 +3201,8 @@ input[type="button"].btn-block {
 }
 
 .dropdown-divider {
-  height: 0;
-  margin: 0.5rem 0;
-  overflow: hidden;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid #ddd;
+  margin: 1rem 0;
 }
 
 .dropdown-item {
@@ -3234,16 +3237,15 @@ input[type="button"].btn-block {
 }
 
 .dropdown-menu.show {
-  display: block;
+  transform: translateY(0); /* Move para a posição visível */
+  opacity: 1; /* Torna visível */
+  display: block !important; /* Mostra quando ativado */
 }
 
 .dropdown-header {
-  display: block;
-  padding: 0.5rem 1.5rem;
-  margin-bottom: 0;
-  font-size: 0.875rem;
-  color: #6c757d;
-  white-space: nowrap;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .dropdown-item-text {
@@ -9741,3 +9743,17 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 
+.close-dropdown {
+  position: absolute;
+  top: 10px; /* Posição no topo */
+  right: 10px; /* Posição à direita */
+  z-index: 1060; /* Fica acima do restante */
+  font-size: 1.5rem; /* Tamanho do botão */
+  background: transparent; /* Fundo transparente */
+  border: none; /* Sem borda */
+  cursor: pointer; /* Mostra o cursor clicável */
+}
+
+.close-dropdown:hover {
+  color: #dc3545; /* Muda a cor no hover */
+}

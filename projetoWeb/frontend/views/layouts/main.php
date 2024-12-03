@@ -46,8 +46,7 @@ AppAsset::register($this);
     <link href="lib/animate/animate.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <?= Html::cssFile('@web/css/style.css') ?>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -59,6 +58,8 @@ AppAsset::register($this);
     <script src="mail/jqBootstrapValidation.min.js"></script>
     <script src="mail/contact.js"></script>
 
+        <!-- Customized Bootstrap Stylesheet -->
+        <?= Html::cssFile('@web/css/style.css') ?>
     <!-- Template Javascript -->
     <?= Html::jsFile('@web/js/main.js') ?>
 </head>
@@ -118,7 +119,7 @@ AppAsset::register($this);
                             <button class="dropdown-item" type="button">
                                 <?= Html::a('Logar', Url::to(['site/login']), ['class' => 'btn btn-primary'])?>
                             </button>
-                            <button xclass="dropdown-item" type="button">Sign up</button>
+                            <button class="dropdown-item" type="button">Sign up</button>
                         </div>
                     </div>
                 </a>
@@ -259,6 +260,7 @@ AppAsset::register($this);
 <?= $this->render('footer') ?>
 
 <?php $this->endBody() ?>
+
 </body>
 </html>
 <?php $this->endPage();

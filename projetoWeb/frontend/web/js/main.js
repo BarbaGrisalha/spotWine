@@ -17,8 +17,41 @@
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
     });
-    
-    
+
+    $(document).ready(function () {
+        // Alterna a exibição do dropdown quando o botão "Filtrar" for clicado
+        $('#dropdownFilterButton').on('click', function () {
+            // Garante que o dropdown seja exibido e preencha toda a tela
+            $('.dropdown-menu').addClass('show').css({
+                display: 'block', // Garante que o display seja alterado corretamente
+                position: 'fixed', // Fixa na tela
+                top: '0', // Gruda no topo
+                left: '0', // Gruda à esquerda
+                height: '100%', // Ocupa 100% da altura
+                width: '30%', // Ocupa 50% da largura
+            });
+        });
+
+        // Fecha o dropdown ao clicar no botão "X"
+        $('#closeDropdownButton').on('click', function () {
+            $('.dropdown-menu').removeClass('show').css({
+                display: 'none', // Esconde o dropdown
+            });
+        });
+
+        // Fecha o dropdown ao clicar fora dele
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.dropdown-menu, #dropdownFilterButton').length) {
+                $('.dropdown-menu').removeClass('show').css({
+                    display: 'none', // Esconde o dropdown
+                });
+            }
+        });
+    });
+
+
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -99,6 +132,10 @@
         }
         button.parent().parent().find('input').val(newVal);
     });
-    
+
+
 })(jQuery);
+
+
+
 

@@ -9,8 +9,12 @@ use common\models\Product;
 /**
  * ProductFrontSearch represents the model behind the search form of `common\models\Product`.
  */
+
 class ProductFrontSearch extends Product
 {
+    public $price_min;
+    public $price_max;
+
     /**
      * {@inheritdoc}
      */
@@ -18,8 +22,8 @@ class ProductFrontSearch extends Product
     {
         return [
             [['product_id', 'producer_id', 'category_id', 'stock'], 'integer'],
-            [['name', 'description', 'image_url'], 'safe'],
-            [['price'], 'number'],
+            [['name', 'description', 'image_url', 'category_id'], 'safe'],
+            [['price', 'price_min', 'price_max'], 'number'],
         ];
     }
 
@@ -59,16 +63,33 @@ class ProductFrontSearch extends Product
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'product_id' => $this->product_id,
-            'producer_id' => $this->producer_id,
-            'category_id' => $this->category_id,
+            'products.product_id' => $this->product_id,
+            'products.producer_id' => $this->producer_id,
+            'products.category_id' => $this->category_id,
             'price' => $this->price,
             'stock' => $this->stock,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description])
+        $query->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'image_url', $this->image_url]);
+
+
+        // Condições de Filtro
+        if (!empty($this->name)) {
+            $query->andFilterWhere(['like', 'products.name', $this->name]);
+        }
+
+        if (!empty($this->category_id)) {
+            $query->andFilterWhere(['products.category_id' => $this->category_id]);
+        }
+
+        if (!empty($this->price_min)) {
+            $query->andWhere(['>=', 'products.price', $this->price_min]);
+        }
+
+        if (!empty($this->price_max)) {
+            $query->andWhere(['<=', 'products.price', $this->price_max]);
+        }
 
         return $dataProvider;
     }
