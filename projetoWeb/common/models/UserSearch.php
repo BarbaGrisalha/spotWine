@@ -52,7 +52,6 @@ class UserSearch extends User
                 }
             ]);
 
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -76,8 +75,6 @@ class UserSearch extends User
         // Filtro de Role (auth_assignment)
         $query->andFilterWhere(['auth_assignment.item_name' => $this->role]);
 
-
         return $dataProvider;
     }
-
 }

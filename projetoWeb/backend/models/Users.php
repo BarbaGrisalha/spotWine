@@ -3,6 +3,7 @@
 namespace backend\models;
 
 
+use common\models\Producers;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\db\ActiveRecord;
@@ -105,7 +106,7 @@ class Users extends ActiveRecord
      */
     public function getProducers()
     {
-        return $this->hasMany(Producers::class, ['user_id' => 'user_id']);
+        return $this->hasMany(Producers::class, ['id' => 'user_id']);
     }
 
     /**
@@ -117,7 +118,6 @@ class Users extends ActiveRecord
     {
         return $this->hasMany(Reviews::class, ['user_id' => 'user_id']);
     }
-    //TODO - ACREDITO QUE AQUI HÁ UM ERRO POIS O getCodigo() não consgui perceber
     public function getCodigo(){
         return $this->id;
     }

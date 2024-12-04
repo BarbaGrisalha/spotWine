@@ -19,7 +19,7 @@ AppAsset::register($this);
     <div class="body-content">
         <p>
             <?= Html::a('Create User', ['user/create'], ['class' => 'btn btn-success']) ?>
-        </p>
+        </p>Altamir
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

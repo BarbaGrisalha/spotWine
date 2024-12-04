@@ -73,7 +73,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getCategories()
     {
-        return $this->hasOne(Categories::class, ['category_id' => 'category_id']);
+        return $this->hasOne(Categories::class, ['category_id' => 'product_id']);
     }
 
     /**
@@ -103,7 +103,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getProducers()
     {
-        return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
+        return $this->hasOne(Producers::class, ['producer_id' => 'id']);
     }
 
     /**
@@ -115,6 +115,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Promotions::class, ['product_id' => 'product_id']);
     }
+
 
     /**
      * Gets query for [[Reviews]].

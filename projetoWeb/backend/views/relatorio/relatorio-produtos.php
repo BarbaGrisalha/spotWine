@@ -2,11 +2,12 @@
 /** @var yii\web\View $this */
 /** @var array $produtos */
 
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use backend\models\Products;
+use common\models\Product;
 use yii\widgets\LinkPager;
-
 
 $this->title = "Relatório de Produtos";
 ?>
@@ -38,13 +39,30 @@ $this->title = "Relatório de Produtos";
 
 </style>
 <div class="relatorio-produtos">
-    <h1>Relatório de Produtos</h1>
+    <h1><?=Html::encode($this->title)   ?></h1>
+    <div>
+        <?php $form = ActiveForm::begin(['method'=> 'get', 'action' => ['relatorio/index']]); ?>
+            <?= Html::label('Selecione o Produtor', 'producer_id')?>
+            <?= Html::dropDownList('producer_id',$producerId,
+                ArrayHelper::map($produtores, 'id','winery_name'),
+                ['prompt'=> 'Todos os produtores','class' => 'form-control']
+        )?>
+        <br>
+        <?= Html::submitButton('Filtrar',['class'=> 'btn btn-primary'])?>
+        <?php ActiveForm::end(); ?>
+    </div>
+
+
+
+
+
     <ul>
         <?php foreach ($produtos as $produto): ?>
+
             <li>
-                Produtor: <?=Html::encode($produto->producer ? $produto->producer->winery_name: 'Produtor não encontrado') ?><br>
+                Produtor: <?=Html::encode($produto->producers ? $produto->producers->winery_name: 'Produtor não encontrado') ?><br>
                 Nome: <?=Html::encode($produto->name) ?><br>
-                Categoria: <?=Html::encode($produto->category ? $produto->category->name : 'Categoria não encontrada') ?> <br>
+                Categoria: <?=Html::encode($produto->categories ? $produto->categories->name : 'Categoria não encontrada') ?> <br>
                 Preço: <?=Html::encode($produto->price) ?>
             </li>
         <?php endforeach; ?>

@@ -281,7 +281,7 @@ class User extends ActiveRecord implements IdentityInterface
         return $scenarios;
     }
 
-    public function getProducer(): \yii\db\ActiveQuery
+    public function getProducers(): \yii\db\ActiveQuery
     {
         return $this->hasOne(Producers::class,['user_id'=> 'id']);
     }

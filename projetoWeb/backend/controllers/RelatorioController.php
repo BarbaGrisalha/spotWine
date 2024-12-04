@@ -2,19 +2,39 @@
 
 namespace backend\controllers;
 
+use common\models\Producers;
+use common\models\User;
 use yii\data\Pagination;
 use yii\db\Query;
 use yii\web\Controller;
-use backend\models\Products;
+use common\models\Product;
 use backend\models\Users;
 use yii\web\Response;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class RelatorioController extends Controller
 {
+    public function actionIndex(){
+        $producerId = Yii::$app->request->get('producer_id');
+        $produtosQuery = Product::find()->with(['producer','categories']);
+
+        if($producerId){
+            $produtosQuery->andWhere(['producer_id'=> $producerId]);
+        }
+
+        $produtos = $produtosQuery->all();
+        $produtores = Producers::find()->all();
+
+        return $this->render('index',[
+            'produtos' => $produtos,
+            'produtores' => $produtores,
+            'producer_id' => $producerId,
+        ]);
+    }
     public function actionRelatorioProdutos()
     {
-        $query = Products::find();
+        $query = Product::find();
 
         $pagination = new Pagination([
             'defaultPageSize' => 5,
@@ -26,9 +46,14 @@ class RelatorioController extends Controller
             ->limit($pagination->limit)
             ->all();
 
+        $produtores = Producers::find()->all();//carrega produtores para o dropDownList
+        $producerId = Yii::$app->request->get('producer_id',null);//Obter o ID do produtore da requisição
+
         return $this->render('relatorio-produtos', [
             'produtos' => $produtos,
             'pagination' => $pagination,
+            'produtores' => $produtores,
+            'producerId'=> $producerId,
         ]);
     }
 
@@ -46,60 +71,40 @@ class RelatorioController extends Controller
         ]);
     }
 
-    public function actionReportPieChart()
+    public function actionRelatorioPorProdutor()//$producerId
     {
-        $categories = Yii::$app->db->createCommand('
-            SELECT category_id, SUM(stock) AS total_stock
-            FROM products
-            GROUP BY category_id
-        ')->queryAll();
-
-        $labels = [];
-        $data = [];
-
-        foreach ($categories as $category) {
-            $labels[] = 'categories ' . $category['category_id'];
-            $data[] = (int)$category['total_stock'];
+        //Verifica se o utilizador tem autorização para logar.
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['site/login']);
         }
+        //Obtém o ID do utilizador logado
+        $producerId = Yii::$app->user->identity->id;
 
-        return $this->render('report', [
-            'labels' => $labels,
-            'data' => $data,
-        ]);
-    }
+        //Busca o modelo do Produtor
+        $producer = Users::findOne($producerId);
 
-    public function actionRelatorioPorProdutor($producerId = null)
-    {
-        if ($producerId === null) {
-            return $this->render('erro', [
-                'mensagem' => 'Por favor, selecione um produtor.',
+        if($producer === null){
+            return $this->render('erro',[
+                'mensagem'=>'Produtor não encontrado',
             ]);
         }
-
+        //Realiza uma consula para a categoria e produto
         $query = (new \yii\db\Query())
-            ->select(['c.name AS category_name', 'SUM(p.stock) AS total_stock'])
+            ->select(['c.name AS category_name','SUM(p.stock) AS total_stock' ])
             ->from('products p')
-            ->innerJoin('categories c', 'p.category_id = c.id')
-            ->where(['p.producer_id' => $producerId])
+            ->innerJoin('categories c', 'p.category_id = c.category_id')
+            ->where(['p.producer_id'=> $producerId])
             ->groupBy('p.category_id')
             ->all();
 
-        $producer = Users::findOne($producerId);
-
-        if ($producer === null) {
-            return $this->render('erro', [
-                'mensagem' => 'Produtor não encontrado.',
-            ]);
-        }
-
-        return $this->render('relatorio-por-produtor', [
+        return $this->render('relatorio-por-produtor',[
             'produtor' => $producer,
             'categorias' => $query,
         ]);
     }
 
     public function actionSelecionarProdutor()
-    {
+    {//TODO - NÃO PODE ser esse tipo de query, pois a IDE já faz isso por nós
         $produtores = Users::find()
             ->joinWith('user')
             ->where(['type' => 'produtor']) // aqui buscamos na tabela devida

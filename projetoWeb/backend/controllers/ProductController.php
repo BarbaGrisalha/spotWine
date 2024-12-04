@@ -69,19 +69,15 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
+        // obter o utilizador logado
         $user = Yii::$app->user->identity;
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'product_id' => $model->product_id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if($model->load(Yii::$app->request->post()) && $model->save()){
+            return $this->redirect(['view','product_id' => $model->product_id]);
         }
-
-        return $this->render('create', [
+        return $this->render('create',[
             'model' => $model,
-            'user' => $user,
+            'user'  => $user,
         ]);
     }
 
@@ -94,15 +90,20 @@ class ProductController extends Controller
      */
     public function actionUpdate($product_id)
     {
-        $model = $this->findModel($product_id);
+        $model = $this->findModel($product_id);//troquei $id por $product_id
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'product_id' => $model->product_id]);
+        // Obtenha o usuário logado
+        $user = Yii::$app->user->identity;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'user' => $user, // Passe o usuário para a view
         ]);
+
     }
 
     /**

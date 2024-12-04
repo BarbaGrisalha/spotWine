@@ -58,6 +58,13 @@
                                     'icon' => 'dot-circle',
                                     'url' => ['relatorio/relatorio-produtos'],
                                     ],
+                                ['label' => 'Relatório dos Meus Produtos ',//com erro ainda.
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' => ['relatorio/relatorio-por-produtor'],
+                                   // 'url' => ['relatorio/relatorio-por-produtor','producerId'=>Yii::$app->user->identity->id],
+
+                                ],
                                 ['label' => 'Relatório de Clienes',
                                     'iconType' => 'far',
                                     'icon' => 'dot-circle',
