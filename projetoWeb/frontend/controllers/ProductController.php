@@ -3,9 +3,12 @@
 namespace frontend\controllers;
 
 use common\models\Categories;
+use common\models\Product;
+use frontend\models\Book;
 use frontend\models\ProductFrontSearch;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 class ProductController extends \yii\web\Controller
 {
@@ -22,6 +25,28 @@ class ProductController extends \yii\web\Controller
             'dataProvider' => $dataProvider,
             'categoriesList' => $categoriesList, // Passa para a view
         ]);
+    }
+
+    public function actionView($id){
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+
+
+
+
+
+
+
+    protected function findModel($id)
+    {
+        if (($model = Product::findOne(['product_id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 
 }

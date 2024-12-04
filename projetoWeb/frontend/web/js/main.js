@@ -1,6 +1,20 @@
 (function ($) {
     "use strict";
-    
+
+// Delegação de eventos para os botões de quantidade
+    $(document).on('click', '.quantity button', function () {
+        var button = $(this);
+        var oldValue = button.closest('.quantity').find('input').val();
+
+        var newVal = button.hasClass('btn-plus')
+            ? parseFloat(oldValue) + 1
+            : Math.max(0, parseFloat(oldValue) - 1); // Evita valores negativos
+
+        button.closest('.quantity').find('input').val(newVal);
+    });
+
+
+
     // Dropdown on mouse hover
     $(document).ready(function () {
         function toggleNavbarMethod() {
@@ -48,9 +62,6 @@
             }
         });
     });
-
-
-
 
     // Back to top button
     $(window).scroll(function () {
@@ -114,23 +125,6 @@
                 items:4
             }
         }
-    });
-
-
-    // Product Quantity
-    $('.quantity button').on('click', function () {
-        var button = $(this);
-        var oldValue = button.parent().parent().find('input').val();
-        if (button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        button.parent().parent().find('input').val(newVal);
     });
 
 

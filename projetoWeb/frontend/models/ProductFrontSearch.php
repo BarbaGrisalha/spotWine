@@ -45,7 +45,7 @@ class ProductFrontSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find()->joinWith(['producers', 'categories']);
+        $query = Product::find();
 
         // add conditions that should always apply here
 
