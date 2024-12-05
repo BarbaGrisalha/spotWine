@@ -71,14 +71,14 @@
                                     'url' => ['relatorio/relatorio-clientes'],
                                     'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
                                     ],
-                                ['label' => 'Relatório Produtos/Produtor',
+                                /*['label' => 'Relatório Produtos/Produtor',
                                     'iconType' => 'far',
                                     'icon'=> 'dot-circle',
                                     'url'=>['relatorio/relatorio-por-produtor'],
-                                    ],
+                                    ],*/
                             ],
                         ],
-                        ['label' => 'Gestão de Produtores',
+                        ['label' => 'Gestão de Utilizadores',
                             'iconType' => 'far',
                             'icon' => 'dot-circle',
                             'url' =>['/user/index'],
