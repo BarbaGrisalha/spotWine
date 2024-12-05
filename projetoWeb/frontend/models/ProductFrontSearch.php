@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\OrderItems;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Product;
@@ -14,7 +15,7 @@ class ProductFrontSearch extends Product
 {
     public $price_min;
     public $price_max;
-
+    public $filter;
     /**
      * {@inheritdoc}
      */
@@ -22,7 +23,7 @@ class ProductFrontSearch extends Product
     {
         return [
             [['product_id', 'producer_id', 'category_id', 'stock'], 'integer'],
-            [['name', 'description', 'image_url', 'category_id'], 'safe'],
+            [['name', 'description', 'image_url', 'category_id', 'filter'], 'safe'],
             [['price', 'price_min', 'price_max'], 'number'],
         ];
     }
@@ -69,9 +70,15 @@ class ProductFrontSearch extends Product
             'price' => $this->price,
             'stock' => $this->stock,
         ]);
-
+        // Se o filtro for 'maisVendido', use os IDs dos produtos mais vendidos
         $query->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'image_url', $this->image_url]);
+
+        if ($this->filter === 'mais_vendidos') {
+            $maisVendidosIds = OrderItems::getProdutosMaisVendidosIds(10);
+            $query->andWhere(['product_id' => $maisVendidosIds]);
+        }
+
 
 
         // Condições de Filtro

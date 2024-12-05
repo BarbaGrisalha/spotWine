@@ -54,6 +54,7 @@ $form = ActiveForm::begin([
                         <?php endforeach; ?>
                     </div>
 
+
                     <div class="dropdown-divider"></div>
 
                     <!-- Campo de Preço Mínimo -->
@@ -67,6 +68,15 @@ $form = ActiveForm::begin([
                         'placeholder' => 'Preço máximo',
                         'class' => 'form-control mb-3',
                     ])->label('<i class="fas fa-dollar-sign"></i> Preço Máximo') ?>
+
+                    <div class="form-check mb-2">
+                        <?= Html::radio('ProductFrontSearch[filter]', $searchModel->filter === 'mais_vendidos', [
+                            'value' => 'mais_vendidos',
+                            'class' => 'form-check-input',
+                            'id' => 'filter-mais-vendidos',
+                        ]) ?>
+                        <?= Html::label('Mais Vendidos', 'filter-mais-vendidos', ['class' => 'form-check-label']) ?>
+                    </div>
 
                     <!-- Botões de Aplicar Filtros e Resetar -->
                     <div class="d-flex justify-content-between">

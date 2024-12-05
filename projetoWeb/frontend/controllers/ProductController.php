@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use common\models\Categories;
 use common\models\Product;
-use frontend\models\Book;
 use frontend\models\ProductFrontSearch;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -23,7 +22,7 @@ class ProductController extends \yii\web\Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'categoriesList' => $categoriesList, // Passa para a view
+            'categoriesList' => $categoriesList,
         ]);
     }
 

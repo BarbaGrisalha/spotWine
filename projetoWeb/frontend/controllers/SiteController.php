@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\OrderItems;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -76,7 +77,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $produtosMaisVendidos = OrderItems::getProdutosMaisVendidos(4);
+        return $this->render('index',['produtosMaisVendidos' => $produtosMaisVendidos]);
     }
 
     /**

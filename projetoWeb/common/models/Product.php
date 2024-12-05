@@ -28,6 +28,7 @@ class Product extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $imageFile;
     public static function tableName()
     {
         return 'products';
@@ -46,7 +47,21 @@ class Product extends \yii\db\ActiveRecord
             [['image_url'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_id' => 'category_id']],
             [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Producers::class, 'targetAttribute' => ['producer_id' => 'producer_id']],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2], // Validação do upload
+
         ];
+    }
+
+    public function upload()
+    {
+        if ($this->validate()) {
+            $fileName = uniqid('product_', true) . '.' . $this->imageFile->extension;
+            $filePath = 'uploads/products/' . $fileName;
+            $this->imageFile->saveAs(\Yii::getAlias('@webroot') . '/' . $filePath);
+            $this->image_url = $filePath; // Salva o caminho no campo do banco
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -73,7 +88,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getCategories()
     {
-        return $this->hasOne(Categories::class, ['category_id' => 'product_id']);
+        return $this->hasOne(Categories::class, ['category_id' => 'category_id']);
     }
 
     /**
@@ -103,7 +118,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getProducers()
     {
-        return $this->hasOne(Producers::class, ['producer_id' => 'id']);
+        return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
     }
 
     /**
