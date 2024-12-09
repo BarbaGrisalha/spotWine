@@ -18,9 +18,13 @@ class UserController extends Controller
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams); // Utilize o método search()
 
+        //definir a consulta dentro da query
+        $query = User::find();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'query' => $query,
         ]);
     }
 

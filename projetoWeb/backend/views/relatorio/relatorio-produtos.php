@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use common\models\Product;
 use yii\widgets\LinkPager;
 
-$this->title = "Relatório de Produtos";
+$this->title = "Relatório de Produtos linha 12";
 ?>
 <style>
     .relatorio-produtos {
@@ -39,23 +39,20 @@ $this->title = "Relatório de Produtos";
 
 </style>
 <div class="relatorio-produtos">
-    <h1><?=Html::encode($this->title)   ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
     <div>
         <?php $form = ActiveForm::begin(['method'=> 'get', 'action' => ['relatorio/index']]); ?>
             <?= Html::label('Selecione o Produtor', 'producer_id')?>
             <?= Html::dropDownList('producer_id',$producerId,
+                //dd($producerId),
                 ArrayHelper::map($produtores, 'id','winery_name'),
+                //dd($produtores),
                 ['prompt'=> 'Todos os produtores','class' => 'form-control']
         )?>
         <br>
         <?= Html::submitButton('Filtrar',['class'=> 'btn btn-primary'])?>
         <?php ActiveForm::end(); ?>
     </div>
-
-
-
-
-
     <ul>
         <?php foreach ($produtos as $produto): ?>
 

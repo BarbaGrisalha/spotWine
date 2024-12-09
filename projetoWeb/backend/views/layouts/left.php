@@ -57,6 +57,7 @@
                                     'iconType' => 'far',
                                     'icon' => 'dot-circle',
                                     'url' => ['relatorio/relatorio-produtos'],
+                                    'visible' => Yii::$app->user->can('createUsers'),
                                     ],
                                 ['label' => 'Relatório dos Meus Produtos ',//com erro ainda.
                                     'iconType' => 'far',

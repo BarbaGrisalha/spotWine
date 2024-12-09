@@ -18,9 +18,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Inclusão de Produtos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            'product_id',
+            'producer_id',
+            'category_id',
+            'name',
+            'description',
+            'price',
+        ],
 
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    ]); ?>
+    <?php echo $this->render(
+            '_search',
+            ['model' => $searchModel]); ?>
 
    

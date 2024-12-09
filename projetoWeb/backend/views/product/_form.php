@@ -1,5 +1,8 @@
 <?php
 
+use common\models\Categories;
+use common\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -13,7 +16,16 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin() ?>
 
     <?php if ($user->role === 'admin'):  ?>
-        <!-- DropDownList para o administrador ou quem tenha a role dele -->
+
+    <?= $form->field($model, 'producer_id')->dropDownList(
+        ArrayHelper::map(User::find()
+            ->where(['role'=> 'producer'])//aqui fala de role .
+            ->all(),
+            'id', //ID do produtor
+            'username'//Nome do produtor
+        ),
+            ['prompt'=> 'Select Producer']//texto inicial
+        )?>
 
     <?php else: ?>
         <!-- Campo oculto para produtores -->
@@ -21,18 +33,19 @@ use yii\widgets\ActiveForm;
             'value' => $user->id, // Preenche com o ID do produtor logado
         ])->label(false) ?>
     <?php endif; ?>
-    <!-- Substituir textInput para category_id por dropdown ou outro widget -->
-    <?= $form->field($model, 'category_id')->dropDownList(
-        \yii\helpers\ArrayHelper::map(
-            \common\models\Categories::find()->asArray()->all(),
-            'id', // ID da categoria
-            'name' // Nome da categoria
+
+    <?= $form->field($model, 'category_id')
+        ->dropDownList(
+       ArrayHelper::map(Categories::find()
+                ->asArray()
+                ->all(),
+            'category_id',
+            'name'
         ),
         ['prompt' => 'Select Category']
     ) ?>
-
-
-    <?= $form->field($model, 'category_id')->textInput() ?>
+    <!-- A lógica é assim, para o admin tem que ter um campo de produtor, para o produtor não , ele
+    já é reconhecido -->
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

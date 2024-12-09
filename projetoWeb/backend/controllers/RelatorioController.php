@@ -3,33 +3,45 @@
 namespace backend\controllers;
 
 use common\models\Producers;
-use common\models\User;
+
 use yii\data\Pagination;
-use yii\db\Query;
+
 use yii\web\Controller;
 use common\models\Product;
 use backend\models\Users;
-use yii\web\Response;
+
 use Yii;
-use yii\helpers\ArrayHelper;
+
 
 class RelatorioController extends Controller
 {
     public function actionIndex(){
+
         $producerId = Yii::$app->request->get('producer_id');
-        $produtosQuery = Product::find()->with(['producer','categories']);
+        //dd($producerId);
+        $produtosQuery = Product::find()->with(['producer_id','categories']);
 
         if($producerId){
             $produtosQuery->andWhere(['producer_id'=> $producerId]);
         }
+        //Configuração da paginação
+        $pagination = new Pagination([
+            'defaultPageSize' => 5,
+            'totalCount'=>$produtosQuery->count(),
+        ]);
+        //Obter os produtos com a paginação
+        $produtos = $produtosQuery
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        //Buscar os produtos para o dropdown
+        $produtores = Producers::find()->orderBy(['winery_name'=> SORT_ASC])->all();
 
-        $produtos = $produtosQuery->all();
-        $produtores = Producers::find()->all();
-
-        return $this->render('index',[
-            'produtos' => $produtos,
-            'produtores' => $produtores,
+        return $this->render('index',[//aqui passamos para a view
+            'products' => $produtos,//trocar de produtos para products
+            'producers' => $produtores,//trocar de produtores para producers
             'producer_id' => $producerId,
+            'pagination' => $pagination
         ]);
     }
     public function actionRelatorioProdutos()

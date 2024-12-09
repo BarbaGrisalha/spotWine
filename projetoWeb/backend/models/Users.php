@@ -28,11 +28,6 @@ class Users extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -106,7 +101,7 @@ class Users extends ActiveRecord
      */
     public function getProducers()
     {
-        return $this->hasMany(Producers::class, ['id' => 'user_id']);
+        return $this->hasMany(Producers::class, ['user_id' => 'id']);
     }
 
     /**
@@ -116,7 +111,7 @@ class Users extends ActiveRecord
      */
     public function getReviews()
     {
-        return $this->hasMany(Reviews::class, ['user_id' => 'user_id']);
+        return $this->hasMany(Reviews::class, ['user_id' => 'user_id']);//estava invertido
     }
     public function getCodigo(){
         return $this->id;

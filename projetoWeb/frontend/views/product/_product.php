@@ -24,6 +24,9 @@ use yii\helpers\Html;
         <div class="d-flex align-items-center justify-content-center mt-2">
             <small>Categoria: <?= Html::encode($model->categories->name ?? 'N/A') ?></small>
         </div>
+        <div class="d-flex align-items-center justify-content-center mt-2">
+            <small>Email do Usuário: <?= Html::encode($model->producers->user->email ?? 'N/A') ?></small>
+        </div>
         <div class="d-flex align-items-center justify-content-center mb-1">
             <small class="fa fa-star text-primary mr-1"></small>
             <small class="fa fa-star text-primary mr-1"></small>

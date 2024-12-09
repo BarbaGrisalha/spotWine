@@ -70,15 +70,28 @@ class ProductController extends Controller
     {
         $model = new Product();
         // obter o utilizador logado
-        $user = Yii::$app->user->identity;
-
+        $user = Yii::$app->user->identity;//aqui busco o utilizador logado.
+       // dd($user);
+    /*
         if($model->load(Yii::$app->request->post()) && $model->save()){
             return $this->redirect(['view','product_id' => $model->product_id]);
+        }
+
+    */
+        if($model->load(Yii::$app->request->post())){
+            //Validamos se é um produtor logado
+            if($user->role === 'producer'){
+                $model->producer_id = $user->id;
+            }
+            if($model->save()){
+                return $this->redirect(['view','product_id' =>$model->product_id]);
+            }
         }
         return $this->render('create',[
             'model' => $model,
             'user'  => $user,
         ]);
+
     }
 
     /**

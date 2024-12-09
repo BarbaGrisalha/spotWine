@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\Producers;
 use backend\models\ProducersSearch;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -71,7 +72,9 @@ class ProducersController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'producer_id' => $model->producer_id]);
+                return $this->redirect([
+                    'view',
+                    'producer_id' => $model->producer_id]);
             }
         } else {
             $model->loadDefaultValues();

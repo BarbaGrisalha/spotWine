@@ -1,5 +1,6 @@
 <?php
 
+use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,16 +15,21 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+    <?php $query = \common\models\Product::find() ?>
+    <?php $pagination = new Pagination([
+        'defaultPageSize' => 5,
+        'totalCount'=> $query->count(),
+    ])?>
 
-    <?= $form->field($model, 'product_id') ?>
+    <?php //$form->field($model, 'product_id') ?>
 
-    <?= $form->field($model, 'producer_id') ?>
+    <?php //$form->field($model, 'producer_id') ?>
 
-    <?= $form->field($model, 'category_id') ?>
+    <?php //$form->field($model, 'category_id') ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?php //$form->field($model, 'name') ?>
 
-    <?= $form->field($model, 'description') ?>
+    <?php //$form->field($model, 'description') ?>
 
     <?php // echo $form->field($model, 'price') ?>
 
@@ -32,10 +38,15 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'image_url') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?php // Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?php // Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
+    <?php $query = \common\models\Product::find() ?>
+    <?php $pagination = new Pagination([
+        'defaultPageSize' => 5,
+        'totalCount'=> $query->count(),
+    ])?>
 
 </div>
