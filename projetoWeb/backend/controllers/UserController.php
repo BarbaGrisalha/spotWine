@@ -116,7 +116,6 @@ class UserController extends Controller
         return $this->redirect(['index']);
     }
 
-
     public function actionUpdate($id)
     {
         // Carrega o modelo User pelo ID
@@ -167,7 +166,7 @@ class UserController extends Controller
     public function actionCreateProducts()
     {
         // Verifica se o usuário tem permissão para criar produtos
-        if (!Yii::$app->user->can('createdProduct')) {
+        if (!Yii::$app->user->can('createProduct')) {
             throw new ForbiddenHttpException('Você não tem permissão para criar produtos!');
         }
 
@@ -197,6 +196,11 @@ class UserController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionLogout(){
+        Yii::$app->user->logout();
+        return $this->goHome();
     }
 
 }

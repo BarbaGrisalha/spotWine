@@ -160,10 +160,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
 
         return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
-
+/*
         return $this->hasOne(\yii\rbac\Assignment::class, ['user_id' => 'id'])
             ->viaTable('auth_assignment', ['user_id' => 'id']);
-
+*/
     }
 
 

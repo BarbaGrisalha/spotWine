@@ -27,15 +27,15 @@ class RbacController extends Controller
         $createProducts->description='Criar produtos';
         $auth->add($createProducts);
 
-        $readProducts = $auth->readPermission('readPermission');
+        $readProducts = $auth->createPermission('readProducts');
         $readProducts->description = 'Ler produtos';
         $auth->add($readProducts);
 
-        $updateProducts = $auth->updatePermission('updatePermission');
-        $updateProducts->desciption = 'Atualizar produtos';
+        $updateProducts = $auth->createPermission('updateProducts');
+        $updateProducts->description = 'Atualizar produtos';
         $auth->add($updateProducts);
 
-        $deleteProducts = $auth->deletePermission('deletePermission');
+        $deleteProducts = $auth->createPermission('deleteProducts');
         $deleteProducts->description = 'Deletar produtos';
         $auth->add($deleteProducts);
 
@@ -47,26 +47,19 @@ class RbacController extends Controller
         $createUsers->description = 'Criar utilizador';
         $auth->add($createUsers);
 
-        // Criar roles
+        // Criar roles Consumidor
         $consumer = $auth->createRole('consumer');
         $auth->add($consumer);
 
+        // Criar roles Produtor
         $producer = $auth->createRole('producer');
         $auth->add($producer);
-        $auth->addChild($producer, $createProducts); // Produtor pode CRIAR produtos
+        $auth->addChild($producer,$createProducts);
+        $auth->addChild($producer,$readProducts);
+        $auth->addChild($producer,$updateProducts);
+        $auth->addChild($producer,$deleteProducts);
 
-        $producer = $auth->readRole('producer');
-        $auth->add($producer);
-        $auth->addChild($producer, $readProducts); // Produtor pode LER produtos
-
-        $producer = $auth->updateRole('producer');
-        $auth->add($producer);
-        $auth->addChild($producer,$updateProducts); //Produtor pode ATUALIZAR produtos
-
-        $producer = $auth->deleteRole('producer');
-        $auth->add($producer);
-        $auth->addChild($producer,$deleteProducts); //Produtor pode DELETAR produtos
-
+        // Criar roles Administrador
         $admin = $auth->createRole('admin');
         $auth->add($admin);
         $auth->addChild($admin, $producer); // Admin herda permissões de produtor

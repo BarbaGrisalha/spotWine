@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="users-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <?php $user = Yii::$app->user->identity; ?>//adicionei na mão.
     <?= $this->render('_form', [
         'model' => $model,
         'userDetails' => $userDetails,

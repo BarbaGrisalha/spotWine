@@ -20,10 +20,14 @@ return [
     'components' => [
     'errorHandler' => [
         'errorAction' => 'site/error', // Define qual ação será chamada para erros
+        //'class' => 'yii\error\ErrorHandler',
     ],
     
     'request' => [
         'csrfParam' => '_csrf-backend',
+        'parsers' => [
+            'application/json' => 'yii\web\JsonParser',
+        ]
     ],
     'user' => [
         'identityClass' => 'common\models\User',
