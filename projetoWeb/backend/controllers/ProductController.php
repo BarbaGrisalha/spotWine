@@ -30,24 +30,24 @@ class ProductController extends Controller
                     ],
                 ],
                 'access' => [
-                    'class'=> \yii\filters\AccessControl::class,
-                    'only'=>['login','index','create','read','update','delete','logout'], //Ações protegidas.
-                    'rules'=> [
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['login', 'index', 'create', 'read', 'update', 'delete', 'logout'], //Ações protegidas.
+                    'rules' => [
                         [
-                            'allow'=> true,
-                            'actions'=>['index','create','read','update','delete'],
-                            'roles'=>['@'], //Significa que somente os usuários autenticados.
-                            'matchCallback'=> function($rule, $action){
+                            'allow' => true,
+                            'actions' => ['index', 'create', 'read', 'update', 'delete'],
+                            'roles' => ['@'], //Significa que somente os usuários autenticados.
+                            'matchCallback' => function ($rule, $action) {
                                 $user = Yii::$app->user->identity;
 
                                 return $user && $user->role === 'producer' &&
-                                    Yii::$app->authManager->checkAccess($user->id,$action->id . 'Product');
+                                    Yii::$app->authManager->checkAccess($user->id, $action->id . 'Product');
                             },
                         ],
                         [//As páginas que podem ser vistas.
-                            'allow'=> true,
-                            'actions'=>['index','view','create','logout'],
-                            'roles'=>['@'],
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'create', 'logout'],
+                            'roles' => ['@'],
                         ]
                     ]
                 ]
@@ -138,24 +138,27 @@ class ProductController extends Controller
 
         $model = new Product();
         // obter o utilizador logado
-       $user = Yii::$app->user->identity;//aqui busco o utilizador logado.
+        $user = Yii::$app->user;//aqui busco o utilizador logado.
 
-        if($model->load(Yii::$app->request->post())){
-           // $model->product_id = Yii::$app->user->identity->producers->producer_id;
+        if ($model->load(Yii::$app->request->post())) {
+
+            // $model->product_id = Yii::$app->user->identity->producers->producer_id;
             //Validamos se é um produtor logado
-            if($user->role === 'producer'){
+
+            if (\Yii::$app->user->can('producer')) {
                 $model->producer_id = $user->id;
             }
-            if($model->save()){
-                return $this->redirect(['view','product_id' => $model->product_id]);
-            }else{
-                Yii::$app->session->setFlash('error','Não foi possível guardar o produto criado. Verifique 
+            if ($model->save()) {
+                return $this->redirect(['view', 'product_id' => $model->product_id]);
+            } else {
+               // dd($model);
+                Yii::$app->session->setFlash('error', 'Não foi possível guardar o produto criado. Verifique 
                 e tente novamente.');
             }
         }
-        return $this->render('create',[
+        return $this->render('create', [
             'model' => $model,
-            'user'  => $user,
+            'user' => $user,
         ]);
 
     }
@@ -199,10 +202,12 @@ class ProductController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionLogout(){
-       Yii::$app->user->logout();
-       return $this->goHome();
-}
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+        return $this->goHome();
+    }
+
     /**
      * Finds the Product model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -218,9 +223,9 @@ class ProductController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }*/
-        $model = Product::findOne(['product_id'=> $product_id]);
+        $model = Product::findOne(['product_id' => $product_id]);
 
-        if(!$model || $model->producer_id !== Yii::$app->user->id && Yii::$app->user->identity->role !== 'admin'){
+        if (!$model || $model->producer_id !== Yii::$app->user->id && Yii::$app->user->identity->role !== 'admin') {
             throw new NotFoundHttpException('Você não tem permissão para acessar esse produto!');
         }
         return $model;

@@ -76,6 +76,7 @@ class ProducersController extends Controller
                     'view',
                     'producer_id' => $model->producer_id]);
             }
+
         } else {
             $model->loadDefaultValues();
         }

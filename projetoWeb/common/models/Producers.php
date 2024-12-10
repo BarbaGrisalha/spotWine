@@ -38,17 +38,13 @@ class Producers extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             [['winery_name'], 'string', 'max' => 100],
             [['location', 'document_id'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError'
-            => true, 'targetClass'
-            => Users::class, 'targetAttribute'
-            => ['user_id' => 'user_id']],
-            [['producer_id'],'required','when'
-            => function ($model){
-            return  Yii::$app->user->identity->role === ' admin';
-            }, 'whenClient' =>"function (attribute, value){
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'user_id']],
+            [['producer_id'], 'required', 'when' => function ($model) {
+                return Yii::$app->user->can(' admin');
+            }, 'whenClient' => "function (attribute, value){
             return $('#user-role').val() === 'admin';
     }"],
-            ];
+        ];
     }
 
     /**
