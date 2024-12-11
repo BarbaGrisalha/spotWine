@@ -12,23 +12,16 @@ class m241029_233633_add_rbac_add_adm_permissions extends Migration
      */
     public function safeUp()
     {
-        //configurei aqui o RBAC com DbManager
         $auth = Yii::$app->authManager;
 
-        //Criei aqui a permissão
-        $manageAll = $auth->createPermission('manageAll');
-        $manageAll->description = 'Manage all';
-        $auth->add($manageAll);
-
-        //Criado o papel/role do administrador
-        $adminRole = $auth->createRole('admin');
-        $auth->add($adminRole);
-
-        //Associei aqui a permissão ao papel/role
-        $auth->addChild($adminRole,$manageAll);
-
-        //Associei o papel/role de aministrador a um utilizador específico
-        $auth->assign($adminRole,1); //ATENÇÃO. o ID '1' representa o id admin que já está na base
+        // Verificar se a role "admin" já existe
+        $adminRole = $auth->getRole('admin');
+        if (!$adminRole) {
+            $adminRole = $auth->createRole('admin');
+            $auth->add($adminRole);
+        } else {
+            echo "Role 'admin' já existe. Nenhuma alteração foi feita.\n";
+        }
 
     }
 
@@ -37,10 +30,12 @@ class m241029_233633_add_rbac_add_adm_permissions extends Migration
      */
     public function safeDown()
     {
-        //Configuração do RBAC
-       $auth = Yii::$app->authManager;
-       //Remover permissão e o papel de administrador
-        $auth->removeAll();
+        $auth = Yii::$app->authManager;
+
+        $adminRole = $auth->getRole('admin');
+        if ($adminRole) {
+            $auth->remove($adminRole);
+        }
     }
 
     /*

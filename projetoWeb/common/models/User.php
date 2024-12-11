@@ -158,11 +158,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthAssignment()
     {
-
         return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
-
-        return $this->hasOne(\yii\rbac\Assignment::class, ['user_id' => 'id'])
-            ->viaTable('auth_assignment', ['user_id' => 'id']);
 
     }
 
@@ -284,6 +280,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function getProducers(): \yii\db\ActiveQuery
     {
         return $this->hasOne(Producers::class,['user_id'=> 'id']);
+    }
+
+    public function getProducerId()
+    {
+        return $this->producers ? $this->producers->producer_id : null;
     }
 
     public function getRole(){
