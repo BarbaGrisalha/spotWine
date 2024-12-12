@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use common\models\Product;
 use common\models\Promotions;
+
 class ProductViewModel
 {
     public $product;

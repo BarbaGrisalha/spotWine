@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use common\models\OrderItems;
+use common\models\Promotions;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Product;
@@ -75,11 +76,14 @@ class ProductFrontSearch extends Product
             ->andFilterWhere(['like', 'image_url', $this->image_url]);
 
         if ($this->filter === 'mais_vendidos') {
-            $maisVendidosIds = OrderItems::getProdutosMaisVendidosIds(10);
+            $maisVendidosIds = OrderItems::getProdutosMaisVendidosIds();
             $query->andWhere(['product_id' => $maisVendidosIds]);
         }
 
-
+        if ($this->filter === 'promocoes') {
+            $produtoIdsEmPromocao = Promotions::getProdutosEmPromocaoIds();
+            $query->andWhere(['product_id' => $produtoIdsEmPromocao]);
+        }
 
         // Condições de Filtro
         if (!empty($this->name)) {

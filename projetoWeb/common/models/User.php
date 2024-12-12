@@ -162,8 +162,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     }
 
-
-
     /**
      * Obter o nome do role
      */
@@ -277,7 +275,7 @@ class User extends ActiveRecord implements IdentityInterface
         return $scenarios;
     }
 
-    public function getProducers(): \yii\db\ActiveQuery
+    public function getProducers()
     {
         return $this->hasOne(Producers::class,['user_id'=> 'id']);
     }

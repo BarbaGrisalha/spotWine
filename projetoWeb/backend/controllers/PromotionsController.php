@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Producers;
 use common\models\Product;
 use common\models\PromotionProduct;
 use common\models\Promotions;
@@ -116,20 +117,45 @@ class PromotionsController extends Controller
         $model = new Promotions();
 
         if ($model->load(Yii::$app->request->post())) {
-            // Associar o producer_id do produtor logado
-            $model->producer_id = Yii::$app->user->identity->getProducerId();
+            // Definir o producer_id com base no usuário logado
+            $producer = Producers::findOne(['user_id' => Yii::$app->user->id]);
+            if (!$producer) {
+                throw new ForbiddenHttpException('Você não é um produtor registrado.');
+            }
 
+            $model->producer_id = $producer->producer_id;
+
+            // Validação das condições de promoção
+            if ($model->promotion_type === 'direct' && empty($model->productsIds)) {
+                $model->addError('productsIds', 'Selecione ao menos um produto para a promoção direta.');
+            }
+
+            if ($model->promotion_type === 'conditional' && (empty($model->condition_type) || empty($model->condition_value))) {
+                $model->addError('condition_type', 'Tipo e valor da condição são obrigatórios para promoções condicionais.');
+            }
+
+            // Salvando a promoção
             if ($model->save()) {
+                // Associar produtos para promoções diretas
+                if ($model->promotion_type === 'direct') {
+                    $model->linkProducts($model->productsIds);
+                }
+
+                Yii::$app->session->setFlash('success', 'Promoção criada com sucesso.');
                 return $this->redirect(['view', 'promotion_id' => $model->promotion_id]);
             }
         }
-        $availableProducts = Product::findByProducer(Yii::$app->user->identity->getProducerId())->all();
 
         return $this->render('create', [
             'model' => $model,
-            'availableProducts' => $availableProducts,
+            'availableProducts' => Product::find()->all(),
         ]);
     }
+
+
+
+
+
 
 
 

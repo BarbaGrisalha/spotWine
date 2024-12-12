@@ -10,7 +10,7 @@ use yii\helpers\Html;
             'alt' => 'Imagem garrafa de vinho',
         ]) ?>
         <?php if ($model->isOnPromotion()): ?>
-            <div class="ribbon bg-danger text-white position-absolute" style="top: 10px; left: -10px; transform: rotate(-45deg); padding: 5px 20px;">
+            <div class="ribbon bg-danger text-white position-absolute" style="top: 15px; left: -10px; transform: rotate(-45deg); padding: 5px 20px;">
                 Promoção
             </div>
         <?php endif; ?>
@@ -18,10 +18,11 @@ use yii\helpers\Html;
     <div class="text-center py-4 flex-grow-1 d-flex flex-column justify-content-between">
         <!-- Nome do Produto -->
         <div>
-            <h6 class="text-truncate"><?= Html::encode($model->product->name) ?></h6>
             <div class="d-flex align-items-center justify-content-center mt-2">
-                <small>Categoria: <?= Html::encode($model->product->categories->name ?? 'N/A') ?></small>
+                <!-- TODO MANDAR O USER PARA A PAGINA DO PRODUCER AO CLICAR NO LINK -->
+                <?= html::a(html::tag('span', $model->product->producers->winery_name ?? 'N/A'), 'producer/view')?>
             </div>
+            <h6 class="text-truncate"><?= Html::encode($model->product->name) ?></h6>
         </div>
 
         <!-- Preços -->

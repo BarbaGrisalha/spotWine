@@ -56,7 +56,7 @@ $form = ActiveForm::begin([
 
 
                     <div class="dropdown-divider"></div>
-
+                    <!--TODO MUDAR PARA PEGAR OS PREÇOS EM PROMOÇÃO TAMBÉM -->
                     <!-- Campo de Preço Mínimo -->
                     <?= $form->field($searchModel, 'price_min')->textInput([
                         'placeholder' => 'Preço mínimo',
@@ -76,6 +76,15 @@ $form = ActiveForm::begin([
                             'id' => 'filter-mais-vendidos',
                         ]) ?>
                         <?= Html::label('Mais Vendidos', 'filter-mais-vendidos', ['class' => 'form-check-label']) ?>
+                    </div>
+
+                    <div class="form-check mb-2">
+                        <?= Html::radio('ProductFrontSearch[filter]', $searchModel->filter === 'promocoes', [
+                            'value' => 'promocoes',
+                            'class' => 'form-check-input',
+                            'id' => 'filter-promocoes',
+                        ]) ?>
+                        <?= Html::label('Promoções', 'filter-promocoes', ['class' => 'form-check-label']) ?>
                     </div>
 
                     <!-- Botões de Aplicar Filtros e Resetar -->

@@ -38,7 +38,8 @@ class Producers extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             [['winery_name'], 'string', 'max' => 100],
             [['location', 'document_id'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'user_id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+
         ];
     }
 

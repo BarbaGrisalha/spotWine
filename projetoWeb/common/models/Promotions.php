@@ -39,10 +39,15 @@ class Promotions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['discount_value', 'condition_value'], 'number'],
-            [['name', 'start_date', 'end_date'], 'safe'],
-            [['discount_type', 'condition_type'], 'string'],
-            [['discount_value'], 'required'],
+            [['name', 'start_date', 'end_date', 'discount_type', 'promotion_type'], 'required'],
+            [['start_date', 'end_date'], 'date', 'format' => 'php:Y-m-d'],
+            [['discount_value', 'condition_value'], 'number', 'min' => 0],
+            [['producer_id'], 'integer'],
+            [['name'], 'string', 'max' => 255],
+            [['promotion_type'], 'in', 'range' => ['direct', 'conditional']],
+            [['discount_type'], 'in', 'range' => ['percent', 'fixed']],
+            [['condition_type'], 'in', 'range' => ['min_purchase', 'quantity', 'none']],
+            [['end_date'], 'compare', 'compareAttribute' => 'start_date', 'operator' => '>'],
             [['productsIds'], 'each', 'rule' => ['integer']], // Validação para IDs de produtos
         ];
     }
@@ -54,13 +59,15 @@ class Promotions extends \yii\db\ActiveRecord
     {
         return [
             'promotion_id' => 'Promotion ID',
-            'name' => 'Name',
-            'start_date' => 'Start Date',
-            'end_date' => 'End Date',
-            'discount_type' => 'Discount Type',
-            'discount_value' => 'Discount Value',
-            'condition_type' => 'Condition Type',
-            'condition_value' => 'Condition Value',
+            'name' => 'Nome da Promoção',
+            'start_date' => 'Data de Início',
+            'end_date' => 'Data de Término',
+            'discount_type' => 'Tipo de Desconto',
+            'discount_value' => 'Valor do Desconto',
+            'promotion_type' => 'Tipo de Promoção',
+            'condition_type' => 'Tipo de Condição',
+            'condition_value' => 'Valor da Condição',
+            'producer_id' => 'Produtor',
             'productsIds' => 'Products', // Nome amigável para o formulário
         ];
     }
@@ -123,6 +130,46 @@ class Promotions extends \yii\db\ActiveRecord
     {
         $this->_productsIds = $ids;
     }
+
+    public static function getProdutosEmPromocao($limit = null)
+    {
+        return self::find()
+            ->joinWith('products')
+            ->where(['<=', 'start_date', date('Y-m-d')])
+            ->andWhere(['>=', 'end_date', date('Y-m-d')])
+            ->with(['products.producers', 'products.categories']) // Carregar relações necessárias
+            ->limit($limit)
+            ->all();
+    }
+
+    public static function getProdutosEmPromocaoIds($limit = null)
+    {
+        return self::find()
+            ->joinWith('products')
+            ->where(['<=', 'start_date', date('Y-m-d')])
+            ->andWhere(['>=', 'end_date', date('Y-m-d')])
+            ->select('promotion_product.product_id')
+            ->column(); // Retorna apenas os IDs dos produtos
+    }
+
+    public function linkProducts($productIds)
+    {
+        // Exclui associações anteriores
+        \Yii::$app->db->createCommand()
+            ->delete('{{%promotion_product}}', ['promotion_id' => $this->promotion_id])
+            ->execute();
+
+        // Adiciona novos produtos
+        foreach ($productIds as $productId) {
+            \Yii::$app->db->createCommand()
+                ->insert('{{%promotion_product}}', [
+                    'promotion_id' => $this->promotion_id,
+                    'product_id' => $productId,
+                ])
+                ->execute();
+        }
+    }
+
 
     /**
      * Atualiza os IDs dos produtos na tabela intermediária após salvar.

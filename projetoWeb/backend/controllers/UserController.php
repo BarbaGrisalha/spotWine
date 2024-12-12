@@ -29,6 +29,7 @@ class UserController extends Controller
         if (!Yii::$app->user->can('createUsers')) {
             throw new ForbiddenHttpException('Você não tem permissão para criar utilizadores - UserController linha 29.');
         }
+
         $model = new User();
         $userDetails = new UserDetails();
 
@@ -45,8 +46,12 @@ class UserController extends Controller
                 // Associa o user_id do novo usuário ao user_details
                 $userDetails->user_id = $model->id;
 
-                // Salva os detalhes do usuário
                 if ($userDetails->save()) {
+                    // Cria o registro na tabela 'Producers' para associar com o novo usuário
+                    $producer = new Producers(); // Assumindo que você tem um modelo `Producers`
+                    $producer->user_id = $model->id;
+                    $producer->save();
+
                     // Atribuir o role de 'producer' automaticamente
                     $auth = Yii::$app->authManager;
                     $producerRole = $auth->getRole('producer');
@@ -62,8 +67,8 @@ class UserController extends Controller
             'model' => $model,
             'userDetails' => $userDetails,
         ]);
-
     }
+
     public function actionView($id)
     {
         $model = User::findOne($id); // Busca o modelo principal User pelo ID

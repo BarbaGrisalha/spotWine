@@ -3,6 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\OrderItems;
+use common\models\Promotions;
+use frontend\models\ProductViewModel;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -78,8 +80,23 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $produtosMaisVendidos = OrderItems::getProdutosMaisVendidos(4);
-        return $this->render('index',['produtosMaisVendidos' => $produtosMaisVendidos]);
+
+        // Buscar produtos em promoção e encapsular no ProductViewModel
+        $promocoes = Promotions::getProdutosEmPromocao(4);
+        $produtosEmPromocao = [];
+        foreach ($promocoes as $promocao) {
+            foreach ($promocao->products as $product) {
+                $produtosEmPromocao[] = new ProductViewModel($product);
+            }
+        }
+
+        return $this->render('index', [
+            'produtosMaisVendidos' => $produtosMaisVendidos,
+            'produtosEmPromocao' => $produtosEmPromocao,
+        ]);
     }
+
+
 
     /**
      * Logs in a user.

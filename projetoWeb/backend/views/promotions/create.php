@@ -9,6 +9,7 @@ use yii\helpers\Html;
 $this->title = 'Create Promotions';
 $this->params['breadcrumbs'][] = ['label' => 'Promotions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+\backend\assets\AppAsset::register($this);
 ?>
 <div class="promotions-create">
 
