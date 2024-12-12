@@ -151,4 +151,9 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');
     }
+
+    public static function findByProducer($producerId)
+    {
+        return static::find()->where(['producer_id' => $producerId]);
+    }
 }

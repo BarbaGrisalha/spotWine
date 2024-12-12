@@ -38,7 +38,8 @@ class Producers extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             [['winery_name'], 'string', 'max' => 100],
             [['location', 'document_id'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'user_id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+
         ];
     }
 
@@ -92,7 +93,7 @@ class Producers extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
-    {
-        return $this->hasOne(Users::class, ['producer_id' => 'user_id']);
+    {                                   //pk User           fk producers
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

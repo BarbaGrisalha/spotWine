@@ -13,8 +13,6 @@
         button.closest('.quantity').find('input').val(newVal);
     });
 
-
-
     // Dropdown on mouse hover
     $(document).ready(function () {
         function toggleNavbarMethod() {

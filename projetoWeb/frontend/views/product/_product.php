@@ -3,43 +3,45 @@
 use yii\helpers\Html;
 
 ?>
-<div class="product-item bg-light mb-4">
+<div class="product-item bg-light mb-4 d-flex flex-column align-items-stretch">
     <div class="product-img position-relative overflow-hidden">
         <?= Html::img('@web/img/wineBottle.png', [
             'class' => 'img-fluid w-100',
             'alt' => 'Imagem garrafa de vinho',
         ]) ?>
-        <div class="product-action">
-            <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-shopping-cart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href="#"><i class="far fa-heart"></i></a>
-            <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-sync-alt"></i></a>
-            <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-search"></i></a>
-        </div>
+        <?php if ($model->isOnPromotion()): ?>
+            <div class="ribbon bg-danger text-white position-absolute" style="top: 15px; left: -10px; transform: rotate(-45deg); padding: 5px 20px;">
+                Promoção
+            </div>
+        <?php endif; ?>
     </div>
-    <div class="text-center py-4">
+    <div class="text-center py-4 flex-grow-1 d-flex flex-column justify-content-between">
+        <!-- Nome do Produto -->
+        <div>
+            <div class="d-flex align-items-center justify-content-center mt-2">
+                <!-- TODO MANDAR O USER PARA A PAGINA DO PRODUCER AO CLICAR NO LINK -->
+                <?= html::a(html::tag('span', $model->product->producers->winery_name ?? 'N/A'), 'producer/view')?>
+            </div>
+            <h6 class="text-truncate"><?= Html::encode($model->product->name) ?></h6>
+        </div>
+
+        <!-- Preços -->
         <div class="d-flex align-items-center justify-content-center mt-2">
-            <small>Produtor: <?= Html::encode($model->producers->winery_name ?? 'N/A') ?></small>
+            <?php if ($model->isOnPromotion()): ?>
+                <h5 class="text-muted"><del><?= Html::encode($model->product->price) ?> €</del></h5>
+                <h5 class="text-danger ml-2 font-weight-bold"><?= Html::encode($model->getFinalPrice()) ?> €</h5>
+            <?php else: ?>
+                <h5 class="text-primary"><?= Html::encode($model->product->price) ?> €</h5>
+            <?php endif; ?>
         </div>
-        <span class="h6 text-decoration-none text-truncate"><?= Html::encode($model->name) ?></span>
-        <div class="d-flex align-items-center justify-content-center mt-2">
-            <small>Categoria: <?= Html::encode($model->categories->name ?? 'N/A') ?></small>
+
+        <!-- Botão -->
+        <div class="mt-2">
+            <?= Html::a(
+                    html::tag('span', 'Ver Produto', ['class' => 'text-white']),
+                ['product/view', 'id' => $model->product->product_id], [
+                'class' => 'btn btn-primary',
+            ]) ?>
         </div>
-        <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star-half-alt text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-        </div>
-        <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5 class="text-primary"><?= Html::encode($model->price) ?> €</h5>
-        </div>
-        <!-- Botão ou Link separado -->
-        <?= Html::a(Html::tag('span','Ver Produto', ['class' => 'text-white']), ['product/view', 'id' => $model->product_id], [
-            'class' => 'btn btn-primary mt-2',
-        ]) ?>
     </div>
 </div>
-
-

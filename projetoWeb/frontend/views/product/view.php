@@ -4,8 +4,9 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var common\models\Product $model */
+/** @var frontend\models\ProductViewModel $productView */
 
-$this->title = $model->name;
+$this->title = $productView->product->name;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -24,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- Detalhes do Produto -->
         <div class="col-md-6">
             <h1><?= Html::encode($this->title) ?></h1>
-            <p class="text-muted"><?= Html::encode($model->producers->winery_name ?? 'N/A') ?></p>
+            <p class="text-muted"><?= Html::encode($productView->product->producers->winery_name ?? 'N/A') ?></p>
 
             <!-- Avaliação -->
             <div class="d-flex align-items-center mb-2">
@@ -37,17 +38,29 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <!-- Preço -->
-            <?= Html::tag('h2', Html::encode($model->price) . ' €', ['class' => 'text-primary mb-4']) ?>
+            <?php if ($productView->isOnPromotion()): ?>
+                <div class="promotion-highlight p-3 mb-4" style="border: 2px solid #dc3545; border-radius: 10px; background: #ffe6e6;">
+                    <p class="mb-1 text-danger font-weight-bold">Produto em Promoção!</p>
+                    <p class="mb-1">
+                        <span class="text-muted">Preço Original:</span> <del class="text-muted"><?= Html::encode($productView->product->price) ?>€</del>
+                    </p>
+                    <p>
+                        <span class="text-success font-weight-bold">Preço Promocional:</span>
+                        <strong><?= Html::encode($productView->getFinalPrice()) ?>€</strong>
+                    </p>
+                </div>
+            <?php else: ?>
+                <p>Preço: <strong><?= Html::encode($productView->product->price) ?>€</strong></p>
+            <?php endif; ?>
 
+            <!-- Botões de Quantidade e Adicionar ao Carrinho -->
             <div class="d-flex align-items-center mb-4">
-                <!-- Campo de Quantidade -->
                 <div class="input-group quantity" style="max-width: 120px;">
                     <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary btn-minus" type="button">
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
-                    <!-- TODO VALIDAR CAMPO DE ENTRADA PRA SER APENAS NUMBER -->
                     <?= Html::textInput('quantity', '1', [
                         'class' => 'form-control text-center']) ?>
                     <div class="input-group-append">
@@ -56,17 +69,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         </button>
                     </div>
                 </div>
-
-
-                <!-- Botão Adicionar ao Carrinho -->
                 <?= Html::button(
                     '<i class="fa fa-shopping-cart mr-2 text-white"></i><span class="text-white">Adicionar ao Carrinho</span>',
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn-primary ml-3']
                 ) ?>
             </div>
 
-
-            <!-- Abas -->
+            <!-- Abas de Informações -->
             <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
                 <li class="nav-item">
                     <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Descrição</button>
@@ -81,13 +90,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <?= Html::encode($model->description ?? 'Descrição indisponível') ?>
+                    <?= Html::encode($productView->product->description ?? 'Descrição indisponível') ?>
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <?= Html::encode($model->producers->winery_name ?? 'Informações do produtor indisponíveis') ?>
+                    <?= Html::encode($productView->product->producers->winery_name ?? 'Informações do produtor indisponíveis') ?>
                 </div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <!-- Avaliações podem ser carregadas aqui -->
                     Avaliações dos clientes.
                 </div>
             </div>

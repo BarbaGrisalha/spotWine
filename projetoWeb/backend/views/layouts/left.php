@@ -82,12 +82,17 @@
                             'iconType' => 'far',
                             'icon' => 'dot-circle',
                             'url' =>['/user/index'],
-                            'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
+                            'visible' => Yii::$app->user->can('admin'),// Somente visível para a role admin
                         ],
                         ['label' => 'Gestão dos Produtos',
                             'iconType' => 'far',
                             'icon' => 'dot-circle',
                             'url' =>['/product/index'],
+                        ],
+                        ['label' => 'Gestão das Promoções',
+                            'iconType' => 'far',
+                            'icon' => 'dot-circle',
+                            'url' =>['/promotions/index'],
                         ]
                 ],
                ]
