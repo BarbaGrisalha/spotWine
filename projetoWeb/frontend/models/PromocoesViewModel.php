@@ -5,13 +5,13 @@ namespace frontend\models;
 use common\models\Product;
 use common\models\Promotions;
 
-class ProductViewModel
+class ProductViewModel extends BaseProductViewModel
 {
     public $product;
     public $promotion;
     public function __construct(Product $product)
     {
-        $this->product = $product;
+        parent::__construct($product);
         $this->promotion = $this->getApplicablePromotion();
     }
 
