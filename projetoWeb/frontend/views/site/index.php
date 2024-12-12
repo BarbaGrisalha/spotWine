@@ -263,16 +263,16 @@ AppAsset::register($this);
             <?= Html::a(html::tag('h5', 'Ver mais',['class' => 'text-secondary']), ['product/index', 'ProductFrontSearch[filter]' => 'mais_vendidos']) ?>
         </div>
 
-        <!--TODO iGUALAR AO RENDER DE PROMOÇOES DA LINHA 317 -->
-        <div class="row px-xl-10">
-            <?php foreach ($produtosMaisVendidos as $produto): ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex">
-                    <?= $this->render('@frontend/views/product/_product', [
-                        'model' => $produto,
-                    ]) ?>
-                </div>
-            <?php endforeach; ?>
-        </div>
+            <!--TODO iGUALAR AO RENDER DE PROMOÇOES DA LINHA 317 -->
+            <div class="row px-xl-10">
+                <?php foreach ($produtosMaisVendidos as $produto): ?>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex">
+                        <?= $this->render('@frontend/views/product/_product', [
+                            'model' => $produto,
+                        ]) ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
 
 

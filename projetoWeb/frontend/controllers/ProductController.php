@@ -6,7 +6,7 @@ use common\models\Categories;
 use common\models\Product;
 use common\models\Promotions;
 use frontend\models\ProductFrontSearch;
-use frontend\models\ProductViewModel;
+use frontend\models\promocoesViewModel;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
@@ -20,10 +20,10 @@ class ProductController extends \yii\web\Controller
 
         $categoriesList = ArrayHelper::map(Categories::find()->all(), 'category_id', 'name');
 
-        // Convertendo cada produto para uma instância de ProductViewModel
-        $products = array_map(fn($product) => new ProductViewModel($product), $dataProvider->getModels());
+        // Convertendo cada produto para uma instância de promocoesViewModel
+        $products = array_map(fn($product) => new promocoesViewModel($product), $dataProvider->getModels());
 
-        // Atualizar o dataProvider para usar os ProductViewModel
+        // Atualizar o dataProvider para usar os promocoesViewModel
         $dataProvider->setModels($products);
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class ProductController extends \yii\web\Controller
             throw new NotFoundHttpException('Produto não encontrado.');
         }
 
-        $productViewModel = new ProductViewModel($model);
+        $productViewModel = new promocoesViewModel($model);
 
         return $this->render('view', [
             'productView' => $productViewModel,

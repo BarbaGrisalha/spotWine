@@ -5,7 +5,7 @@ namespace frontend\models;
 use common\models\Product;
 use common\models\Promotions;
 
-class ProductViewModel extends BaseProductViewModel
+class promocoesViewModel extends BaseProductViewModel
 {
     public $product;
     public $promotion;
