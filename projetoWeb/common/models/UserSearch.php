@@ -46,7 +46,8 @@ class UserSearch extends User
     {
         $query = User::find()
             ->joinWith([
-                'userDetails', // Relação com detalhes do usuário
+                'consumerDetails', // Relacionamento com consumer_details
+                'producerDetails', // Relacionamento com producer_details
                 'authAssignment' => function ($query) {
                     $query->alias('auth_assignment'); // Alias para a tabela auth_assignment
                 }
@@ -65,15 +66,19 @@ class UserSearch extends User
             return $dataProvider;
         }
 
-        //Filtros de buscas
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'user_details.nif', $this->nif])
-            ->andFilterWhere(['like', 'user_details.phone_number', $this->phone_number])
-            ->andFilterWhere(['user_details.status' => $this->status]);
+            ->andFilterWhere(['like', 'consumer_details.nif', $this->nif])
+            ->andFilterWhere(['like', 'producer_details.nif', $this->nif])
+            ->andFilterWhere(['like', 'consumer_details.phone_number', $this->phone_number])
+            ->andFilterWhere(['like', 'producer_details.phone_number', $this->phone_number])
+            ->andFilterWhere(['consumer_details.status' => $this->status])
+            ->orFilterWhere(['producer_details.status' => $this->status]);
 
         // Filtro de Role (auth_assignment)
-        $query->andFilterWhere(['auth_assignment.item_name' => $this->role]);
+        if (!empty($this->role)) {
+            $query->andFilterWhere(['auth_assignment.item_name' => $this->role]);
+        }
 
         return $dataProvider;
     }

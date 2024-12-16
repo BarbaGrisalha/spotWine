@@ -101,9 +101,34 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Relacionamento com UserDetails
      */
-    public function getUserDetails()
+    public function getConsumerDetails()
     {
-        return $this->hasOne(UserDetails::class, ['user_id' => 'id']);
+        return $this->hasOne(ConsumerDetails::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Relacionamento com ProducerDetails
+     * (Para usuários do tipo produtor).
+     */
+    public function getProducerDetails()
+    {
+        return $this->hasOne(ProducerDetails::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Identifica se o usuário é um produtor.
+     */
+    public function isProducer()
+    {
+        return $this->getProducerDetails()->exists();
+    }
+
+    /**
+     * Identifica se o usuário é um consumidor.
+     */
+    public function isConsumer()
+    {
+        return $this->getConsumerDetails()->exists();
     }
     /**
      * {@inheritdoc}
@@ -282,7 +307,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getProducerId()
     {
-        return $this->producers ? $this->producers->producer_id : null;
+        return $this->producerDetails ? $this->producerDetails->id : null;
     }
 
     public function getRole(){
@@ -290,5 +315,91 @@ class User extends ActiveRecord implements IdentityInterface
 
         //return $this->hasOne(User::class, ['user_id' => 'id'])->role;
     }
+
+    public function saveUser(){
+        $userDetails = new UserDetails();
+        $model = new User();
+
+        $model->setPassword($model->password); // Gera o hash da senha
+        $model->generatePasswordResetToken();
+
+        // Gera as chaves de autenticação e tokens
+        $model->generateAuthKey();
+        $model->generateEmailVerificationToken();
+
+        if ($model->save()) {
+            // Associa o user_id do novo usuário ao user_details
+            $userDetails->user_id = $model->id;
+
+            if ($userDetails->save()) {
+                // Cria o registro na tabela 'Producers' para associar com o novo usuário
+                $producer = new Producers(); // Assumindo que você tem um modelo `Producers`
+                $producer->user_id = $model->id;
+                $producer->save();
+
+                // Atribuir o role de 'producer' automaticamente
+                $auth = Yii::$app->authManager;
+                $producerRole = $auth->getRole('producer');
+                $auth->assign($producerRole, $model->id);
+
+                // Redireciona para a view do usuário criado
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+    }
+
+    public function activate()
+    {
+        if ($this->producerDetails) {
+            $this->producerDetails->status = 1;
+            return $this->producerDetails->save();
+        }
+
+        if ($this->consumerDetails) {
+            $this->consumerDetails->status = 1;
+            return $this->consumerDetails->save();
+        }
+
+        return false; // Não encontrou relação
+    }
+
+    public function deactivate()
+    {
+        if ($this->producerDetails) {
+            $this->producerDetails->status = 0;
+            return $this->producerDetails->save();
+        }
+
+        if ($this->consumerDetails) {
+            $this->consumerDetails->status = 0;
+            return $this->consumerDetails->save();
+        }
+
+        return false; // Não encontrou relação
+    }
+
+    public function saveWithDetails($detailsModel)
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            if ($this->save() && $detailsModel->save()) {
+                $transaction->commit();
+                return true;
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+
+        return false;
+    }
+
+    // Retorna o modelo de detalhes relacionado (produtor ou consumidor)
+    public function getDetails()
+    {
+        return $this->producerDetails ?? $this->consumerDetails;
+    }
+
 
 }

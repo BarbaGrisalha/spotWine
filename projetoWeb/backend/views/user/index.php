@@ -14,12 +14,12 @@ AppAsset::register($this);
 ?>
 <div class="site-index">
     <div class="text-center bg-transparent">
-        <?=Html::tag('h1', Html::encode($this->title))?>
+        <?= Html::tag('h1', Html::encode($this->title)) ?>
     </div>
     <div class="body-content">
         <p>
             <?= Html::a('Create User', ['user/create'], ['class' => 'btn btn-success']) ?>
-        </p>Altamir
+        </p>
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
@@ -28,21 +28,29 @@ AppAsset::register($this);
                 'id',
                 'username',
                 'email',
-                // Colunas de `user_details`
-//                [
-//                    'attribute' => 'userDetails.nif',
-//                    'value' => 'userDetails.nif',
-//                ],
+                // Colunas de detalhes do consumidor ou produtor
                 [
                     'attribute' => 'nif',
                     'value' => function ($model) {
-                        return $model->userDetails->nif ?? 'N/A';
+                        if ($model->consumerDetails) {
+                            return $model->consumerDetails->nif ?? 'N/A';
+                        }
+                        if ($model->producerDetails) {
+                            return $model->producerDetails->nif ?? 'N/A';
+                        }
+                        return 'N/A';
                     },
                 ],
                 [
                     'attribute' => 'phone_number',
                     'value' => function ($model) {
-                        return $model->userDetails->phone_number ?? 'N/A';
+                        if ($model->consumerDetails) {
+                            return $model->consumerDetails->phone_number ?? 'N/A';
+                        }
+                        if ($model->producerDetails) {
+                            return $model->producerDetails->phone_number ?? 'N/A';
+                        }
+                        return 'N/A';
                     },
                 ],
                 [
@@ -58,33 +66,36 @@ AppAsset::register($this);
                     ],
                     'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'],
                 ],
-
-
                 // Coluna de status
                 [
                     'attribute' => 'status',
                     'format' => 'raw', // Permite HTML na célula
                     'value' => function ($model) {
-                        // Verifica o status e define a classe CSS
-                        $statusClass = $model->userDetails && $model->userDetails->status == 1 ? 'badge badge-success' : 'badge badge-danger';
-                        $statusLabel = $model->userDetails && $model->userDetails->status == 1 ? 'Ativo' : 'Inativo';
+                        $statusClass = 'badge badge-secondary';
+                        $statusLabel = 'N/A';
 
-                        // Retorna o status com a classe CSS aplicada
+                        if ($model->consumerDetails) {
+                            $statusClass = $model->consumerDetails->status == 1 ? 'badge badge-success' : 'badge badge-danger';
+                            $statusLabel = $model->consumerDetails->status == 1 ? 'Ativo' : 'Inativo';
+                        } elseif ($model->producerDetails) {
+                            $statusClass = $model->producerDetails->status == 1 ? 'badge badge-success' : 'badge badge-danger';
+                            $statusLabel = $model->producerDetails->status == 1 ? 'Ativo' : 'Inativo';
+                        }
+
                         return Html::tag('span', $statusLabel, ['class' => $statusClass]);
                     },
                     'filter' => [
                         1 => 'Ativo',
                         0 => 'Inativo',
                     ],
-                    'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'], // Adiciona um placeholder
-
+                    'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'],
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{view} {update} {deactivate}', // Adiciona um botão personalizado
                     'buttons' => [
                         'deactivate' => function ($url, $model, $key) {
-                            if ($model->userDetails && $model->userDetails->status == 1) {
+                            if ($model->consumerDetails && $model->consumerDetails->status == 1) {
                                 return Html::a(
                                     '<i class="fas fa-ban text-red"></i>', // Ícone de desativar
                                     ['user/deactivate', 'id' => $model->id], // URL para a actionDeactivate
@@ -92,6 +103,16 @@ AppAsset::register($this);
                                         'title' => 'Desativar',
                                         'data-confirm' => 'Você tem certeza que deseja desativar este usuário?',
                                         'data-method' => 'post', // Envia como POST para segurança
+                                    ]
+                                );
+                            } elseif ($model->producerDetails && $model->producerDetails->status == 1) {
+                                return Html::a(
+                                    '<i class="fas fa-ban text-red"></i>', // Ícone de desativar
+                                    ['user/deactivate', 'id' => $model->id], // URL para a actionDeactivate
+                                    [
+                                        'title' => 'Desativar',
+                                        'data-confirm' => 'Você tem certeza que deseja desativar este usuário?',
+                                        'data-method' => 'post',
                                     ]
                                 );
                             } else {
@@ -107,13 +128,8 @@ AppAsset::register($this);
                             }
                         },
                     ],
-
                 ],
             ],
-
         ]); ?>
-
-
-
     </div>
 </div>

@@ -12,34 +12,75 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
 
-    <h3>Informações do Usuário</h3>
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'username',
-            'email',
-        ],
-    ]) ?>
-
-    <h3>Detalhes Adicionais do Usuário</h3>
-    <?php if ($model->userDetails): ?>
-        <?= DetailView::widget([
-            'model' => $model->userDetails, // Usando o relacionamento
-            'attributes' => [
-                'nif',
-                'phone_number',
-                [
-                    'attribute' => 'status',
-                    'value' => function ($userDetails) {
-                        return $userDetails->status == 1 ? 'Ativo' : 'Inativo';
-                    },
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Informações do Usuário</h3>
+        </div>
+        <div class="card-body">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id',
+                    'username',
+                    'email',
+                    [
+                        'label' => 'Role',
+                        'value' => function ($model) {
+                            return $model->authAssignment->item_name ?? 'Sem Role';
+                        },
+                    ],
                 ],
-                'role',
-            ],
-        ]) ?>
-    <?php else: ?>
-        <p>Sem detalhes adicionais.</p>
-    <?php endif; ?>
+            ]) ?>
+        </div>
+    </div>
 
+    <?php if ($model->producerDetails): ?>
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Detalhes Adicionais do Usuário</h3>
+            </div>
+            <div class="card-body">
+                <?= DetailView::widget([
+                    'model' => $model->producerDetails,
+                    'attributes' => [
+                        'document_id',
+                        'nif',
+                        'phone',
+                        'mobile',
+                        'winery_name',
+                        'location',
+                        [
+                            'label' => 'Status',
+                            'value' => function ($producerDetails) {
+                                return $producerDetails->status == 1 ? 'Ativo' : 'Inativo';
+                            },
+                        ],
+                    ],
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0">Endereço</h3>
+            </div>
+            <div class="card-body">
+                <?= DetailView::widget([
+                    'model' => $model->producerDetails,
+                    'attributes' => [
+                        'address',
+                        'number',
+                        'postal_code',
+                        'region',
+                        'city',
+                        'complement',
+                    ],
+                ]) ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-warning">
+            Sem detalhes adicionais.
+        </div>
+    <?php endif; ?>
 </div>

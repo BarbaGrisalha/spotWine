@@ -182,7 +182,7 @@ class SiteController extends Controller
         $model = new SignupForm(); // Formulário de registro
 
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Registration successful. Please log in.');
+
             return $this->goHome();
         }
 

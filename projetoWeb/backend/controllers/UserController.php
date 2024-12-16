@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use common\models\ProducerDetails;
 use common\models\Producers;
 use common\models\Product;
 use common\models\User;
@@ -26,46 +27,25 @@ class UserController extends Controller
 
     public function actionCreate()
     {
+        // Verifica se o usuário tem permissão para criar
         if (!Yii::$app->user->can('createUsers')) {
-            throw new ForbiddenHttpException('Você não tem permissão para criar utilizadores - UserController linha 29.');
+            throw new ForbiddenHttpException('Você não tem permissão para criar produtores.');
         }
 
-        $model = new User();
-        $userDetails = new UserDetails();
+        $user = new User();
+        $producerDetails = new ProducerDetails();
 
-        if ($model->load($this->request->post()) && $userDetails->load(Yii::$app->request->post())) {
-
-            $model->setPassword($model->password); // Gera o hash da senha
-            $model->generatePasswordResetToken();
-
-            // Gera as chaves de autenticação e tokens
-            $model->generateAuthKey();
-            $model->generateEmailVerificationToken();
-
-            if ($model->save()) {
-                // Associa o user_id do novo usuário ao user_details
-                $userDetails->user_id = $model->id;
-
-                if ($userDetails->save()) {
-                    // Cria o registro na tabela 'Producers' para associar com o novo usuário
-                    $producer = new Producers(); // Assumindo que você tem um modelo `Producers`
-                    $producer->user_id = $model->id;
-                    $producer->save();
-
-                    // Atribuir o role de 'producer' automaticamente
-                    $auth = Yii::$app->authManager;
-                    $producerRole = $auth->getRole('producer');
-                    $auth->assign($producerRole, $model->id);
-
-                    // Redireciona para a view do usuário criado
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
+        if ($user->load(Yii::$app->request->post()) && $producerDetails->load(Yii::$app->request->post())) {
+            // Delega lógica de criação ao modelo
+            if ($producerDetails->createProducer($user)) {
+                Yii::$app->session->setFlash('success', 'Produtor criado com sucesso.');
+                return $this->redirect(['view', 'id' => $user->id]);
             }
         }
 
         return $this->render('create', [
-            'model' => $model,
-            'userDetails' => $userDetails,
+            'user' => $user,
+            'producerDetails' => $producerDetails,
         ]);
     }
 
@@ -81,70 +61,46 @@ class UserController extends Controller
             'model' => $model,
         ]);
     }
-    public function actionDeactivate($id)
-    {
-        $userDetails = UserDetails::findOne(['user_id' => $id]);
-
-        if ($userDetails) {
-            $userDetails->status = 0; // Desativa
-            if ($userDetails->save(false)) {
-                Yii::$app->session->setFlash('success', 'Usuário desativado com sucesso.');
-            } else {
-                Yii::$app->session->setFlash('error', 'Falha ao desativar o usuário.');
-            }
-        } else {
-            Yii::$app->session->setFlash('error', 'Detalhes do usuário não encontrados.');
-        }
-
-        return $this->redirect(['index']);
-    }
-
     public function actionActivate($id)
     {
-        $userDetails = UserDetails::findOne(['user_id' => $id]);
+        $user = $this->findModel($id);
 
-        if ($userDetails) {
-            $userDetails->status = 1; // Ativa
-            if ($userDetails->save(false)) {
-                Yii::$app->session->setFlash('success', 'Usuário ativado com sucesso.');
-            } else {
-                Yii::$app->session->setFlash('error', 'Falha ao ativar o usuário.');
-            }
+        if ($user->activate()) {
+            Yii::$app->session->setFlash('success', 'Usuário ativado com sucesso.');
         } else {
-            Yii::$app->session->setFlash('error', 'Detalhes do usuário não encontrados.');
+            Yii::$app->session->setFlash('error', 'Não foi possível ativar o usuário.');
         }
 
         return $this->redirect(['index']);
     }
+
+    public function actionDeactivate($id)
+    {
+        $user = $this->findModel($id);
+
+        if ($user->deactivate()) {
+            Yii::$app->session->setFlash('success', 'Usuário desativado com sucesso.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Não foi possível desativar o usuário.');
+        }
+
+        return $this->redirect(['index']);
+    }
+
 
 
     public function actionUpdate($id)
     {
-        // Carrega o modelo User pelo ID
         $model = $this->findModel($id);
+        $userDetails = $model->getDetails();
 
-        // Carrega o modelo UserDetails relacionado
-        $userDetails = UserDetails::findOne(['user_id' => $id]) ?? new UserDetails(['user_id' => $id]);
-
-        if (!$model) {
-            throw new NotFoundHttpException('Usuário não encontrado.');
+        if (!$userDetails) {
+            throw new NotFoundHttpException('Detalhes do usuário não encontrados.');
         }
 
         if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
-
-
-            // Se o campo de senha foi preenchido, atualize a senha
-            if (!empty($model->password)) {
-                $model->setPassword($model->password); // Define o hash
-            }
-
-
-            if(!empty($model->password)){
-                $model->setPassword($model->password);
-            }
-
-            // Salva os dados de ambos os modelos
-            if ($model->save() && $userDetails->save()) {
+            // Salva o usuário e os detalhes
+            if ($model->saveWithDetails($userDetails)) {
                 Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso.');
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -157,6 +113,7 @@ class UserController extends Controller
             'userDetails' => $userDetails,
         ]);
     }
+
     protected function findModel($id)
     {
         if (($model = User::findOne($id)) !== null) {
@@ -165,39 +122,5 @@ class UserController extends Controller
         throw new NotFoundHttpException('The requested user does not exist.');
     }
 
-    public function actionCreateProducts()
-    {
-        // Verifica se o usuário tem permissão para criar produtos
-        if (!Yii::$app->user->can('createdProduct')) {
-            throw new ForbiddenHttpException('Você não tem permissão para criar produtos!');
-        }
-
-        // Cria uma nova instância de Product
-        $model = new Product();
-
-        // Verifica se os dados do formulário foram enviados e se o produto pode ser salvo
-        if ($model->load(Yii::$app->request->post())) {
-            // Atribui automaticamente o 'producer_id' se o usuário logado for um produtor
-            if (Yii::$app->user->identity->role === 'producer') {
-                $producer = Producers::findOne(['user_id' => Yii::$app->user->id]);
-                if ($producer) {
-                    $model->producer_id = $producer->id; // Relaciona o produto ao produtor logado
-                } else {
-                    throw new ForbiddenHttpException('Não foi possível identificar o produtor associado a este usuário.');
-                }
-            }
-
-            // Tenta salvar o produto no banco de dados
-            if ($model->save()) {
-                // Redireciona para a visualização do produto se salvo com sucesso
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
-
-        // Renderiza o formulário de criação do produto caso contrário
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
 
 }

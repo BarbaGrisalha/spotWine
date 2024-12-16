@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\ProducerDetails;
 use common\models\Producers;
 use common\models\Product;
 use common\models\PromotionProduct;
@@ -73,7 +74,7 @@ class PromotionsController extends Controller
     public function actionIndex()
     {
         // Verificar se o usuário logado é um produtor
-        $producer = Yii::$app->user->identity->producers;
+        $producer = Yii::$app->user->identity->producerDetails;
         if (!$producer) {
             throw new \yii\web\ForbiddenHttpException('Você precisa ser um produtor para acessar esta página.');
         }
@@ -85,7 +86,7 @@ class PromotionsController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         // Filtra as promoções para incluir apenas as do produtor logado
-        $dataProvider->query->andWhere(['producer_id' => $producer->producer_id]);
+        $dataProvider->query->andWhere(['producer_id' => $producer->id]);
 
         // Renderiza a página com os dados
         return $this->render('index', [
@@ -115,42 +116,25 @@ class PromotionsController extends Controller
     public function actionCreate()
     {
         $model = new Promotions();
+        $producer = ProducerDetails::findOne(['user_id' => Yii::$app->user->id]);
 
-        if ($model->load(Yii::$app->request->post())) {
-            // Definir o producer_id com base no usuário logado
-            $producer = Producers::findOne(['user_id' => Yii::$app->user->id]);
-            if (!$producer) {
-                throw new ForbiddenHttpException('Você não é um produtor registrado.');
-            }
+        if (!$producer) {
+            throw new ForbiddenHttpException('Você não é um produtor registrado.');
+        }
 
-            $model->producer_id = $producer->producer_id;
+        $model->producer_id = $producer->id;
 
-            // Validação das condições de promoção
-            if ($model->promotion_type === 'direct' && empty($model->productsIds)) {
-                $model->addError('productsIds', 'Selecione ao menos um produto para a promoção direta.');
-            }
-
-            if ($model->promotion_type === 'conditional' && (empty($model->condition_type) || empty($model->condition_value))) {
-                $model->addError('condition_type', 'Tipo e valor da condição são obrigatórios para promoções condicionais.');
-            }
-
-            // Salvando a promoção
-            if ($model->save()) {
-                // Associar produtos para promoções diretas
-                if ($model->promotion_type === 'direct') {
-                    $model->linkProducts($model->productsIds);
-                }
-
-                Yii::$app->session->setFlash('success', 'Promoção criada com sucesso.');
-                return $this->redirect(['view', 'promotion_id' => $model->promotion_id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->savePromotion()) {
+            Yii::$app->session->setFlash('success', 'Promoção criada com sucesso.');
+            return $this->redirect(['view', 'promotion_id' => $model->promotion_id]);
         }
 
         return $this->render('create', [
             'model' => $model,
-            'availableProducts' => Product::find()->all(),
+            'availableProducts' => Product::find()->where(['producer_id' => $producer->id])->all(),
         ]);
     }
+
 
 
 

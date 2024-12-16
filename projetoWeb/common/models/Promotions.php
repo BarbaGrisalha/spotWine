@@ -154,21 +154,61 @@ class Promotions extends \yii\db\ActiveRecord
 
     public function linkProducts($productIds)
     {
-        // Exclui associações anteriores
-        \Yii::$app->db->createCommand()
-            ->delete('{{%promotion_product}}', ['promotion_id' => $this->promotion_id])
-            ->execute();
+        // Verifica se há produtos para associar
+        if (empty($productIds)) {
+            return;
+        }
 
-        // Adiciona novos produtos
-        foreach ($productIds as $productId) {
+        // Usa transação para garantir integridade
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        try {
+            // Exclui associações anteriores
             \Yii::$app->db->createCommand()
-                ->insert('{{%promotion_product}}', [
-                    'promotion_id' => $this->promotion_id,
-                    'product_id' => $productId,
-                ])
+                ->delete('{{%promotion_product}}', ['promotion_id' => $this->promotion_id])
                 ->execute();
+
+            // Adiciona novos produtos
+            foreach ($productIds as $productId) {
+                \Yii::$app->db->createCommand()
+                    ->insert('{{%promotion_product}}', [
+                        'promotion_id' => $this->promotion_id,
+                        'product_id' => $productId,
+                    ])
+                    ->execute();
+            }
+
+            // Confirma a transação
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            // Reverte a transação em caso de erro
+            $transaction->rollBack();
+            throw $e; // Relança a exceção para tratamento posterior
         }
     }
+
+    public function savePromotion()
+    {
+        if ($this->promotion_type === 'direct' && empty($this->productsIds)) {
+            $this->addError('productsIds', 'Selecione ao menos um produto para a promoção direta.');
+            return false;
+        }
+
+        if ($this->promotion_type === 'conditional' && (empty($this->condition_type) || empty($this->condition_value))) {
+            $this->addError('condition_type', 'Tipo e valor da condição são obrigatórios para promoções condicionais.');
+            return false;
+        }
+
+        if ($this->save()) {
+            if ($this->promotion_type === 'direct') {
+                $this->linkProducts($this->productsIds);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
 
 
     /**
