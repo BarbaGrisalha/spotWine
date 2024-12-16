@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
-use backend\models\Producers;
-use backend\models\ProducersSearch;
+use common\models\Producers;
+use common\models\ProducersSearch;
 use common\models\User;
 
 use yii\web\Controller;

@@ -46,7 +46,7 @@ class ProductController extends Controller
                         ],
                         [//As páginas que podem ser vistas.
                             'allow' => true,
-                            'actions' => ['index', 'view', 'create', 'logout'],
+                            'actions' => ['index', 'view', 'create', 'logout','update','delete'],
                             'roles' => ['@'],
                         ]
                     ]
@@ -63,14 +63,18 @@ class ProductController extends Controller
     public function actionIndex()
     {
         // Obtém o usuário logado
-        $user = Yii::$app->user->identity;
+        $producer = Yii::$app->user->identity->producers;
+
 
         $searchModel = new ProductSearch();
+
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['producer_id'=>$producer->producer_id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+
         ]);
 
         /*
@@ -178,7 +182,7 @@ class ProductController extends Controller
         $user = Yii::$app->user->identity;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'product_id' => $model->product_id]);
         }
 
         return $this->render('update', [

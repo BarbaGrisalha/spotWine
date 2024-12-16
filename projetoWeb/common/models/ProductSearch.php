@@ -19,6 +19,7 @@ class ProductSearch extends Product
     {
         return [
             [['product_id', 'producer_id', 'category_id', 'stock'], 'integer'],
+           // ['winery_name'],
             [['name', 'description', 'image_url'], 'safe'],
             [['price'], 'number'],
         ];
@@ -59,12 +60,13 @@ class ProductSearch extends Product
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+            $query->where('0=1');
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
+            //'winery_name'=> $this->winery_name,
             'product_id' => $this->product_id,
             'producer_id' => $this->producer_id,
             'category_id' => $this->category_id,

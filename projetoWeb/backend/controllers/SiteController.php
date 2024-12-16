@@ -77,9 +77,6 @@ class SiteController extends Controller
                 'logout' => ['post'], // Logout via POST
             ],
         ],
-
-
-
     ];
 
 
@@ -200,8 +197,4 @@ class SiteController extends Controller
             $status = "error";
         }
     }
-
-
-
-
 }

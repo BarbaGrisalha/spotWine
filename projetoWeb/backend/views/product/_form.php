@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var common\models\Product $model */
+
 /** @var yii\widgets\ActiveForm $form */
 /** @var common\models\User $user */
 ?>

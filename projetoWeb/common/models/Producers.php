@@ -53,7 +53,6 @@ class Producers extends \yii\db\ActiveRecord
             [['winery_name', 'location', 'region', 'address'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 15],
             [['notes'], 'string'],
-           // [['role'], 'default', 'value' => 'producer'],
         ];
 
     }
@@ -63,15 +62,6 @@ class Producers extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        /*
-        return [
-            'producer_id' => 'Producer ID',
-            'user_id' => 'User ID',
-            'winery_name' => 'Winery Name',
-            'location' => 'Location',
-            'document_id' => 'Document ID',
-        ];
-        */
         return [
             'producer_id' => 'Producer ID',
             'user_id' => 'User ID',
@@ -125,5 +115,9 @@ class Producers extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(Users::class, ['id' => 'user_id']);
+    }
+
+    public function getProducersDetails(){
+        return $this->hasOne(Producers::class,['producer_id'=>'id']);
     }
 }

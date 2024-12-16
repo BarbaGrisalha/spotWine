@@ -46,7 +46,6 @@ class Product extends \yii\db\ActiveRecord
             [['producer_id'],'required'],
             [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Producers::class, 'targetAttribute' => ['producer_id' => 'producer_id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_id' => 'category_id']],
-
             [['description'], 'string'],
             [['price'], 'number'],
             [['name'], 'string', 'max' => 100],
@@ -77,6 +76,7 @@ class Product extends \yii\db\ActiveRecord
 
         return [
             'product_id' => 'Product ID',
+            'winery_name'=> 'Nome da Vinha',
             'producer_id' => 'Produtor',
             'category_id' => 'Categoria',
             'name' => 'Nome do Vinho',
@@ -158,4 +158,5 @@ class Product extends \yii\db\ActiveRecord
         $user = Yii::$app->user->identity;
         return $this->hasOne(User::class, ['id' => 'producer_id'])->via('producer');//user_id
     }
+
 }

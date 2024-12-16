@@ -8,41 +8,32 @@ use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
 /** @var common\models\ProductSearch $model */
+/** @var common\models\User $produtor */
 /** @var yii\widgets\ActiveForm $form */
 
 $this->title = 'Gestão de Produtos';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="product-management">
-
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
-
-    <div class="search-filters">
-        <?= $form->field($model, 'product_id') ?>
-        <?= $form->field($model, 'producer_id') ?>
-        <?= $form->field($model, 'category_id') ?>
-        <?= $form->field($model, 'name') ?>
-        <?= $form->field($model, 'description') ?>
-        <?= $form->field($model, 'price') ?>
-    </div>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
     <?php
-    // Configurando o DataProvider com paginação
+    // Get the current user ID if logged in
+    $currentUserId = Yii::$app->user->isGuest ? null : Yii::$app->user->id;
+
+    // Configurando o DataProvider com paginação e filtro pelo usuário autenticado
+    $query = \common\models\Product::find();
+
+    // Apply filter for signed-in user
+    if ($currentUserId !== null) {
+        $query->joinWith('producers') // Ensure the relationship is loaded
+        ->andWhere(['producers_details.user_id' => $currentUserId]);
+    }
+
     $dataProvider = new ActiveDataProvider([
-        'query' => \common\models\Product::find(),
+        'query' => $query,
         'pagination' => [
             'pageSize' => 5, // Altere aqui para o número máximo de itens por página
         ],
@@ -52,12 +43,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- GridView para exibir os dados -->
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        // 'filterModel'=> $model,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'], // Coluna de número de série
-
             'product_id',
-            'producer_id',
-            'category_id',
+            [
+                'attribute' => 'producer_id',
+                'value' => function($model) {
+                    return $model->producers->user->username ?? 'n/a';
+                },
+            ],
+            [
+                'attribute' => 'winery_name',
+                'value' => function($model) {
+                    return $model->producers->winery_name ?? 'n/a';
+                },
+            ],
+            [
+                'attribute' => 'category_id',
+                'value' => function($model) {
+                    return $model->categories->name ?? 'n/a';
+                },
+            ],
             'name',
             'description',
             [
@@ -65,13 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['decimal', 2],
             ],
             // Outras colunas podem ser adicionadas conforme necessidade
-
             ['class' => 'yii\grid\ActionColumn'], // Coluna para ações (editar/excluir)
         ],
     ]); ?>
 
-    <!-- Links de paginação -->
-    <?= LinkPager::widget([
-        'pagination' => $dataProvider->pagination,
-    ]); ?>
 </div>

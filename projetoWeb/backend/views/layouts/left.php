@@ -66,12 +66,20 @@
                                    // 'url' => ['relatorio/relatorio-por-produtor','producerId'=>Yii::$app->user->identity->id],
 
                                 ],
+                                ['label' => 'Relatório dos Pizza ',//com erro ainda.
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' => ['relatorio/chart'],
+                                    // 'url' => ['relatorio/relatorio-por-produtor','producerId'=>Yii::$app->user->identity->id],
+
+                                ],
                                 ['label' => 'Relatório de Clienes',
                                     'iconType' => 'far',
                                     'icon' => 'dot-circle',
                                     'url' => ['relatorio/relatorio-clientes'],
                                     'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
                                     ],
+
                                 /*['label' => 'Relatório Produtos/Produtor',
                                     'iconType' => 'far',
                                     'icon'=> 'dot-circle',
@@ -89,7 +97,13 @@
                             'iconType' => 'far',
                             'icon' => 'dot-circle',
                             'url' =>['/product/index'],
+                        ],
+                        ['label' => 'Busca de Produtos',
+                            'iconType' => 'far',
+                            'icon' => 'dot-circle',
+                            'url' =>['/product/index'],
                         ]
+
                 ],
                ]
             ) ?>

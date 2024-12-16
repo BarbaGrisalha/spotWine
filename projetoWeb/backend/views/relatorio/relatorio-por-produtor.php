@@ -5,11 +5,10 @@
 
 use yii\helpers\Html;
 
-$this->title = "Relatório de Produtos por Produtor - {$produtor->username}";
 ?>
 <div class="relatorio-produtor">
     <h1><?= Html::encode($this->title)?></h1>
-    <p><strong> Produtor:</strong><?=Html::encode($produtor->username) ?></p>
+    <p><strong> Produtor11:</strong><?=Html::encode($produtor->username) ?></p>
     <table class="table table-bordered">
         <thead>
             <tr>

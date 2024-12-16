@@ -53,8 +53,8 @@ class UserController extends Controller
                 if ($producerDetails->save()) {
                     // Atribuir o role de 'producer' automaticamente
                     $auth = Yii::$app->authManager;
-                    //$producerRole = $auth->getRole('producer');
-                    //$auth->assign($producerRole, $model->id);
+                    $producerRole = $auth->getRole('producer');
+                    $auth->assign($producerRole, $model->id);
 
                     // Redireciona para a view do usuário criado
                     return $this->redirect(['view', 'id' => $model->id]);
