@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Product;
@@ -41,7 +42,12 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
+        //Aqui eu busco a identidade do utilizador logado
+        $loggedInProducerId = Yii::$app->user->id;
         $query = Product::find()->joinWith(['producers', 'categories']);
+
+        //Aqui eu garanto que os produtos filtrados sejam do produtor logado
+        $query->andWhere(['producer_id'=>$loggedInProducerId]);
 
         // add conditions that should always apply here
 

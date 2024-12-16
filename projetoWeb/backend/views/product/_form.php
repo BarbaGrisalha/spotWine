@@ -19,6 +19,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin() ?>
    <?php $user = Yii::$app->user->identity; ?>
 
+
     <?php if ($user === null) {
     throw new \yii\web\ForbiddenHttpException('Usuário não autenticado.');
     }?>
@@ -26,7 +27,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'producer_id')->dropDownList(
             ArrayHelper::map(
                 User::find()
-                    ->where(['role' => 'producer'])
+                   // ->where(['role' => 'producer'])
                     ->all(),
                 'id', // ID do produtor
                 'username' // Nome do produtor

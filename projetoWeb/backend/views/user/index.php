@@ -1,5 +1,4 @@
 <?php
-/** @var yii\web\View $this */
 
 use backend\assets\AppAsset;
 use yii\data\Pagination;
@@ -13,15 +12,16 @@ use yii\widgets\LinkPager;
 
 $this->title = 'Gestão de Utilizadores';
 AppAsset::register($this);
+
 ?>
 <div class="site-index">
     <div class="text-center bg-transparent">
-        <?=Html::tag('h1', Html::encode($this->title))?>
+
     </div>
     <div class="body-content">
         <p>
             <?= Html::a('Criar Utilizador', ['user/create'], ['class' => 'btn btn-success']) ?>
-        </p>Altamir
+        </p>
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

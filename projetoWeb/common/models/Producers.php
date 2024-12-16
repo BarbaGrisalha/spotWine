@@ -26,14 +26,14 @@ class Producers extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'producers';
+        return 'producers_details';
     }
 
     /**
      * {@inheritdoc}
      */
     public function rules()
-    {
+    {/*
         return [
             [['user_id'], 'integer'],
             [['winery_name'], 'string', 'max' => 100],
@@ -45,6 +45,17 @@ class Producers extends \yii\db\ActiveRecord
             return $('#user-role').val() === 'admin';
     }"],
         ];
+    */
+        return [
+            [['user_id'], 'integer'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['winery_name', 'location', 'nif', 'address','number','complement', 'postal_code', 'region', 'city','phone','notes'], 'required'],
+            [['winery_name', 'location', 'region', 'address'], 'string', 'max' => 255],
+            [['phone'], 'string', 'max' => 15],
+            [['notes'], 'string'],
+           // [['role'], 'default', 'value' => 'producer'],
+        ];
+
     }
 
     /**
@@ -52,12 +63,27 @@ class Producers extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
+        /*
         return [
             'producer_id' => 'Producer ID',
             'user_id' => 'User ID',
             'winery_name' => 'Winery Name',
             'location' => 'Location',
             'document_id' => 'Document ID',
+        ];
+        */
+        return [
+            'producer_id' => 'Producer ID',
+            'user_id' => 'User ID',
+            'winery_name' => 'Winery Name',
+            'location' => 'Location',
+            'nif' => 'Nif',
+            'address' => 'Address',
+            'postal_code' => 'Postal Code',
+            'region' => 'Region',
+            'city' => 'City',
+            'phone' => 'Phone',
+            'notes' => 'Notes',
         ];
     }
 

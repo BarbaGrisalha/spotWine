@@ -58,7 +58,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
 
 
- public $password; // Campo temporário para o formulário
+    public $password; // Campo temporário para o formulário
 
     public function rules()
     {
@@ -158,15 +158,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthAssignment()
     {
-
         return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
-/*
-        return $this->hasOne(\yii\rbac\Assignment::class, ['user_id' => 'id'])
-            ->viaTable('auth_assignment', ['user_id' => 'id']);
-*/
+
     }
-
-
 
     /**
      * Obter o nome do role
@@ -281,15 +275,52 @@ class User extends ActiveRecord implements IdentityInterface
         return $scenarios;
     }
 
-    public function getProducers(): \yii\db\ActiveQuery
+    public function getProducers()
     {
         return $this->hasOne(Producers::class,['user_id'=> 'id']);
+    }
+
+    public function getProducerId()
+    {
+        return $this->producers ? $this->producers->producer_id : null;
     }
 
     public function getRole(){
         //return $this->hasOne(Producers::class,['user_id'=> 'id'])->role;
 
         //return $this->hasOne(User::class, ['user_id' => 'id'])->role;
+    }
+
+    public function saveUser(){
+        $userDetails = new UserDetails();
+        $model = new User();
+
+        $model->setPassword($model->password); // Gera o hash da senha
+        $model->generatePasswordResetToken();
+
+        // Gera as chaves de autenticação e tokens
+        $model->generateAuthKey();
+        $model->generateEmailVerificationToken();
+
+        if ($model->save()) {
+            // Associa o user_id do novo usuário ao user_details
+            $userDetails->user_id = $model->id;
+
+            if ($userDetails->save()) {
+                // Cria o registro na tabela 'Producers' para associar com o novo usuário
+                $producer = new Producers(); // Assumindo que você tem um modelo `Producers`
+                $producer->user_id = $model->id;
+                $producer->save();
+
+                // Atribuir o role de 'producer' automaticamente
+                $auth = Yii::$app->authManager;
+                $producerRole = $auth->getRole('producer');
+                $auth->assign($producerRole, $model->id);
+
+                // Redireciona para a view do usuário criado
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
     }
 
 }

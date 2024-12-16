@@ -34,9 +34,9 @@ class UserController extends Controller
             throw new ForbiddenHttpException('Você não tem permissão para criar utilizadores - UserController linha 29.');
         }
         $model = new User();
-        $userDetails = new UserDetails();
+        $producerDetails = new Producers();
 
-        if ($model->load($this->request->post()) && $userDetails->load(Yii::$app->request->post())) {
+        if ($model->load($this->request->post()) && $producerDetails->load(Yii::$app->request->post())) {
 
             $model->setPassword($model->password); // Gera o hash da senha
             $model->generatePasswordResetToken();
@@ -47,14 +47,14 @@ class UserController extends Controller
 
             if ($model->save()) {
                 // Associa o user_id do novo usuário ao user_details
-                $userDetails->user_id = $model->id;
+                $producerDetails->user_id = $model->id;
 
                 // Salva os detalhes do usuário
-                if ($userDetails->save()) {
+                if ($producerDetails->save()) {
                     // Atribuir o role de 'producer' automaticamente
                     $auth = Yii::$app->authManager;
-                    $producerRole = $auth->getRole('producer');
-                    $auth->assign($producerRole, $model->id);
+                    //$producerRole = $auth->getRole('producer');
+                    //$auth->assign($producerRole, $model->id);
 
                     // Redireciona para a view do usuário criado
                     return $this->redirect(['view', 'id' => $model->id]);
@@ -64,7 +64,7 @@ class UserController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'userDetails' => $userDetails,
+            'producerDetails' => $producerDetails,
         ]);
 
     }
