@@ -121,32 +121,34 @@ class UserController extends Controller
         // Carrega o modelo User pelo ID
         $model = $this->findModel($id);
 
-        // Carrega o modelo UserDetails relacionado
+        // Carrega ou cria o modelo UserDetails relacionado
         $userDetails = UserDetails::findOne(['user_id' => $id]) ?? new UserDetails(['user_id' => $id]);
 
         if (!$model) {
             throw new NotFoundHttpException('Usuário não encontrado.');
         }
 
+        // Processa a requisição
         if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
-
-
-            // Se o campo de senha foi preenchido, atualize a senha
+            // Atualiza a senha somente se um novo valor foi fornecido
             if (!empty($model->password)) {
-                $model->setPassword($model->password); // Define o hash
-            }
-
-
-            if(!empty($model->password)){
                 $model->setPassword($model->password);
             }
 
-            // Salva os dados de ambos os modelos
-            if ($model->save() && $userDetails->save()) {
-                Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso.');
-                return $this->redirect(['view', 'id' => $model->id]);
+            // Valida e salva os modelos
+            if ($model->validate() && $userDetails->validate()) {
+                try {
+                    if ($model->save(false) && $userDetails->save(false)) {
+                        Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso.');
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Erro ao salvar os dados.');
+                    }
+                } catch (\Exception $e) {
+                    Yii::$app->session->setFlash('error', 'Erro inesperado: ' . $e->getMessage());
+                }
             } else {
-                Yii::$app->session->setFlash('error', 'Erro ao salvar os dados.');
+                Yii::$app->session->setFlash('error', 'Erro ao validar os dados.');
             }
         }
 

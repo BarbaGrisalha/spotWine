@@ -112,7 +112,5 @@ AppAsset::register($this);
             'defaultPageSize'=>5,
             'totalCount'=> $query->count(),
     ]); ?>
-
-
     </div>
 </div>

@@ -9,6 +9,7 @@ use common\models\ProductSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -69,54 +70,13 @@ class ProductController extends Controller
         $searchModel = new ProductSearch();
 
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->query->andWhere(['producer_id'=>$producer->producer_id]);
+        $dataProvider->query->andWhere(['producers_details.producer_id'=>$producer->producer_id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 
         ]);
-
-        /*
-        // Obtém o usuário logado
-        $user = Yii::$app->user->identity;
-
-        // Se não for admin, filtrar apenas os produtos do produtor logado
-        $query = Product::find();
-        if ($user->role !== 'admin') {
-            $query->where(['producer_id' => $user->id]);
-        }
-
-        // Filtro por produtor (apenas para admins)
-        $producerId = Yii::$app->request->get('producer_id');
-        if ($user->role === 'admin' && $producerId) {
-            $query->andWhere(['producer_id' => $producerId]);
-        }
-
-        // Configurar paginação
-        $pagination = new Pagination([
-            'defaultPageSize' => 10,
-            'totalCount' => $query->count(),
-        ]);
-
-        $produtos = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-
-        // Lista de produtores para o dropdown (apenas para admins)
-        $produtores = [];
-        if ($user->role === 'admin') {
-            $produtores = User::find()->where(['role' => 'producer'])->all();
-        }
-
-        return $this->render('index', [
-            'produtos' => $produtos,
-            'pagination' => $pagination,
-            'produtores' => $produtores,
-            'producerId' => $producerId,
-        ]);
-        */
-
     }
 
     /**
@@ -129,13 +89,14 @@ class ProductController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($product_id),
+           // dd($product_id)
         ]);
     }
 
     /**
      * Creates a new Product model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -171,18 +132,19 @@ class ProductController extends Controller
      * Updates an existing Product model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $product_id Product ID
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($product_id)
     {
+
         $model = $this->findModel($product_id);//troquei $id por $product_id
 
         // Obtenha o usuário logado
         $user = Yii::$app->user->identity;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'product_id' => $model->product_id]);
+            return $this->redirect(['view', 'product_id' => $model->product_id]);//mudei de id para product_id
         }
 
         return $this->render('update', [
@@ -196,11 +158,12 @@ class ProductController extends Controller
      * Deletes an existing Product model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $product_id Product ID
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($product_id)
     {
+
         $this->findModel($product_id)->delete();
 
         return $this->redirect(['index']);
@@ -219,14 +182,9 @@ class ProductController extends Controller
      * @return Product the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($product_id)
+    protected function findModel($product_id)//aqui eu mudei para id para acompanhar o update
     {
-        /*if (($model = Product::findOne(['product_id' => $product_id])) !== null) {
-            return $model;
-        }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }*/
         $model = Product::findOne(['product_id' => $product_id]);
 
         if (!$model || $model->producer_id !== Yii::$app->user->id && Yii::$app->user->identity->role !== 'admin') {

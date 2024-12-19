@@ -19,7 +19,7 @@ class ProductSearch extends Product
     {
         return [
             [['product_id', 'producer_id', 'category_id', 'stock'], 'integer'],
-           // ['winery_name'],
+
             [['name', 'description', 'image_url'], 'safe'],
             [['price'], 'number'],
         ];
@@ -48,7 +48,7 @@ class ProductSearch extends Product
         $query = Product::find()->joinWith(['producers', 'categories']);
 
         //Aqui eu garanto que os produtos filtrados sejam do produtor logado
-        $query->andWhere(['producer_id'=>$loggedInProducerId]);
+        $query->andWhere(['producers_details.producer_id'=>$loggedInProducerId]);
 
         // add conditions that should always apply here
 
@@ -66,15 +66,15 @@ class ProductSearch extends Product
 
         // grid filtering conditions
         $query->andFilterWhere([
-            //'winery_name'=> $this->winery_name,
+
             'product_id' => $this->product_id,
-            'producer_id' => $this->producer_id,
+            'products.producer_id' => $this->producer_id,
             'category_id' => $this->category_id,
             'price' => $this->price,
             'stock' => $this->stock,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'products.name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'image_url', $this->image_url]);
 

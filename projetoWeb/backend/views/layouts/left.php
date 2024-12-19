@@ -98,12 +98,6 @@
                             'icon' => 'dot-circle',
                             'url' =>['/product/index'],
                         ],
-                        ['label' => 'Busca de Produtos',
-                            'iconType' => 'far',
-                            'icon' => 'dot-circle',
-                            'url' =>['/product/index'],
-                        ]
-
                 ],
                ]
             ) ?>

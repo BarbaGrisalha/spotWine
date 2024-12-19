@@ -33,19 +33,7 @@ class Producers extends \yii\db\ActiveRecord
      * {@inheritdoc}
      */
     public function rules()
-    {/*
-        return [
-            [['user_id'], 'integer'],
-            [['winery_name'], 'string', 'max' => 100],
-            [['location', 'document_id'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'user_id']],
-            [['producer_id'], 'required', 'when' => function ($model) {
-                return Yii::$app->user->can(' admin');
-            }, 'whenClient' => "function (attribute, value){
-            return $('#user-role').val() === 'admin';
-    }"],
-        ];
-    */
+    {
         return [
             [['user_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::class, 'targetAttribute' => ['user_id' => 'id']],

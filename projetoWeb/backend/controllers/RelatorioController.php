@@ -11,6 +11,7 @@ use common\models\Product;
 use backend\models\Users;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 
 class RelatorioController extends Controller
@@ -137,5 +138,25 @@ class RelatorioController extends Controller
         ]);
     }
 
+    public function actionChart($id){
+        //buscando o produtor pelo ID
+        $produtor = Users::findOne($id);
+
+        if(!$produtor){
+            throw new NotFoundHttpException('Produtor não encontrado.');
+        }
+        //Consulta para obter categorias e totais de produtos
+        $categorias =  (new \yii\db\Query())
+            ->select(['category_id','SUM(stock) AS total_stock'])
+            ->from('products')
+            ->where(['producer_id'=> $id])
+            ->groupBy('category_id')
+            ->all();
+        //Renderiza a view e envia os dados
+        return $this->render('chart',[
+            'produtor' => $produtor,
+            'categorias'=> $categorias,
+        ]);
+    }
 
 }

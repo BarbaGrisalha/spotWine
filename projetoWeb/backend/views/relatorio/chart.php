@@ -25,7 +25,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
             <tbody>
             <?php foreach ($categorias as $categoria): ?>
                 <tr>
-                    <td><?= Html::encode($categoria['category_name']) ?></td>
+                    <td><?= Html::encode($categoria['category_id']) ?></td>
                     <td><?= Html::encode($categoria['total_stock']) ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -33,12 +33,15 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
         </table>
 
         <!-- Gráfico de Pizza -->
-        <canvas id="chartPizza" width="400" height="400"></canvas>
+        <div style="width:300px; height:300px; margin:auto;">
+            <canvas id="chartPizza"></canvas>
+        </div>
+
     </div>
 
 <?php
 // Preparando os dados para o gráfico
-$labels = json_encode(array_column($categorias, 'category_name'));
+$labels = json_encode(array_column($categorias, 'category_id'));
 $data = json_encode(array_column($categorias, 'total_stock'));
 
 // Script para gerar o gráfico de pizza

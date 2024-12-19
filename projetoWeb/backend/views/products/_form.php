@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
         ['prompt'=>'Select Producer']
     ) ?>
 
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'value' => '']) ?>//incluí a password como vazio para poder alterar.
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'value' => '']) ?>
 
     <?= $form->field($model, 'category_id')->textInput() ?>
 

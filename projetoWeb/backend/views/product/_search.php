@@ -11,13 +11,14 @@ use yii\widgets\LinkPager;
 /** @var common\models\User $produtor */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = 'Gestão de Produtos';
+$this->title = 'Gestão de Produtos13';// canto superior direito
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
 <div class="product-management">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title = 'Gestão de Produtos12') ?></h1>
+
 
     <?php
     // Get the current user ID if logged in
@@ -39,41 +40,22 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
     ?>
+    <?php
+    // Busca todos os produtores com a relação para 'user' carregada
+    $producers = \common\models\Producers::find()
+        ->joinWith('user') // Carrega dados da tabela 'user'
+        ->all();
 
-    <!-- GridView para exibir os dados -->
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        // 'filterModel'=> $model,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'], // Coluna de número de série
-            'product_id',
-            [
-                'attribute' => 'producer_id',
-                'value' => function($model) {
-                    return $model->producers->user->username ?? 'n/a';
-                },
-            ],
-            [
-                'attribute' => 'winery_name',
-                'value' => function($model) {
-                    return $model->producers->winery_name ?? 'n/a';
-                },
-            ],
-            [
-                'attribute' => 'category_id',
-                'value' => function($model) {
-                    return $model->categories->name ?? 'n/a';
-                },
-            ],
-            'name',
-            'description',
-            [
-                'attribute' => 'price',
-                'format' => ['decimal', 2],
-            ],
-            // Outras colunas podem ser adicionadas conforme necessidade
-            ['class' => 'yii\grid\ActionColumn'], // Coluna para ações (editar/excluir)
-        ],
-    ]); ?>
+    // Transforma os dados dos produtores em um array de chave-valor para o dropDownList
+    $producerItems = \yii\helpers\ArrayHelper::map(
+        $producers,
+        'id', // ID do produtor como chave
+        function ($model) {
+            // Combinação do nome do usuário e do nome da vinícola como valor
+            return $model->user->username . ' - ' . ($model->winery_name ?? 'Sem Vinícola');
+        }
+    );
+    ?>
+
 
 </div>

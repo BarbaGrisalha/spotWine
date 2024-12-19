@@ -8,7 +8,8 @@ use yii\helpers\Html;
 ?>
 <div class="relatorio-produtor">
     <h1><?= Html::encode($this->title)?></h1>
-    <p><strong> Produtor11:</strong><?=Html::encode($produtor->username) ?></p>
+    <p><strong> Produtor:</strong><?=Html::encode($produtor->username) ?></p>
+    <?=Html::a('Ver Gráfico',['relatorio/chart','id'=> $produtor->id],['class'=>'btn btn-primary']) ?>
     <table class="table table-bordered">
         <thead>
             <tr>

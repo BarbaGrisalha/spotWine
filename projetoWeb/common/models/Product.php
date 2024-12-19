@@ -149,6 +149,13 @@ class Product extends \yii\db\ActiveRecord
     }
 
     /**
+     *
+     * Gets query for [prodcer] Criado agora 2024-12-17 22:27
+     */
+    public function getProducer(){
+        return $this->hasOne(Producers::class,['producer_id'=> 'producer_id']);
+    }
+    /**
      * Gets query for [[User]] through [[Producers]].
      *
      * @return \yii\db\ActiveQuery
