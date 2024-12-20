@@ -20,7 +20,7 @@ class RelatorioController extends Controller
 
         $producerId = Yii::$app->request->get('producer_id');
         //dd($producerId);
-        $produtosQuery = Product::find()->with(['producer_id','categories']);
+        $produtosQuery = Product::find()->with(['producer_id','categories']);//mudei de producer_id para producer
 
         if($producerId){
             $produtosQuery->andWhere(['producer_id'=> $producerId]);
@@ -30,11 +30,13 @@ class RelatorioController extends Controller
             'defaultPageSize' => 5,
             'totalCount'=>$produtosQuery->count(),
         ]);
+       // dd($produtosQuery);//esse dd($produtosQuery); traz o produtor corretamente.
         //Obter os produtos com a paginação
         $produtos = $produtosQuery
             ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
+
         //Buscar os produtos para o dropdown
         $produtores = Producers::find()->orderBy(['winery_name'=> SORT_ASC])->all();
 
@@ -64,6 +66,7 @@ class RelatorioController extends Controller
 
         return $this->render('relatorio-produtos', [
             'produtos' => $produtos,
+
             'pagination' => $pagination,
             'produtores' => $produtores,
             'producerId'=> $producerId,
@@ -147,10 +150,11 @@ class RelatorioController extends Controller
         }
         //Consulta para obter categorias e totais de produtos
         $categorias =  (new \yii\db\Query())
-            ->select(['category_id','SUM(stock) AS total_stock'])
+            ->select(['categories.name AS category_name','SUM(products.stock) AS total_stock'])
             ->from('products')
-            ->where(['producer_id'=> $id])
-            ->groupBy('category_id')
+            ->leftJoin('categories', 'products.category_id = categories.category_id')
+            ->where(['products.producer_id'=> $id])
+            ->groupBy('categories.name')
             ->all();
         //Renderiza a view e envia os dados
         return $this->render('chart',[

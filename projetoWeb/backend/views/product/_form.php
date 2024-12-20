@@ -23,7 +23,8 @@ use yii\widgets\ActiveForm;
     <?php if ($user === null) {
     throw new \yii\web\ForbiddenHttpException('Usuário não autenticado.');
     }?>
-    <?php if ($user->role === 'admin'): ?>
+    <?php
+    if (Yii::$app->user->can('admin')): ?>
         <?= $form->field($model, 'producer_id')->dropDownList(
             ArrayHelper::map(
                 User::find()

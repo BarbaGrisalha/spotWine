@@ -124,9 +124,15 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getProducers()
     {
-        return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
+        return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);//mudei para id em vez de producer_id
     }
-
+    /**
+     *
+     * Gets query for [prodcer] Criado agora 2024-12-17 22:27
+     */
+    public function getProducer(){
+        return $this->hasOne(ProducersDetails::class,['producer_id'=> 'producer_id']);
+    }
     /**
      * Gets query for [[Promotions]].
      *
@@ -148,13 +154,6 @@ class Product extends \yii\db\ActiveRecord
         return $this->hasMany(Reviews::class, ['product_id' => 'product_id']);
     }
 
-    /**
-     *
-     * Gets query for [prodcer] Criado agora 2024-12-17 22:27
-     */
-    public function getProducer(){
-        return $this->hasOne(Producers::class,['producer_id'=> 'producer_id']);
-    }
     /**
      * Gets query for [[User]] through [[Producers]].
      *

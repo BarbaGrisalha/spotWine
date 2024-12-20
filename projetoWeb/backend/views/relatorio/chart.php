@@ -5,7 +5,7 @@
 
 use yii\helpers\Html;
 
-$this->title = "Relatório de Produtos por Produtor - {$produtor->username}";
+//$this->title = "Relatório de Produtos por Produtor - {$produtor->username}";
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
     ['depends' => [\yii\web\JqueryAsset::class]]);
 
@@ -25,7 +25,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
             <tbody>
             <?php foreach ($categorias as $categoria): ?>
                 <tr>
-                    <td><?= Html::encode($categoria['category_id']) ?></td>
+                    <td><?= Html::encode($categoria['category_name']) ?></td>
                     <td><?= Html::encode($categoria['total_stock']) ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -41,7 +41,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
 
 <?php
 // Preparando os dados para o gráfico
-$labels = json_encode(array_column($categorias, 'category_id'));
+$labels = json_encode(array_column($categorias, 'category_name'));
 $data = json_encode(array_column($categorias, 'total_stock'));
 
 // Script para gerar o gráfico de pizza

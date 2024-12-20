@@ -49,8 +49,8 @@
                     ],
                         [
                             'label' => 'Database Relatorio',
-                            'iconType' => 'far',
-                            'icon' => 'circle',
+                            //'iconType' => 'far',
+                            'icon' => 'share',
                             'url' => '#',
                             'items' => [
                                 ['label' => 'Relatório de Produtos',
@@ -66,41 +66,36 @@
                                    // 'url' => ['relatorio/relatorio-por-produtor','producerId'=>Yii::$app->user->identity->id],
 
                                 ],
-                                ['label' => 'Relatório dos Pizza ',//com erro ainda.
-                                    'iconType' => 'far',
-                                    'icon' => 'dot-circle',
-                                    'url' => ['relatorio/chart'],
-                                    // 'url' => ['relatorio/relatorio-por-produtor','producerId'=>Yii::$app->user->identity->id],
-
-                                ],
                                 ['label' => 'Relatório de Clienes',
                                     'iconType' => 'far',
                                     'icon' => 'dot-circle',
                                     'url' => ['relatorio/relatorio-clientes'],
                                     'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
                                     ],
-
-                                /*['label' => 'Relatório Produtos/Produtor',
-                                    'iconType' => 'far',
-                                    'icon'=> 'dot-circle',
-                                    'url'=>['relatorio/relatorio-por-produtor'],
-                                    ],*/
                             ],
                         ],
-                        ['label' => 'Gestão de Utilizadores',
-                            'iconType' => 'far',
-                            'icon' => 'dot-circle',
-                            'url' =>['/user/index'],
-                            'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
-                        ],
-                        ['label' => 'Gestão dos Produtos',
-                            'iconType' => 'far',
-                            'icon' => 'dot-circle',
-                            'url' =>['/product/index'],
+                        [
+                            'label' => 'Gestão Utilizadores',
+                            //'iconType' => 'far',
+                            'icon' => 'share',
+                            'url' => '#',
+                            'items'=>[
+                                ['label' => 'Gestão de Utilizadores',
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' =>['/user/index'],
+                                    'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
+                                ],
+                                ['label' => 'Gestão dos Produtos',
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' =>['/product/index'],
+                                ],
+
+                            ],
                         ],
                 ],
-               ]
-            ) ?>
+               ]) ?>
         </nav>
 
     </div>
