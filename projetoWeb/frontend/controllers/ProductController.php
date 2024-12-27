@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\Categories;
 use common\models\Product;
 use common\models\Promotions;
+use frontend\models\CartItems;
 use frontend\models\ProductFrontSearch;
 use frontend\models\promocoesViewModel;
 use Yii;
@@ -18,6 +19,7 @@ class ProductController extends \yii\web\Controller
         $searchModel = new ProductFrontSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+
         $categoriesList = ArrayHelper::map(Categories::find()->all(), 'category_id', 'name');
 
         // Convertendo cada produto para uma instância de promocoesViewModel
@@ -30,6 +32,7 @@ class ProductController extends \yii\web\Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'categoriesList' => $categoriesList,
+            'cartItemModel' => new CartItems()
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\ConsumerDetails;
 use Yii;
 use yii\base\Model;
 use common\models\User;
@@ -63,13 +64,14 @@ class SignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+        $user->generatePasswordResetToken();
 
         if ($user->save()) {
-            $userDetails = new UserDetails();
-            $userDetails->user_id = $user->id;
-            $userDetails->nif = $this->nif;
-            $userDetails->phone_number = $this->phone_number;
-            $userDetails->save();
+            $consumerDetails = new ConsumerDetails();
+            $consumerDetails->user_id = $user->id;
+            $consumerDetails->nif = $this->nif;
+            $consumerDetails->phone_number = $this->phone_number;
+            $consumerDetails->save();
 
             // Atribuir um role padrão (Ex.: consumer)
             $auth = \Yii::$app->authManager;

@@ -4,6 +4,8 @@ namespace frontend\controllers;
 
 use common\models\OrderItems;
 use common\models\Promotions;
+use frontend\models\Cart;
+use frontend\models\CartItems;
 use frontend\models\maisVendidosViewModel;
 use frontend\models\promocoesViewModel;
 use frontend\models\ResendVerificationEmailForm;
@@ -82,21 +84,20 @@ class SiteController extends Controller
     {
         $produtosMaisVendidos = OrderItems::getProdutosMaisVendidos(4);
         $maisVendidosViewModels = [];
+        $cartItemModel = new CartItems();
         foreach ($produtosMaisVendidos as $orderItem) {
             $maisVendidosViewModels[] = new MaisVendidosViewModel($orderItem->product);
         }
 
-        $promocoes = Promotions::getProdutosEmPromocao(4);
+        $produtosEmPromocao = Promotions::getProdutosEmPromocao(4); // Usando o novo método
         $promocoesViewModel = [];
-        foreach ($promocoes as $promocao) {
-            foreach ($promocao->products as $product) {
-                $promocoesViewModel[] = new PromocoesViewModel($product);
-            }
+        foreach ($produtosEmPromocao as $product) {
+            $promocoesViewModel[] = new PromocoesViewModel($product);
         }
-
         return $this->render('index', [
             'produtosMaisVendidos' => $maisVendidosViewModels,
             'produtosEmPromocao' => $promocoesViewModel,
+            'cartItemModel' => $cartItemModel,
         ]);
     }
 
@@ -108,26 +109,61 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
 
-        $model = new LoginForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+public function actionLogin()
+{
+    if (!Yii::$app->user->isGuest) {
+        return $this->goHome();
     }
 
-    /**
+    $model = new LoginForm();
+    $sessionId = Yii::$app->session->id;
+
+    if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        // Migrar carrinho do guest (session_id) para o usuário logado (user_id)
+        $userId = Yii::$app->user->id;
+
+        $guestCart = Cart::findOne(['session_id' => $sessionId]);
+        if ($guestCart) {
+            // Verificar se já existe um carrinho associado ao usuário logado
+            $userCart = Cart::findOne(['user_id' => $userId]);
+            if ($userCart) {
+                // Migrar os itens do carrinho de guest para o carrinho logado
+                foreach ($guestCart->cartItems as $item) {
+                    $existingItem = CartItems::findOne([
+                        'cart_id' => $userCart->id,
+                        'product_id' => $item->product_id,
+                    ]);
+                    if ($existingItem) {
+                        // Atualiza a quantidade do produto
+                        $existingItem->quantity += $item->quantity;
+                        $existingItem->save();
+                    } else {
+                        // Move o item para o carrinho do usuário
+                        $item->cart_id = $userCart->id;
+                        $item->save();
+                    }
+                }
+                // Remove o carrinho de guest
+                $guestCart->delete();
+            } else {
+                // Se não existe um carrinho para o usuário, vincula o carrinho do guest
+                $guestCart->user_id = $userId;
+                $guestCart->session_id = null; // Remove o vínculo com session_id
+                $guestCart->save();
+            }
+        }
+
+        return $this->goBack(); // Redireciona para a página anterior
+    }
+
+    return $this->render('login', [
+        'model' => $model,
+    ]);
+}
+
+
+/**
      * Logs out the current user.
      *
      * @return mixed
@@ -136,8 +172,9 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->goHome(); // Redireciona para a página inicial
     }
+
 
     /**
      * Displays contact page.

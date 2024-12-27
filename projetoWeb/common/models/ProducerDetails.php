@@ -100,7 +100,7 @@ class ProducerDetails extends \yii\db\ActiveRecord
      */
     public function getProducts()
     {
-        return $this->hasMany(Products::class, ['producer_id' => 'id']);
+        return $this->hasMany(Product::class, ['producer_id' => 'id']);
     }
 
     /**

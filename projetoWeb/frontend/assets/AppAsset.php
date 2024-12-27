@@ -12,10 +12,10 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        '@web/css/style.css',
+        'css/style.css',
     ];
     public $js = [
-        '@web/js/main.js',
+        'js/main.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
@@ -25,10 +25,5 @@ class AppAsset extends AssetBundle
     public function init()
     {
         parent::init();
-
-        // Adicionar timestamp ao CSS para evitar cache
-        foreach ($this->css as &$cssFile) {
-            $cssFile .= '?v=' . @filemtime(\Yii::getAlias($this->basePath) . '/' . $cssFile);
-        }
     }
 }

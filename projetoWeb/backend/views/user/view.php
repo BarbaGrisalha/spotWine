@@ -34,10 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <?php if ($model->producerDetails): ?>
+    <?php if ($model->isProducer()): ?>
         <div class="card mb-4">
             <div class="card-header bg-success text-white">
-                <h3 class="mb-0">Detalhes Adicionais do Usuário</h3>
+                <h3 class="mb-0">Detalhes Produtor</h3>
             </div>
             <div class="card-body">
                 <?= DetailView::widget([
@@ -58,29 +58,46 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]) ?>
             </div>
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">Endereço</h3>
+                </div>
+                <div class="card-body">
+                    <?= DetailView::widget([
+                        'model' => $model->producerDetails,
+                        'attributes' => [
+                            'address',
+                            'number',
+                            'postal_code',
+                            'region',
+                            'city',
+                            'complement',
+                        ],
+                    ]) ?>
+                </div>
+            </div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <h3 class="mb-0">Endereço</h3>
-            </div>
-            <div class="card-body">
-                <?= DetailView::widget([
-                    'model' => $model->producerDetails,
-                    'attributes' => [
-                        'address',
-                        'number',
-                        'postal_code',
-                        'region',
-                        'city',
-                        'complement',
-                    ],
-                ]) ?>
-            </div>
+
+
+    <?php elseif ($model->isConsumer()): ?>
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h3>Detalhes do Consumidor</h3>
         </div>
+        <?= DetailView::widget([
+            'model' => $model->consumerDetails,
+            'attributes' => [
+                'nif',
+                'phone_number',
+            ],
+        ]) ?>
+    </div>
     <?php else: ?>
         <div class="alert alert-warning">
             Sem detalhes adicionais.
         </div>
+
+
     <?php endif; ?>
-</div>
+

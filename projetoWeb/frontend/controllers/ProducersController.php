@@ -2,8 +2,13 @@
 
 namespace frontend\controllers;
 
-use common\models\Producers;
-use frontend\models\ProducersSearch;
+use common\models\ProducerDetails;
+use common\models\Product;
+use frontend\models\CartItems;
+use frontend\models\ProducerSearch;
+use frontend\models\ProductFrontSearch;
+use frontend\models\promocoesViewModel;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,7 +43,7 @@ class ProducersController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ProducersSearch();
+        $searchModel = new ProducerSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -55,10 +60,19 @@ class ProducersController extends Controller
      */
     public function actionView($producer_id)
     {
+        $searchModel = new ProductFrontSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $producer_id);
+
+        $products = array_map(fn($product) => new promocoesViewModel($product), $dataProvider->getModels());
+        $dataProvider->setModels($products);
+
         return $this->render('view', [
             'model' => $this->findModel($producer_id),
+            'dataProvider' => $dataProvider,
+            'cartItemModel' => new CartItems(),
         ]);
     }
+
 
     /**
      * Creates a new Producers model.
@@ -67,7 +81,7 @@ class ProducersController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Producers();
+        $model = new ProducerDetails();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -120,12 +134,12 @@ class ProducersController extends Controller
      * Finds the Producers model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $producer_id Producer ID
-     * @return Producers the loaded model
+     * @return ProducerDetails the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($producer_id)
     {
-        if (($model = Producers::findOne(['producer_id' => $producer_id])) !== null) {
+        if (($model = ProducerDetails::findOne(['id' => $producer_id])) !== null) {
             return $model;
         }
 

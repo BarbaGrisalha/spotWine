@@ -269,6 +269,7 @@ AppAsset::register($this);
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex">
                         <?= $this->render('@frontend/views/product/_product', [
                             'model' => $produto,
+                            'cartItemModel' => $cartItemModel,
                         ]) ?>
                     </div>
                 <?php endforeach; ?>
@@ -325,6 +326,7 @@ AppAsset::register($this);
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex">
                     <?= $this->render('@frontend/views/product/_product', [
                         'model' => $produto,
+                        'cartItemModel' => $cartItemModel,
                     ]) ?>
                 </div>
             <?php endforeach; ?>

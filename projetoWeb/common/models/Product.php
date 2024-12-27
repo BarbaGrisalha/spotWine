@@ -118,19 +118,19 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getProducers()
     {
-        return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
+        return $this->hasOne(ProducerDetails::class, ['id' => 'producer_id']);
     }
 
     /**
      * Gets query for [[Promotions]].
-     *
+     *s
      * @return \yii\db\ActiveQuery
      */
     public function getPromotions()
     {
-        return $this->hasMany(Promotions::class, ['product_id' => 'product_id']);
+        return $this->hasMany(Promotions::class, ['promotion_id' => 'promotion_id'])
+            ->viaTable('promotion_product', ['product_id' => 'product_id']);
     }
-
 
     /**
      * Gets query for [[Reviews]].

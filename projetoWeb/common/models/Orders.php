@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\models\Users;
 use Yii;
 
 /**
@@ -46,13 +47,30 @@ class Orders extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'order_id' => 'Order ID',
+            'id' => 'Order ID',
             'user_id' => 'User ID',
             'order_date' => 'Order Date',
             'status' => 'Status',
             'total_price' => 'Total Price',
         ];
     }
+
+    public static function getStatusMap()
+    {
+        return [
+            'Pending' => 'Pendente',
+            'Completed' => 'Concluído',
+            'Cancelled' => 'Cancelado',
+            'Shipped' => 'Enviado',
+        ];
+    }
+
+    public function getStatusLabel()
+    {
+        $map = self::getStatusMap();
+        return $map[$this->status] ?? $this->status;
+    }
+
 
     /**
      * Gets query for [[OrderItems]].
@@ -61,7 +79,7 @@ class Orders extends \yii\db\ActiveRecord
      */
     public function getOrderItems()
     {
-        return $this->hasMany(OrderItems::class, ['order_id' => 'order_id']);
+        return $this->hasMany(OrderItems::class, ['order_id' => 'id']);
     }
 
     /**
@@ -72,6 +90,11 @@ class Orders extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']); // Tabela correta
+    }
+
+    public function getInvoice()
+    {
+        return $this->hasOne(Invoices::class, ['order_id' => 'id']);
     }
 
 }

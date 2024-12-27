@@ -98,9 +98,9 @@ class Promotions extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getProducer()
+    public function getProducers()
     {
-        return $this->hasOne(Producers::class, ['producer_id' => 'producer_id']);
+        return $this->hasOne(ProducerDetails::class, ['id' => 'producer_id']);
     }
 
     /**
@@ -133,14 +133,15 @@ class Promotions extends \yii\db\ActiveRecord
 
     public static function getProdutosEmPromocao($limit = null)
     {
-        return self::find()
-            ->joinWith('products')
-            ->where(['<=', 'start_date', date('Y-m-d')])
-            ->andWhere(['>=', 'end_date', date('Y-m-d')])
-            ->with(['products.producers', 'products.categories']) // Carregar relações necessárias
+        return Product::find()
+            ->joinWith('promotions') // Certifique-se de que a relação com promotions existe no modelo Product
+            ->where(['<=', 'promotions.start_date', date('Y-m-d')])
+            ->andWhere(['>=', 'promotions.end_date', date('Y-m-d')])
+            ->with(['producers', 'categories']) // Relacionamentos que você deseja carregar
             ->limit($limit)
             ->all();
     }
+
 
     public static function getProdutosEmPromocaoIds($limit = null)
     {

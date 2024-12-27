@@ -107,10 +107,15 @@ $form = ActiveForm::begin([
 
 <?php ActiveForm::end(); ?>
 
-<!-- Lista de Produtos -->
+<!-- TODO MUDAR A ALTURA DO CARD UM POUCO -->
+
 <?= ListView::widget([
     'dataProvider' => $dataProvider,
     'itemView' => '_product', // Arquivo de template para exibir cada produto
+    'viewParams' => [
+        'cartItemModel' => $cartItemModel, // Passa o modelo do carrinho para cada item
+    ],
     'layout' => "<div class='row'>{items}</div>\n{pager}", // Estrutura dos produtos
     'itemOptions' => ['class' => 'col-lg-3 col-md-4 col-sm-6 mb-4'], // Classes dos cartões
+
 ]); ?>

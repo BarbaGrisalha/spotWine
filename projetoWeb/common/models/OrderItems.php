@@ -34,7 +34,7 @@ class OrderItems extends \yii\db\ActiveRecord
         return [
             [['order_id', 'product_id', 'quantity'], 'integer'],
             [['unit_price'], 'number'],
-            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Orders::class, 'targetAttribute' => ['order_id' => 'order_id']],
+            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Orders::class, 'targetAttribute' => ['order_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'product_id']],
         ];
     }
@@ -45,7 +45,7 @@ class OrderItems extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'order_item_id' => 'Order Item ID',
+            'id' => 'Order Item ID',
             'order_id' => 'Order ID',
             'product_id' => 'Product ID',
             'quantity' => 'Quantity',
@@ -60,7 +60,7 @@ class OrderItems extends \yii\db\ActiveRecord
      */
     public function getOrder()
     {
-        return $this->hasOne(Orders::class, ['order_id' => 'order_id']);
+        return $this->hasOne(Orders::class, ['id' => 'order_id']);
     }
 
     /**
@@ -95,8 +95,6 @@ class OrderItems extends \yii\db\ActiveRecord
             ->limit($limit)
             ->column(); // Retorna apenas os IDs
     }
-
-
 
 
 

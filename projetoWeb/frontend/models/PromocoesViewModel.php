@@ -9,9 +9,13 @@ class promocoesViewModel extends BaseProductViewModel
 {
     public $product;
     public $promotion;
-    public function __construct(Product $product)
+    public $quantity;
+
+    public function __construct(Product $product, $quantity = 1)
     {
         parent::__construct($product);
+        $this->product = $product;
+        $this->quantity = $quantity; // Adiciona a quantidade
         $this->promotion = $this->getApplicablePromotion();
     }
 
@@ -26,7 +30,6 @@ class promocoesViewModel extends BaseProductViewModel
             ->one();
     }
 
-
     public function getFinalPrice()
     {
         if ($this->promotion) {
@@ -37,6 +40,11 @@ class promocoesViewModel extends BaseProductViewModel
             }
         }
         return $this->product->price;
+    }
+
+    public function getTotalPrice()
+    {
+        return $this->getFinalPrice() * $this->quantity;
     }
 
     public function isOnPromotion()
