@@ -32,19 +32,19 @@ class UserController extends Controller
             throw new ForbiddenHttpException('Você não tem permissão para criar produtores.');
         }
 
-        $user = new User();
+        $model = new User();
         $producerDetails = new ProducerDetails();
 
-        if ($user->load(Yii::$app->request->post()) && $producerDetails->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $producerDetails->load(Yii::$app->request->post())) {
             // Delega lógica de criação ao modelo
-            if ($producerDetails->createProducer($user)) {
+            if ($producerDetails->createProducer($model)) {
                 Yii::$app->session->setFlash('success', 'Produtor criado com sucesso.');
-                return $this->redirect(['view', 'id' => $user->id]);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
         return $this->render('create', [
-            'user' => $user,
+            'model' => $model,
             'producerDetails' => $producerDetails,
         ]);
     }
@@ -63,9 +63,9 @@ class UserController extends Controller
     }
     public function actionActivate($id)
     {
-        $user = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        if ($user->activate()) {
+        if ($model->activate()) {
             Yii::$app->session->setFlash('success', 'Usuário ativado com sucesso.');
         } else {
             Yii::$app->session->setFlash('error', 'Não foi possível ativar o usuário.');
@@ -76,9 +76,9 @@ class UserController extends Controller
 
     public function actionDeactivate($id)
     {
-        $user = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        if ($user->deactivate()) {
+        if ($model->deactivate()) {
             Yii::$app->session->setFlash('success', 'Usuário desativado com sucesso.');
         } else {
             Yii::$app->session->setFlash('error', 'Não foi possível desativar o usuário.');
@@ -92,15 +92,15 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $userDetails = $model->getDetails();
+        $producerDetails = $model->getDetails();
 
-        if (!$userDetails) {
+        if (!$producerDetails) {
             throw new NotFoundHttpException('Detalhes do usuário não encontrados.');
         }
 
-        if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $producerDetails->load(Yii::$app->request->post())) {
             // Salva o usuário e os detalhes
-            if ($model->saveWithDetails($userDetails)) {
+            if ($model->saveWithDetails($producerDetails)) {
                 Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso.');
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -108,9 +108,9 @@ class UserController extends Controller
             }
         }
 
-        return $this->render('update', [
+        return $this->render('update',[
             'model' => $model,
-            'userDetails' => $userDetails,
+            'userDetails' => $producerDetails,
         ]);
     }
 

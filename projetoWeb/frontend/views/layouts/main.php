@@ -6,6 +6,9 @@
 
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
+use frontend\models\Cart;
+use frontend\models\CartItems;
+use frontend\models\promocoesViewModel;
 use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap5\Breadcrumbs;
 //use yii\bootstrap5\Html;
@@ -17,6 +20,8 @@ use yii\widgets\ActiveForm;
 
 
 BootstrapAsset::register($this);
+AppAsset::register($this);
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -52,16 +57,16 @@ AppAsset::register($this);
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
     <!-- Contact Javascript File -->
-    <script src="mail/jqBootstrapValidation.min.js"></script>
-    <script src="mail/contact.js"></script>
+    <?= $this->registerJsFile('@web/js/jqBootstrapValidation.min.js', ['depends' => [\yii\web\JqueryAsset::className()]]); ?>
+    <?= $this->registerJsFile('@web/js/contact.js', ['depends' => [\yii\web\JqueryAsset::className()]]);?>
 
-        <!-- Customized Bootstrap Stylesheet -->
-        <?= Html::cssFile('@web/css/style.css') ?>
+    <!-- Customized Bootstrap Stylesheet -->
+    <?= Html::cssFile('@web/css/style.css') ?>
     <!-- Template Javascript -->
-    <?= Html::jsFile('@web/js/main.js') ?>
+
 </head>
 
 <?php $this->beginBody(); ?>
@@ -149,7 +154,7 @@ AppAsset::register($this);
                     <div class="navbar-nav mx-auto">
 
                         <?=Html::a('Vinhos', Url::to(['/product/index']), ['class' => 'nav-item nav-link'])?>
-                        <a href="#" class="nav-item nav-link">Produtores</a>
+                        <?=Html::a('Produtores', Url::to(['/producers/index']), ['class' => 'nav-item nav-link'])?>
                         <a href="#" class="nav-item nav-link">Promoções</a>
                         <a href="#" class="nav-item nav-link">Concurso</a>
                         <a href="#" class="nav-item nav-link">Blogue</a>
@@ -173,70 +178,78 @@ AppAsset::register($this);
 
                     <!-- Ícones de Ação -->
                 <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                    <div class="d-flex align-items-center">
-                        <!-- Heart Icon -->
-                        <a href="#" class="btn px-0 ml-3 d-flex align-items-center">
-                            <i class="fas fa-heart fa-lg text-secondary"></i>
-                            <span class="badge text-third border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
-                        </a>
+                    <div class="d-flex align-items-center justify-content-between w-100">
+                        <!-- Favorites and Cart Section -->
+                        <div class="d-flex align-items-center">
+                            <!-- Heart Icon -->
+                            <a href="#" class="btn px-0 ml-3 d-flex align-items-center">
+                                <i class="fas fa-heart fa-lg text-secondary"></i>
+                                <span class="badge text-third border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                            </a>
+                            <!-- CART -->
+                            <?= \frontend\widgets\CartWidget::widget() ?>
 
-                        <!-- Cart Icon -->
-                        <a href="#" class="btn px-0 ml-3 d-flex align-items-center">
-                            <i class="fas fa-shopping-cart fa-lg text-secondary"></i>
-                            <span class="badge text-third border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
-                        </a>
+                        </div>
 
-                        <!-- User Dropdown -->
-                    
-                        <div class="btn-group">
-                            <?php if (Yii::$app->user->isGuest): ?>
-                                <a class="btn btn-primary " href="<?= \yii\helpers\Url::to(['/site/signup']) ?>"><span class="text-white">Registo</span></a>
-                                <a class="btn btn-primary " href="<?= \yii\helpers\Url::to(['/site/login']) ?>"><span class="text-white">Login</span></a>
-                            <?php else: ?>
-                                <?php $idUser = Yii::$app->user->id; ?>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-user-circle fa-lg mr-2 text-secondary"></i><?= Yii::$app->user->identity->username ?>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <?= Html::a(
-                                            '<i class="fas fa-user fa-lg text-secondary mr-2"></i> Ver Perfil',
-                                            ['/perfil/view', 'id' => $idUser],
-                                            ['class' => 'dropdown-item']
-                                        ) ?>
-                                        <?= Html::a(
-                                            '<i class="fas fa-edit fa-lg text-secondary mr-2"></i> Alterar Dados',
-                                            ['/perfil/update', 'id' => $idUser],
-                                            ['class' => 'dropdown-item']
-                                        ) ?>
-                                        <?= Html::a(
-                                            '<i class="fas fa-star fa-lg text-secondary mr-2"></i> Minhas Avaliações',
-                                            ['/avaliacao/index'],
-                                            ['class' => 'dropdown-item']
-                                        ) ?>
-                                        <?= Html::a(
-                                            '<i class="fas fa-file-invoice fa-lg text-secondary mr-2"></i> Minhas Faturas',
-                                            ['/fatura/index'],
-                                            ['class' => 'dropdown-item']
-                                        ) ?>
-                                        <?= Html::a(
-                                            '<i class="fas fa-key fa-lg text-secondary mr-2"></i> Alterar Password',
-                                            ['/perfil/alterar-password'],
-                                            ['class' => 'dropdown-item']
-                                        ) ?>
-                                        <?= Html::beginForm(['/site/logout'], 'post', ['id' => 'logout-form']) ?>
+                        <!-- Space between sections -->
+                        <div class="mx-4"></div>
+
+                        <!-- User Dropdown Section -->
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group">
+                                <?php if (Yii::$app->user->isGuest): ?>
+                                    <a class="btn btn-primary mr-2" href="<?= \yii\helpers\Url::to(['/site/signup']) ?>">
+                                        <span class="text-white">Registo</span>
+                                    </a>
+                                    <a class="btn btn-primary" href="<?= \yii\helpers\Url::to(['/site/login']) ?>">
+                                        <span class="text-white">Login</span>
+                                    </a>
+                                <?php else: ?>
+                                    <?php $idUser = Yii::$app->user->id; ?>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-user-circle fa-lg mr-2 text-secondary"></i><?= Yii::$app->user->identity->username ?>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <?= Html::a(
+                                                '<i class="fas fa-user fa-lg text-secondary mr-2"></i> Ver Perfil',
+                                                ['/perfil/view', 'id' => $idUser],
+                                                ['class' => 'dropdown-item']
+                                            ) ?>
+                                            <?= Html::a(
+                                                '<i class="fas fa-edit fa-lg text-secondary mr-2"></i> Alterar Dados',
+                                                ['/perfil/update', 'id' => $idUser],
+                                                ['class' => 'dropdown-item']
+                                            ) ?>
+                                            <?= Html::a(
+                                                '<i class="fas fa-star fa-lg text-secondary mr-2"></i> Minhas Avaliações',
+                                                ['/avaliacao/index'],
+                                                ['class' => 'dropdown-item']
+                                            ) ?>
+                                            <?= Html::a(
+                                                '<i class="fas fa-file-invoice fa-lg text-secondary mr-2"></i> Minhas Faturas',
+                                                ['/fatura/index'],
+                                                ['class' => 'dropdown-item']
+                                            ) ?>
+                                            <?= Html::a(
+                                                '<i class="fas fa-key fa-lg text-secondary mr-2"></i> Alterar Password',
+                                                ['/perfil/alterar-password'],
+                                                ['class' => 'dropdown-item']
+                                            ) ?>
+                                            <?= Html::beginForm(['/site/logout'], 'post', ['id' => 'logout-form']) ?>
                                             <?= Html::submitButton(
                                                 '<i class="fas fa-sign-out-alt fa-lg text-secondary mr-2"></i> Logout',
                                                 ['class' => 'dropdown-item']
                                             ) ?>
-                                        <?= Html::endForm() ?>
+                                            <?= Html::endForm() ?>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php endif; ?>
-                       </div>
-
-
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </nav>
         </div>
     </div>

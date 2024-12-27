@@ -2342,7 +2342,7 @@ textarea.form-control {
 }
 
 .btn:hover {
-  color: #6C757D;
+  color: #6C757D;!important;
   text-decoration: none;
 }
 
@@ -2365,20 +2365,27 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  background-color: #4C1A1B;
-  border-radius:15px;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 15px !important;
+  background-color: #4C1A1B !important;
+  padding: 10px !important;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .btn-primary:hover {
-  color: #212529;
-  background-color: #ffcb0d;
-  border-color: #ffc800;
+  color: #212529 !important;
+  background-color: #ffcb0d !important;
+  border-color: #ffc800 !important;
 }
+
+
 
 .btn-footer {
   background-color: #4C1A1B;
 
 }
+
 
 .btn-footer:hover {
   color: #212529;
@@ -2960,6 +2967,7 @@ fieldset:disabled a.btn {
   font-size: 0.875rem;
   line-height: 1.5;
   border-radius: 0;
+  width:50%;
 }
 
 .btn-block {
@@ -9502,9 +9510,6 @@ a.text-dark:hover, a.text-dark:focus {
   padding: 30px;
 }
 
-.btn.btn-primary {
-  color: #3D464D !important;
-}
 
 .btn-square {
   width: 40px;
@@ -9761,3 +9766,61 @@ a.text-dark:hover, a.text-dark:focus {
 .close-dropdown:hover {
   color: #dc3545; /* Muda a cor no hover */
 }
+
+.cart-container {
+  position: relative;
+}
+
+.cart-dropdown {
+  position: fixed; /* Fixa o menu na viewport */
+  top: 0; /* Alinha ao topo */
+  right: -30%; /* Inicialmente fora da tela */
+  width: 30%; /* Ocupa 30% da largura da tela */
+  height: 100vh; /* Ocupa toda a altura da tela */
+  background-color: #fff; /* Fundo branco */
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+  padding: 1rem; /* Espaçamento interno */
+  overflow-y: auto; /* Habilita scroll vertical se necessário */
+  z-index: 1050; /* Garante que fique acima de outros elementos */
+  transform: translateX(100%); /* Animação: move fora da tela */
+  transition: transform 1s ease-in-out; /* Animação suave */
+}
+
+.cart-dropdown.show {
+  display:block;
+  transform: translateX(0); /* Move para dentro da tela */
+  right: 0; /* Colado à direita */
+}
+
+
+
+.cart-dropdown {
+  display: none; !important;
+}
+
+
+
+
+.finalizar-compra-btn {
+  background-color: #4C1A1B;
+  color: #fff;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.finalizar-compra-btn:hover {
+  background-color: #ffcb0d;
+  color: #212529;
+}
+
+.finalizar-compra-btn .divider {
+  height: 30px;
+  border-left: 2px solid #ccc;
+}
+
+.finalizar-compra-btn i {
+  margin-right: 10px;
+}
+
+

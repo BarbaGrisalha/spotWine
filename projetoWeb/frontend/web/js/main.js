@@ -1,6 +1,24 @@
 (function ($) {
     "use strict";
 
+    document.addEventListener("DOMContentLoaded", function () {
+        const cartButton = document.querySelector("#dropdownCart");
+        const cartMenu = document.querySelector(".cart-dropdown");
+
+        if (cartButton && cartMenu) {
+            cartButton.addEventListener("click", function () {
+                cartMenu.classList.toggle("show");
+            });
+
+            document.addEventListener("click", function (e) {
+                if (!cartMenu.contains(e.target) && !cartButton.contains(e.target)) {
+                    cartMenu.classList.remove("show");
+                }
+            });
+        }
+    });
+
+
 // Delegação de eventos para os botões de quantidade
     $(document).on('click', '.quantity button', function () {
         var button = $(this);

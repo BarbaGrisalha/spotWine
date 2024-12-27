@@ -45,9 +45,13 @@ class ProductFrontSearch extends Product
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $producerId = null)
     {
         $query = Product::find();
+
+        if ($producerId !== null) {
+            $query->andWhere(['producer_id' => $producerId]);
+        }
 
         // add conditions that should always apply here
 
