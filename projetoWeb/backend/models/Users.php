@@ -4,6 +4,7 @@ namespace backend\models;
 
 
 use common\models\Producers;
+use common\models\UserDetails;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\db\ActiveRecord;
@@ -61,7 +62,7 @@ class Users extends ActiveRecord
     // Relação com a tabela user_detail
     public function getUserDetails()
     {
-        return $this->hasOne(UserDetail::class, ['user_id' => 'id']);
+        return $this->hasOne(UserDetails::class, ['user_id' => 'id']);
     }
 
     /**

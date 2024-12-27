@@ -171,10 +171,12 @@ use dmstr\adminlte\widgets\Alert;
         </div>
     </div>
 </aside>
-
+<br>
+<br>
+<br>
 <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
-        <b>Version</b> 3.0.2
+        <b>Version</b> 3.0.2.A
     </div>
     <strong>Copyright © 2024 <a href="site/index">Spotwine</a>.</strong> All rights
     reserved.

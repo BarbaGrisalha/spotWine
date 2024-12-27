@@ -19,7 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="product-management">
     <h1><?= Html::encode($this->title = 'Gestão de Produtos12') ?></h1>
 
-
     <?php
     // Get the current user ID if logged in
     $currentUserId = Yii::$app->user->isGuest ? null : Yii::$app->user->id;
@@ -32,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
         $query->joinWith('producers') // Ensure the relationship is loaded
         ->andWhere(['producers_details.user_id' => $currentUserId]);
     }
-
     $dataProvider = new ActiveDataProvider([
         'query' => $query,
         'pagination' => [
@@ -45,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
     $producers = \common\models\Producers::find()
         ->joinWith('user') // Carrega dados da tabela 'user'
         ->all();
-
     // Transforma os dados dos produtores em um array de chave-valor para o dropDownList
     $producerItems = \yii\helpers\ArrayHelper::map(
         $producers,
@@ -56,6 +53,4 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     );
     ?>
-
-
 </div>

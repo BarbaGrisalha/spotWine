@@ -11,7 +11,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
 
 ?>
     <div class="relatorio-produtor">
-        <h1><?= Html::encode($this->title)?></h1>
+
         <p><strong> Produtor:</strong> <?= Html::encode($produtor->username) ?></p>
 
         <!-- Tabela de dados -->

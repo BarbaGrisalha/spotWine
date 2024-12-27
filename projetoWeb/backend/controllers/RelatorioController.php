@@ -75,8 +75,13 @@ class RelatorioController extends Controller
 
     public function actionRelatorioClientes()
     {
-        $query = Users::find();
-        $pagination = new Pagination(['totalCount' => $query->count()]);
+        $query = Users::find()->with('userDetails');//com with eu adiciono a relação userDetails
+        //paginação correta
+        $pagination = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize'=>5,
+            ]);
+
         $clientes = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();

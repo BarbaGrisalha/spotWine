@@ -4,10 +4,10 @@
 /** @var array $categorias */
 
 use yii\helpers\Html;
-
+$this->title="Relatório por Categoria"
 ?>
 <div class="relatorio-produtor">
-    <h1><?= Html::encode($this->title)?></h1>
+
     <p><strong> Produtor:</strong><?=Html::encode($produtor->username) ?></p>
     <?=Html::a('Ver Gráfico',['relatorio/chart','id'=> $produtor->id],['class'=>'btn btn-primary']) ?>
     <table class="table table-bordered">
