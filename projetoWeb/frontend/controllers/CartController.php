@@ -55,27 +55,14 @@ class CartController extends Controller
                 return $this->redirect(['site/index']); // Ajuste conforme necessário
             }
 
-            // Identificar o carrinho do usuário
-            $cart = Cart::findOrCreateCart(Yii::$app->user->id);
+            try {
+                // Identificar o carrinho do usuário
+                $cart = Cart::findOrCreateCart(Yii::$app->user->id);
+                $cart->addItem($productId, $quantity);
 
-            // Verificar se o item já existe no carrinho
-            $cartItem = CartItems::findOne(['cart_id' => $cart->id, 'product_id' => $productId]);
-
-            if ($cartItem) {
-                $cartItem->quantity += $quantity; // Atualizar quantidade
-            } else {
-                $cartItem = new CartItems([
-                    'cart_id' => $cart->id,
-                    'product_id' => $productId,
-                    'quantity' => $quantity, // Adicionar nova quantidade
-                    'price' => Product::findOne($productId)->price, // Buscar preço do produto
-                ]);
-            }
-
-            if ($cartItem->save()) {
                 Yii::$app->session->setFlash('success', 'Produto adicionado ao carrinho.');
-            } else {
-                Yii::$app->session->setFlash('error', 'Erro ao adicionar produto ao carrinho.');
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }
 
             return $this->redirect(['site/index']);
@@ -83,6 +70,7 @@ class CartController extends Controller
 
         throw new BadRequestHttpException('Requisição inválida.');
     }
+
 
 
     public function actionDelete($id)

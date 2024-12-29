@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\Product;
 use common\models\User;
 use Yii;
 
@@ -102,6 +103,36 @@ class Cart extends \yii\db\ActiveRecord
         }
         return $cart;
     }
+
+    public function addItem($productId, $quantity)
+    {
+        $product = Product::findOne($productId);
+        if (!$product) {
+            throw new \yii\web\NotFoundHttpException('Produto não encontrado.');
+        }
+
+        // Verificar se o item já existe no carrinho
+        $cartItem = CartItems::findOne(['cart_id' => $this->id, 'product_id' => $productId]);
+
+        if ($cartItem) {
+            $cartItem->quantity += $quantity; // Atualizar a quantidade
+        } else {
+            $cartItem = new CartItems([
+                'cart_id' => $this->id,
+                'product_id' => $productId,
+                'quantity' => $quantity, // Adicionar nova quantidade
+                'price' => $product->price, // Buscar preço do produto
+            ]);
+        }
+
+        if (!$cartItem->save()) {
+            throw new \yii\web\ServerErrorHttpException('Erro ao adicionar produto ao carrinho.');
+        }
+
+        return $cartItem;
+    }
+
+
 
 
 

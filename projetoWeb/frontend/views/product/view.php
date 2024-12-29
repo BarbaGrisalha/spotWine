@@ -105,13 +105,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button"
-                            role="tab" aria-controls="profile" aria-selected="false">Produtor
+                    <button class="nav-link" id="reviews-tab" data-toggle="tab" data-target="#reviews" type="button"
+                            role="tab" aria-controls="reviews" aria-selected="false">Avaliações
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" id="contact-tab" data-toggle="tab" data-target="#contact" type="button"
-                            role="tab" aria-controls="contact" aria-selected="false">Avaliações
+                    <button class="nav-link" id="rate-tab" data-toggle="tab" data-target="#rate" type="button"
+                            role="tab" aria-controls="rate" aria-selected="false">Avaliar
                     </button>
                 </li>
             </ul>
@@ -120,10 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <?= Html::encode($productView->product->description ?? 'Descrição indisponível') ?>
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <?= Html::encode($productView->product->producers->winery_name ?? 'Informações do produtor indisponíveis') ?>
-                </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                     <!-- Avaliações dos Clientes -->
                     <!-- TODO: SE PASSAR DE 4 REVIEWS COLOCAR PAGINAÇÃO OU SE FOR MAIS FÁCIL SE TIVER MAIS DE 4 APARECE O BOTAO PARA VER TODOS QUE LEVA PARA UM INDEX COM TODOS OS REVIEWS-->
                     <div class="customer-reviews">
@@ -155,6 +152,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     <?php endif; ?>
 
+
+                </div>
+                <div class="tab-pane fade" id="rate" role="tabpanel" aria-labelledby="rate-tab">
                     <!-- Formulário de Avaliação -->
                     <?php if (!Yii::$app->user->isGuest): ?>
                         <div class="leave-review mt-4">
@@ -186,6 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p>Faça login para deixar sua avaliação.</p>
                     <?php endif; ?>
                 </div>
+
             </div>
         </div>
     </div>
