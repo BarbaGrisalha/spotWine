@@ -46,7 +46,21 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                // Regra explícita para o índice de produtos
+                'product/index' => 'product/index',
+
+                // Regra para visualizar produtos por ID
+                'product/<id:\d+>' => 'product/view',
+
+                // Regra para visualizar produtos por slug (opcional)
+                'product/<slug:[a-zA-Z0-9\-]+>' => 'product/view',
+
+                // Outras regras
+                'reviews/<productId:\d+>' => 'reviews/index',
+                'reviews/<slug:[a-zA-Z0-9\-]+>' => 'reviews/index',
+
             ],
+
         ],
 
     ],

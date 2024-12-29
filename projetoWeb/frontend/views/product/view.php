@@ -1,10 +1,13 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var common\models\Product $model */
 /** @var frontend\models\promocoesViewModel $productView */
+/** @var common\models\Reviews $reviewModel */
+/** @var array $reviews */
 
 $this->title = $productView->product->name;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
@@ -27,22 +30,23 @@ $this->params['breadcrumbs'][] = $this->title;
             <h1><?= Html::encode($this->title) ?></h1>
             <p class="text-muted"><?= Html::encode($productView->product->producers->winery_name ?? 'N/A') ?></p>
 
-            <!-- Avaliação -->
+            <!-- Avaliação Média -->
             <div class="d-flex align-items-center mb-2">
-                <small class="fa fa-star text-primary mr-1"></small>
-                <small class="fa fa-star text-primary mr-1"></small>
-                <small class="fa fa-star text-primary mr-1"></small>
-                <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                <small class="far fa-star text-primary mr-1"></small>
-                <small>(99)</small>
+                <?php $averageRating = round(array_sum(array_column($reviews, 'rating')) / max(count($reviews), 1)); ?>
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <small class="fa <?= $i <= $averageRating ? 'fa-star text-yellow' : 'fa-star-o text-secondary' ?> mr-1"></small>
+                <?php endfor; ?>
+                <small>(<?= count($reviews) ?> avaliações)</small>
             </div>
 
             <!-- Preço -->
             <?php if ($productView->isOnPromotion()): ?>
-                <div class="promotion-highlight p-3 mb-4" style="border: 2px solid #dc3545; border-radius: 10px; background: #ffe6e6;">
+                <div class="promotion-highlight p-3 mb-4"
+                     style="border: 2px solid #dc3545; border-radius: 10px; background: #ffe6e6;">
                     <p class="mb-1 text-danger font-weight-bold">Produto em Promoção!</p>
                     <p class="mb-1">
-                        <span class="text-muted">Preço Original:</span> <del class="text-muted"><?= Html::encode($productView->product->price) ?>€</del>
+                        <span class="text-muted">Preço Original:</span>
+                        <del class="text-muted"><?= Html::encode($productView->product->price) ?>€</del>
                     </p>
                     <p>
                         <span class="text-success font-weight-bold">Preço Promocional:</span>
@@ -53,38 +57,62 @@ $this->params['breadcrumbs'][] = $this->title;
                 <p>Preço: <strong><?= Html::encode($productView->product->price) ?>€</strong></p>
             <?php endif; ?>
 
-            <!-- Botões de Quantidade e Adicionar ao Carrinho -->
             <div class="d-flex align-items-center mb-4">
-                <div class="input-group quantity" style="max-width: 120px;">
+                <?php $form = ActiveForm::begin([
+                    'action' => ['cart/add'], // Ação no controlador
+                    'method' => 'post',
+                ]); ?>
+
+                <!-- Campo oculto para o ID do produto -->
+                <?= $form->field($cartItemModel, 'product_id')->hiddenInput(['value' => $productView->product->product_id])->label(false) ?>
+
+                <div class="input-group quantity mb-3" style="max-width: 150px;">
                     <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary btn-minus" type="button">
+                        <button class="btn btn-outline-secondary btn-minus p-0" type="button"
+                                style="width: 40px; height: 38px;">
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
-                    <?= Html::textInput('quantity', '1', [
-                        'class' => 'form-control text-center']) ?>
+                    <?= $form->field($cartItemModel, 'quantity')->textInput([
+                        'class' => 'form-control text-center quantity-input',
+                        'value' => 1, // Valor inicial
+                        'style' => 'width: 60px; height: 38px;', // Garante o mesmo tamanho que os botões
+                    ])->label(false) ?>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary btn-plus" type="button">
+                        <button class="btn btn-outline-secondary btn-plus p-0" type="button"
+                                style="width: 40px; height: 38px;">
                             <i class="fa fa-plus"></i>
                         </button>
                     </div>
                 </div>
-                <?= Html::button(
-                    '<i class="fa fa-shopping-cart mr-2 text-white"></i><span class="text-white">Adicionar ao Carrinho</span>',
-                    ['class' => 'btn btn-primary ml-3']
-                ) ?>
+
+
+                <!-- Botão de Adicionar ao Carrinho -->
+                <?= Html::submitButton('<i class="fa fa-cart-plus"></i> Adicionar ao Carrinho', [
+                    'class' => 'btn btn-primary ml-3',
+                    'encode' => false,
+                ]) ?>
+
+                <?php ActiveForm::end(); ?>
             </div>
+
 
             <!-- Abas de Informações -->
             <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Descrição</button>
+                    <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button"
+                            role="tab" aria-controls="home" aria-selected="true">Descrição
+                    </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Produtor</button>
+                    <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button"
+                            role="tab" aria-controls="profile" aria-selected="false">Produtor
+                    </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" id="contact-tab" data-toggle="tab" data-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Avaliações</button>
+                    <button class="nav-link" id="contact-tab" data-toggle="tab" data-target="#contact" type="button"
+                            role="tab" aria-controls="contact" aria-selected="false">Avaliações
+                    </button>
                 </li>
             </ul>
 
@@ -96,11 +124,69 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::encode($productView->product->producers->winery_name ?? 'Informações do produtor indisponíveis') ?>
                 </div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    Avaliações dos clientes.
+                    <!-- Avaliações dos Clientes -->
+                    <!-- TODO: SE PASSAR DE 4 REVIEWS COLOCAR PAGINAÇÃO OU SE FOR MAIS FÁCIL SE TIVER MAIS DE 4 APARECE O BOTAO PARA VER TODOS QUE LEVA PARA UM INDEX COM TODOS OS REVIEWS-->
+                    <div class="customer-reviews">
+                        <?php if (!empty($reviews)): ?>
+                            <?php foreach (array_slice($reviews, 0, 4) as $review): ?>
+                                <div class="review mb-3">
+                                    <strong><?= Html::encode($review->user->username) ?>:</strong>
+                                    <div class="stars">
+                                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                                            <small class="fa <?= $i <= $review->rating ? 'fa-star text-yellow' : 'fa-star-o text-secondary' ?>"></small>
+                                        <?php endfor; ?>
+                                    </div>
+                                    <p><?= Html::encode($review->comment) ?></p>
+                                    <small class="text-muted">Postado
+                                        em <?= Yii::$app->formatter->asDate($review->created_at) ?></small>
+                                </div>
+                                <hr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Este produto ainda não possui avaliações.</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if (count($reviews) > 4): ?>
+                        <div class="text-center mt-3">
+                            <?= Html::a('Ver Todas as Avaliações', ['reviews/index', 'productId' => $productView->product->product_id], [
+                                'class' => 'btn btn-outline-primary',
+                            ]) ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Formulário de Avaliação -->
+                    <?php if (!Yii::$app->user->isGuest): ?>
+                        <div class="leave-review mt-4">
+                            <h4>Deixe sua Avaliação</h4>
+                            <?php $form = ActiveForm::begin([
+                                'action' => ['product/review', 'id' => $productView->product->product_id],
+                                'method' => 'post',
+                            ]); ?>
+
+                            <?= $form->field($reviewModel, 'rating')->dropDownList([
+                                5 => '★★★★★ - Excelente',
+                                4 => '★★★★☆ - Muito Bom',
+                                3 => '★★★☆☆ - Bom',
+                                2 => '★★☆☆☆ - Regular',
+                                1 => '★☆☆☆☆ - Ruim',
+                            ], [
+                                'prompt' => 'Escolha a quantidade de estrelas',
+                                'class' => 'form-control star-dropdown',
+                            ]) ?>
+
+
+                            <?= $form->field($reviewModel, 'comment')->textarea(['rows' => 4, 'placeholder' => 'Escreva seu comentário aqui...']) ?>
+
+                            <?= Html::submitButton('Enviar Avaliação', ['class' => 'btn btn-primary']) ?>
+
+                            <?php ActiveForm::end(); ?>
+                        </div>
+                    <?php else: ?>
+                        <p>Faça login para deixar sua avaliação.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-

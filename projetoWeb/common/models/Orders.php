@@ -37,7 +37,7 @@ class Orders extends \yii\db\ActiveRecord
             [['order_date'], 'safe'],
             [['total_price'], 'number'],
             [['status'], 'string', 'max' => 50],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'user_id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => user::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 

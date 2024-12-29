@@ -19,17 +19,19 @@
     });
 
 
-// Delegação de eventos para os botões de quantidade
-    $(document).on('click', '.quantity button', function () {
+    $(document).on('click', '.btn-plus, .btn-minus', function () {
         var button = $(this);
-        var oldValue = button.closest('.quantity').find('input').val();
+        var input = button.closest('.input-group').find('input.quantity-input'); // Corrige a seleção do input
+        var oldValue = parseInt(input.val()) || 0; // Garante que o valor seja um número válido
 
+        // Ajusta o valor com base na classe do botão
         var newVal = button.hasClass('btn-plus')
-            ? parseFloat(oldValue) + 1
-            : Math.max(0, parseFloat(oldValue) - 1); // Evita valores negativos
+            ? oldValue + 1
+            : Math.max(1, oldValue - 1); // Valor mínimo é 1
 
-        button.closest('.quantity').find('input').val(newVal);
+        input.val(newVal); // Atualiza o valor no input
     });
+
 
     // Dropdown on mouse hover
     $(document).ready(function () {
