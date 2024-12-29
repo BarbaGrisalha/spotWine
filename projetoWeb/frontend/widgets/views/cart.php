@@ -48,7 +48,7 @@ use yii\widgets\ActiveForm;
                                 'options' => ['class' => 'd-inline-block'], // Evita quebra de layout
                             ]); ?>
                             <?= Html::submitButton('<i class="fas fa-trash "></i>', [
-                                'class' => 'btn btn-sm btn-outline-danger ml-2 delete-item',
+                                'class' => 'btn btn-outline-danger ml-2 delete-item',
                                 'data' => ['confirm' => 'Tem certeza que deseja remover este item do carrinho?'],
                                 'title' => 'Remover do Carrinho',
                             ]) ?>
@@ -60,6 +60,7 @@ use yii\widgets\ActiveForm;
 
             </div>
             <div class="btn btn-primary btn-xs d-flex align-items-center justify-content-center px-4 ">
+                <!--TODO: SE NAO TIVER LOGADO E QUISER FINALIZAR COMPRA VAI SER REDIRECIONADO PARA O LOGIN -->
                 <?= Html::a(
                     '<div class="d-flex align-items-center ">
                             <i class="fas fa-shopping-bag fa-lg mr-3"></i>

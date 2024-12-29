@@ -52,30 +52,23 @@ class CartController extends Controller
 
             if (!$productId) {
                 Yii::$app->session->setFlash('error', 'Produto inválido.');
-                return $this->redirect(['site/index']); // Ajuste conforme sua necessidade
+                return $this->redirect(['site/index']); // Ajuste conforme necessário
             }
 
-            // Identificar o carrinho do usuário (user_id ou session_id)
-            $cart = Cart::findOrCreateCart(Yii::$app->user->id); // Método no modelo Cart
+            // Identificar o carrinho do usuário
+            $cart = Cart::findOrCreateCart(Yii::$app->user->id);
 
-            // Adicionar ou atualizar item no carrinho
+            // Verificar se o item já existe no carrinho
             $cartItem = CartItems::findOne(['cart_id' => $cart->id, 'product_id' => $productId]);
 
-            $product = Product::findOne($productId); // Buscar o produto associado
-
-            if (!$product) {
-                Yii::$app->session->setFlash('error', 'Produto não encontrado.');
-                return $this->redirect(['site/index']);
-            }
-
             if ($cartItem) {
-                $cartItem->quantity += $quantity;
+                $cartItem->quantity += $quantity; // Atualizar quantidade
             } else {
                 $cartItem = new CartItems([
                     'cart_id' => $cart->id,
                     'product_id' => $productId,
-                    'quantity' => $quantity,
-                    'price' => $product->price,
+                    'quantity' => $quantity, // Adicionar nova quantidade
+                    'price' => Product::findOne($productId)->price, // Buscar preço do produto
                 ]);
             }
 
@@ -85,14 +78,12 @@ class CartController extends Controller
                 Yii::$app->session->setFlash('error', 'Erro ao adicionar produto ao carrinho.');
             }
 
-            // Atualizar o cartItem para conter o modelo de promoção
-            $cartViewModel = new promocoesViewModel($product);
-
-            return $this->redirect(['site/index', 'cartViewModel' => $cartViewModel]); // Ajuste conforme necessário
+            return $this->redirect(['site/index']);
         }
 
         throw new BadRequestHttpException('Requisição inválida.');
     }
+
 
     public function actionDelete($id)
     {
@@ -124,24 +115,18 @@ class CartController extends Controller
 
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Cart::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $cart = Cart::findOrCreateCart(Yii::$app->user->id);
+        $cartItems = $cart->cartItems;
+        $totalAmount = array_reduce($cartItems, function ($sum, $item) {
+            return $sum + ($item->price * $item->quantity);
+        }, 0);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'cartItems' => $cartItems,
+            'totalAmount' => $totalAmount,
         ]);
     }
+
 
     /**
      * Displays a single Cart model.

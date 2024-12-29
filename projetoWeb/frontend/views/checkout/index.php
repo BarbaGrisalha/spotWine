@@ -57,12 +57,27 @@ $this->title = 'Checkout';
         <h3 class="text-center"><i class="fas fa-credit-card"></i> Escolha o Método de Pagamento</h3>
         <form method="post" action="<?= Url::to(['checkout/index']) ?>" class="mt-3">
             <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->getCsrfToken()) ?>
-            <?= Html::dropDownList('payment_method', null, [
-                'Mbway' => 'Mbway',
-                'Cartão de Crédito' => 'Cartão de Crédito',
-                'Multibanco' => 'Multibanco',
-                'PayPal' => 'PayPal',
-            ], ['class' => 'form-control mb-3', 'prompt' => 'Selecione um método de pagamento']) ?>
+            <div class="form-group">
+                <div class="d-flex flex-column">
+                    <label class="btn btn-outline-secondary mb-2">
+                        <input type="radio" name="payment_method" value="Mbway">
+                        <i class="fas fa-mobile-alt"></i> Mbway
+                    </label>
+                    <label class="btn btn-outline-secondary mb-2">
+                        <input type="radio" name="payment_method" value="Cartão de Crédito">
+                        <i class="fas fa-credit-card"></i> Cartão de Crédito
+                    </label>
+                    <label class="btn btn-outline-secondary mb-2">
+                        <input type="radio" name="payment_method" value="Multibanco">
+                        <i class="fas fa-university"></i> Multibanco
+                    </label>
+                    <label class="btn btn-outline-secondary">
+                        <input type="radio" name="payment_method" value="PayPal">
+                        <i class="fab fa-paypal"></i> PayPal
+                    </label>
+                </div>
+            </div>
+
             <?= Html::submitButton('<i class="fas fa-check"></i> Confirmar Pedido', ['class' => 'btn btn-success btn-block']) ?>
         </form>
     </div>
