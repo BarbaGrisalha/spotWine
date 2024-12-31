@@ -29,6 +29,7 @@ class Product extends \yii\db\ActiveRecord
      * {@inheritdoc}
      */
     public $imageFile;
+
     public static function tableName()
     {
         return 'products';
@@ -40,13 +41,15 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+
             [['producer_id', 'category_id', 'stock'], 'integer'],
+            [['producer_id'],'required'],
+            [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Producers::class, 'targetAttribute' => ['producer_id' => 'producer_id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_id' => 'category_id']],
             [['description'], 'string'],
             [['price'], 'number'],
             [['name'], 'string', 'max' => 100],
             [['image_url'], 'string', 'max' => 255],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_id' => 'category_id']],
-            [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Producers::class, 'targetAttribute' => ['producer_id' => 'producer_id']],
             [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2], // Validação do upload
 
         ];
@@ -54,6 +57,7 @@ class Product extends \yii\db\ActiveRecord
 
     public function upload()
     {
+        $user = Yii::$app->user->identity;
         if ($this->validate()) {
             $fileName = uniqid('product_', true) . '.' . $this->imageFile->extension;
             $filePath = 'uploads/products/' . $fileName;
@@ -68,12 +72,14 @@ class Product extends \yii\db\ActiveRecord
      * {@inheritdoc}
      */
     public function attributeLabels()
-    {
+    {//aqui ficam os atributos da grid, esses nomes está no topo da tabela.
+
         return [
             'product_id' => 'Product ID',
+            'winery_name'=> 'Nome da Vinha',
             'producer_id' => 'Produtor',
             'category_id' => 'Categoria',
-            'name' => 'Nome',
+            'name' => 'Nome do Vinho',
             'description' => 'Descrição',
             'price' => 'Preço',
             'stock' => 'Stock',
@@ -120,7 +126,13 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ProducerDetails::class, ['id' => 'producer_id']);
     }
-
+    /**
+     *
+     * Gets query for [prodcer] Criado agora 2024-12-17 22:27
+     */
+    public function getProducer(){
+        return $this->hasOne(ProducersDetails::class,['producer_id'=> 'producer_id']);
+    }
     /**
      * Gets query for [[Promotions]].
      *s
@@ -149,7 +161,8 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');
+        $user = Yii::$app->user->identity;
+        return $this->hasOne(User::class, ['id' => 'producer_id'])->via('producer');//user_id
     }
 
     public static function findByProducer($producerId)

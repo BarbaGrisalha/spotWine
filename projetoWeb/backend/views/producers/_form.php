@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\Producers $model */
+/** @var common\models\Producers $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -18,7 +18,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'document_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'nif')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model,'address')->textInput(['maxlength'=> true])?>
+
+    <?= $form->field($model,'number')->textInput(['maxlengt'=>true])?>
+
+    <?= $form->field($model, 'city')->textInput(['maxlength'=> true]) ?>
+
+    <?= $form->field($model,'complement')->textInput(['maxlength'=> true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

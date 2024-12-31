@@ -18,16 +18,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?php if ($model->isProducer()): ?>
-        <h3>Detalhes do Produtor</h3>
-
-        <!-- Campos do modelo ProducerDetails -->
-        <?= $form->field($userDetails, 'document_id')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($userDetails, 'nif')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($userDetails, 'phone')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($userDetails, 'mobile')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($userDetails, 'winery_name')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($userDetails, 'location')->textInput(['maxlength' => true]) ?>
+    <?php if ($model->isNewRecord): ?>
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+    <?php else: ?>
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'value' => ''])->label('Nova Senha (deixe em branco para manter)') ?>
+    <?php endif; ?>
 
         <div class="row">
             <div class="col-md-6">
@@ -55,11 +50,18 @@ use yii\widgets\ActiveForm;
     <?php elseif ($model->isConsumer()): ?>
         <h3>Detalhes do Consumidor</h3>
 
-        <!-- Campos do modelo ConsumerDetails -->
-        <?= $form->field($userDetails, 'nif')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($userDetails, 'phone_number')->textInput(['maxlength' => true]) ?>
-    <?php endif; ?>
-
+    <!-- Campos do modelo ProducersDetails -->
+    <?= $form->field($producerDetails, 'winery_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'location')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'nif')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'address')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'number')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'complement')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'postal_code')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'region')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'city')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'phone')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($producerDetails, 'notes')->textInput(['maxlength' => true]) ?>
     <div class="form-group">
         <?= Html::submitButton('Salvar', ['class' => 'btn btn-success']) ?>
     </div>

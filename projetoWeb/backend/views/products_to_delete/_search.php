@@ -15,7 +15,9 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'product_id') ?>
+    <?= $form->field($model, 'product_id'); dd($model->product_id) ?>
+
+    <?= $form->field($model,'winery_name') ?>
 
     <?= $form->field($model, 'producer_id') ?>
 
@@ -25,9 +27,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description') ?>
 
-    <?php // echo $form->field($model, 'price') ?>
+    <?php  echo $form->field($model, 'price') ?>
 
-    <?php // echo $form->field($model, 'stock') ?>
+    <?php  echo $form->field($model, 'stock') ?>
 
     <?php // echo $form->field($model, 'image_url') ?>
 

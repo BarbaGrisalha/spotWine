@@ -10,17 +10,45 @@ use yii\grid\GridView;
 /** @var common\models\ProductSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Gestão de Produtos';
+$this->title = 'Products index linha 13';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Product1', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
-   
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                    'attribute' => 'producer_id',
+                    'value' => function($model){
+                        return $model->producers->user->username ?? 'n/a';
+                    }
+            ],
+            [
+                'attribute' => 'category_id',
+                'value' => function($model) {
+                    return $model->categories->name ?? 'n/a';
+                },
+            ],
+            'name',
+            'description:ntext',
+            'price',
+            'stock',
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Product $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'product_id' => $model->product_id]);
+                }
+            ],
+        ],
+    ]); ?>
+
+</div>

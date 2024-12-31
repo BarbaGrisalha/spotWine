@@ -1,11 +1,12 @@
 <?php
 
+use common\models\Producers;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\Producers $model */
+/** @var Producers $model */
 
-$this->title = 'Update Producers: ' . $model->producer_id;
+$this->title = 'Atualização Produtor: ' . $model->producer_id;
 $this->params['breadcrumbs'][] = ['label' => 'Producers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->producer_id, 'url' => ['view', 'producer_id' => $model->producer_id]];
 $this->params['breadcrumbs'][] = 'Update';

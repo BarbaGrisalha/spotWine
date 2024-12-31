@@ -22,9 +22,28 @@ class SiteController extends Controller
      */
     public function behaviors(){
     return [
+
         'access' => [
             'class' => AccessControl::class,
+            'only' => ['logout','index'],
             'rules' => [
+                [
+                    'actions' => ['index'],
+                    'allow'=>true,
+                    'roles'=>['admin'],
+                ],
+                [
+                    'actions' => ['index'],
+                    'allow' => true,
+                    'roles' => ['producer'],
+
+                ],
+                [
+                    'actions' => ['logout'],
+                    'allow' => true,
+                    'roles' =>['@'],// Apenas usuários autenticados
+
+                ],
                 // Permitir acesso para login e erro para visitantes
                 [
                     'actions' => ['login', 'error'],
@@ -41,7 +60,7 @@ class SiteController extends Controller
                     'actions' => ['login'],
                     'allow' => false,
                     'roles' => ['consumer'], // Usuários logados
-                    
+
                 ],
             ],
             'denyCallback' => function ($rule, $action) {
@@ -50,10 +69,6 @@ class SiteController extends Controller
                 }
                 //Exibir a página de erro personalizada
                 return Yii::$app->response->statusCode = 403;
-                return Yii::$app->controller->render('error',[
-                    'name' => 'Acesso Negado',
-                    'message' =>'Você não tem permissão para acessar esta pagina.',
-                ]);
             },
         ],
         'verbs' => [
@@ -63,6 +78,8 @@ class SiteController extends Controller
             ],
         ],
     ];
+
+
 }
     /**
      * {@inheritdoc}
@@ -124,8 +141,7 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        Yii::$app->user->logout();
-
+        Yii::$app->user->logout(false);
         return $this->goHome();
     }
     /**
@@ -181,8 +197,4 @@ class SiteController extends Controller
             $status = "error";
         }
     }
-
-
-
-
 }

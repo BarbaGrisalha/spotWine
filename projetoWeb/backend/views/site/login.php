@@ -7,13 +7,13 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = 'Login';
+$this->title = 'Login1';
 ?>
 <div class="site-login">
     <div class="mt-5 offset-lg-3 col-lg-6">
         <h1><?= Html::encode($this->title) ?></h1>
 
-        <p>Please fill out the following fields to login:</p>
+        <p>Preencha os campos</p>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 

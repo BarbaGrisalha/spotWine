@@ -6,10 +6,11 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use common\models\Producers;
 use common\models\Product;
 use yii\widgets\LinkPager;
 
-$this->title = "Relatório de Produtos";
+$this->title = "Relatório de Produtos linha 12";
 ?>
 <style>
     .relatorio-produtos {
@@ -39,25 +40,26 @@ $this->title = "Relatório de Produtos";
 
 </style>
 <div class="relatorio-produtos">
-    <h1><?=Html::encode($this->title)   ?></h1>
+
     <div>
-        <?php $form = ActiveForm::begin(['method'=> 'get', 'action' => ['relatorio/index']]); ?>
+        <?php
+        //dd( ArrayHelper::map(Producers::find()->asArray()->all(), 'producer_id','winery_name'));
+        $form = ActiveForm::begin(['method'=> 'get', 'action' => ['relatorio/index']]); ?>
             <?= Html::label('Selecione o Produtor', 'producer_id')?>
-            <?= Html::dropDownList('producer_id',$producerId,
-                ArrayHelper::map($produtores, 'id','winery_name'),
-                ['prompt'=> 'Todos os produtores','class' => 'form-control']
+
+
+            <?= Html::dropDownList('producer_id',null,
+                ArrayHelper::map(Producers::find()->asArray()->all(), 'producer_id','winery_name'),
+                ['prompt'=> 'Select a Producer','class' => 'form-control'],
+
         )?>
         <br>
         <?= Html::submitButton('Filtrar',['class'=> 'btn btn-primary'])?>
         <?php ActiveForm::end(); ?>
     </div>
-
-
-
-
-
     <ul>
-        <?php foreach ($produtos as $produto): ?>
+        <?php
+        foreach ($produtos as $produto): ?>
 
             <li>
                 Produtor: <?=Html::encode($produto->producers ? $produto->producers->winery_name: 'Produtor não encontrado') ?><br>

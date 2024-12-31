@@ -3,7 +3,7 @@
 /** @var array $clientes */
 
 use yii\helpers\Html;
-use backend\models\Products;
+use common\models\Product;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
 
@@ -40,12 +40,11 @@ $this->title = "Relatório de Clientes";
 <div class="relatorio-clientes">
     <h1>Relatório de Clientes</h1>
     <ul>
-        <?php foreach ($clientes as $cliente): ?>
+        <?php foreach ($clientes as $cliente):?>
             <li>
-                Nome: <?=Html::encode($cliente->username) ?><br><!--alterei o nome para username em vez de name-->
-                Email: <?=Html::encode($cliente->email) ?><br>
-
-
+                Nome: <?=Html::encode($cliente->username) ?><!--alterei o nome para username em vez de name-->
+                | Email: <?=Html::encode($cliente->email) ?><br>
+                Telefone: <?=Html::encode($cliente->userDetails->phone_number ?? 'Não informado') ?><br>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -53,5 +52,7 @@ $this->title = "Relatório de Clientes";
     <?=  LinkPager::widget([
             'pagination'=>$pagination,
     ]); ?>
-    <p><a href="<?=Url::to(['site/index'])?>" class="btn btn-primary">Voltar </a></p>
+   <!-- <p><a href="<?=Url::to(['site/index'])?>" class="btn btn-primary">Voltar </a></p> -->
+    <p><a href="<?=Url::to(['relatorio/relatorio-clientes'])?>" class="btn btn-primary">Voltar </a></p>
+
 </div>

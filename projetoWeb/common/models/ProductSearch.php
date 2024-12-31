@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Product;
@@ -18,6 +19,7 @@ class ProductSearch extends Product
     {
         return [
             [['product_id', 'producer_id', 'category_id', 'stock'], 'integer'],
+
             [['name', 'description', 'image_url'], 'safe'],
             [['price'], 'number'],
         ];
@@ -41,7 +43,12 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
+        //Aqui eu busco a identidade do utilizador logado
+        $loggedInProducerId = Yii::$app->user->id;
         $query = Product::find()->joinWith(['producers', 'categories']);
+
+        //Aqui eu garanto que os produtos filtrados sejam do produtor logado
+        $query->andWhere(['producers_details.producer_id'=>$loggedInProducerId]);
 
         // add conditions that should always apply here
 
@@ -53,20 +60,21 @@ class ProductSearch extends Product
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+            $query->where('0=1');
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
+
             'product_id' => $this->product_id,
-            'producer_id' => $this->producer_id,
+            'products.producer_id' => $this->producer_id,
             'category_id' => $this->category_id,
             'price' => $this->price,
             'stock' => $this->stock,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'products.name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'image_url', $this->image_url]);
 

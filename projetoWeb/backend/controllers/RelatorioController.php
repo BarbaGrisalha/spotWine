@@ -3,33 +3,48 @@
 namespace backend\controllers;
 
 use common\models\Producers;
-use common\models\User;
+
 use yii\data\Pagination;
-use yii\db\Query;
+
 use yii\web\Controller;
 use common\models\Product;
 use backend\models\Users;
-use yii\web\Response;
+
 use Yii;
-use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
+
 
 class RelatorioController extends Controller
 {
     public function actionIndex(){
+
         $producerId = Yii::$app->request->get('producer_id');
-        $produtosQuery = Product::find()->with(['producer','categories']);
+        //dd($producerId);
+        $produtosQuery = Product::find()->with(['producer_id','categories']);//mudei de producer_id para producer
 
         if($producerId){
             $produtosQuery->andWhere(['producer_id'=> $producerId]);
         }
+        //Configuração da paginação
+        $pagination = new Pagination([
+            'defaultPageSize' => 5,
+            'totalCount'=>$produtosQuery->count(),
+        ]);
+       // dd($produtosQuery);//esse dd($produtosQuery); traz o produtor corretamente.
+        //Obter os produtos com a paginação
+        $produtos = $produtosQuery
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
 
-        $produtos = $produtosQuery->all();
-        $produtores = Producers::find()->all();
+        //Buscar os produtos para o dropdown
+        $produtores = Producers::find()->orderBy(['winery_name'=> SORT_ASC])->all();
 
-        return $this->render('index',[
-            'produtos' => $produtos,
-            'produtores' => $produtores,
+        return $this->render('index',[//aqui passamos para a view
+            'products' => $produtos,//trocar de produtos para products
+            'producers' => $produtores,//trocar de produtores para producers
             'producer_id' => $producerId,
+            'pagination' => $pagination
         ]);
     }
     public function actionRelatorioProdutos()
@@ -51,6 +66,7 @@ class RelatorioController extends Controller
 
         return $this->render('relatorio-produtos', [
             'produtos' => $produtos,
+
             'pagination' => $pagination,
             'produtores' => $produtores,
             'producerId'=> $producerId,
@@ -59,8 +75,13 @@ class RelatorioController extends Controller
 
     public function actionRelatorioClientes()
     {
-        $query = Users::find();
-        $pagination = new Pagination(['totalCount' => $query->count()]);
+        $query = Users::find()->with('userDetails');//com with eu adiciono a relação userDetails
+        //paginação correta
+        $pagination = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize'=>5,
+            ]);
+
         $clientes = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
@@ -125,5 +146,26 @@ class RelatorioController extends Controller
         ]);
     }
 
+    public function actionChart($id){
+        //buscando o produtor pelo ID
+        $produtor = Users::findOne($id);
+
+        if(!$produtor){
+            throw new NotFoundHttpException('Produtor não encontrado.');
+        }
+        //Consulta para obter categorias e totais de produtos
+        $categorias =  (new \yii\db\Query())
+            ->select(['categories.name AS category_name','SUM(products.stock) AS total_stock'])
+            ->from('products')
+            ->leftJoin('categories', 'products.category_id = categories.category_id')
+            ->where(['products.producer_id'=> $id])
+            ->groupBy('categories.name')
+            ->all();
+        //Renderiza a view e envia os dados
+        return $this->render('chart',[
+            'produtor' => $produtor,
+            'categorias'=> $categorias,
+        ]);
+    }
 
 }

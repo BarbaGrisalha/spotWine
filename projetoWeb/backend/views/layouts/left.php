@@ -7,7 +7,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <?= \yii\helpers\Html::a('<img class="brand-image img-circle elevation-3" src="' . ($directoryAsset . '/img/AdminLTELogo.png') . '" alt="APP"><span class="brand-text font-weight-light">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'brand-link']) ?>
     <div class="sidebar">
-
         <nav class="mt-2">
             <?= dmstr\adminlte\widgets\Menu::widget(
                 [
@@ -47,22 +46,29 @@
                                     'url'=>['/site/developing']],
                         ],
                     ],
-                        [
-                            'label' => 'Database Relatorio',
-                            'iconType' => 'far',
-                            'icon' => 'circle',
+                        [  'label' => 'Database Relatorio',
+                            //'iconType' => 'far',
+                            'icon' => 'share',
                             'url' => '#',
                             'items' => [
                                 ['label' => 'Relatório de Produtos',
                                     'iconType' => 'far',
                                     'icon' => 'dot-circle',
                                     'url' => ['relatorio/relatorio-produtos'],
+                                    'visible' => Yii::$app->user->can('createUsers'),
                                     ],
-                                ['label' => 'Relatório dos Meus Produtos ',//com erro ainda.
+                                ['label' => 'Relatório Produtos/Categoria ',//com erro ainda.
                                     'iconType' => 'far',
                                     'icon' => 'dot-circle',
                                     'url' => ['relatorio/relatorio-por-produtor'],
                                    // 'url' => ['relatorio/relatorio-por-produtor','producerId'=>Yii::$app->user->identity->id],
+
+                                ],
+                                ['label' => 'Relatório Quantidade/Categoria ',//com erro ainda.
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' => ['relatorio/relatorio-por-produtor'],
+                                    // 'url' => ['relatorio/relatorio-por-produtor','producerId'=>Yii::$app->user->identity->id],
 
                                 ],
                                 ['label' => 'Relatório de Clienes',
@@ -71,34 +77,44 @@
                                     'url' => ['relatorio/relatorio-clientes'],
                                     'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
                                     ],
-                                /*['label' => 'Relatório Produtos/Produtor',
-                                    'iconType' => 'far',
-                                    'icon'=> 'dot-circle',
-                                    'url'=>['relatorio/relatorio-por-produtor'],
-                                    ],*/
                             ],
                         ],
-                        ['label' => 'Gestão de Utilizadores',
-                            'iconType' => 'far',
-                            'icon' => 'dot-circle',
-                            'url' =>['/user/index'],
-                            'visible' => Yii::$app->user->can('admin'),// Somente visível para a role admin
+                        [   'label' => 'Gestão Utilizadores',
+                            'icon' => 'share',
+                            'url' => '#',
+                            'items'=>[
+                                ['label' => 'Gestão de Utilizadores',
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' =>['/user/index'],
+                                    'visible' => Yii::$app->user->can('createUsers'),// Somente visível para a role admin
+                                ],
+                                ['label' => 'Gestão dos Produtos',
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' =>['/product/index'],
+                                ],
+
+                            ],
                         ],
-                        ['label' => 'Gestão dos Produtos',
-                            'iconType' => 'far',
-                            'icon' => 'dot-circle',
-                            'url' =>['/product/index'],
+                        [
+                            'label' => 'Gestão de Vinícola',
+                            'icon' => 'wine-glass',
+                            'url' => Yii::$app->user->identity->producers ?
+                                ['producers/update', 'producer_id' => Yii::$app->user->identity->producers->producer_id] : '#',
+                            'items' => [
+                                [
+                                    'label' => 'Minha Vinícola',
+                                    'iconType' => 'far',
+                                    'icon' => 'building',
+                                    'url' => Yii::$app->user->identity->producers ?
+                                        ['producers/update', 'producer_id' => Yii::$app->user->identity->producers->producer_id] : '#',
+                                    'visible' => Yii::$app->user->identity->role === 'producer',
+                                ],
+                            ],
                         ],
-                        ['label' => 'Gestão das Promoções',
-                            'iconType' => 'far',
-                            'icon' => 'dot-circle',
-                            'url' =>['/promotions/index'],
-                        ]
                 ],
-               ]
-            ) ?>
+               ]); ?>
         </nav>
-
     </div>
-
 </aside>

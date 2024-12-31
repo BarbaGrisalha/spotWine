@@ -4,6 +4,7 @@ namespace backend\models;
 
 
 use common\models\Producers;
+use common\models\UserDetails;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\db\ActiveRecord;
@@ -25,11 +26,6 @@ use yii\db\ActiveRecord;
  */
 class Users extends ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
-    
-
     /**
      * {@inheritdoc}
      */
@@ -66,7 +62,7 @@ class Users extends ActiveRecord
     // Relação com a tabela user_detail
     public function getUserDetails()
     {
-        return $this->hasOne(UserDetail::class, ['user_id' => 'id']);
+        return $this->hasOne(UserDetails::class, ['user_id' => 'id']);
     }
 
     /**
@@ -106,7 +102,7 @@ class Users extends ActiveRecord
      */
     public function getProducers()
     {
-        return $this->hasMany(Producers::class, ['id' => 'user_id']);
+        return $this->hasMany(Producers::class, ['user_id' => 'id']);
     }
 
     /**
@@ -116,7 +112,7 @@ class Users extends ActiveRecord
      */
     public function getReviews()
     {
-        return $this->hasMany(Reviews::class, ['user_id' => 'user_id']);
+        return $this->hasMany(Reviews::class, ['user_id' => 'user_id']);//estava invertido
     }
     public function getCodigo(){
         return $this->id;

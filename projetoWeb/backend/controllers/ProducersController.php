@@ -2,8 +2,10 @@
 
 namespace backend\controllers;
 
-use backend\models\Producers;
-use backend\models\ProducersSearch;
+use common\models\Producers;
+use common\models\ProducersSearch;
+use common\models\User;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -67,19 +69,54 @@ class ProducersController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Producers();
+        $model = new User();
+        $producer = new Producers();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'producer_id' => $model->producer_id]);
+        if ($model->load(Yii::$app->request->post()) && $producer->load(Yii::$app->request->post())) {
+            // Transação para garantir que ambas as tabelas sejam salvas corretamente
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                // Configurando campos específicos do User
+                $model->role = 'producer'; // Configura o campo role
+                $model->status = 9; // Status padrão. Falta configurar o email para validação
+                if ($model->save()) {
+                    // Relacionando o user_id com producer
+                    $producer->user_id = $model->id;
+                    $producer->role = 'producer'; // Configura o campo role em producers
+                    if ($producer->save()) {
+                        $transaction->commit();
+                        Yii::$app->session->setFlash('success', 'Produtor criado com sucesso.');
+                        return $this->redirect(['view', 'producer_id' => $producer->producer_id]);
+                    }
+                    if (!$model->save()) {
+                        Yii::$app->session->setFlash('error', 'Erro ao salvar o usuário: ' . implode(', ', $model->getFirstErrors()));
+                        $transaction->rollBack();
+                        return $this->render('create', [
+                            'model' => $model,
+                            'producer' => $producer,
+                        ]);
+                    }
+                    if (!$producer->save()) {
+                        Yii::$app->session->setFlash('error', 'Erro ao salvar o produtor: ' . implode(', ', $producer->getFirstErrors()));
+                        $transaction->rollBack();
+                        return $this->render('create', [
+                            'model' => $model,
+                            'producer' => $producer,
+                        ]);
+                    }
+                }
+                $transaction->rollBack();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
+            'producer' => $producer,
         ]);
+
     }
 
     /**
@@ -91,15 +128,61 @@ class ProducersController extends Controller
      */
     public function actionUpdate($producer_id)
     {
-        $model = $this->findModel($producer_id);
+        //ESSE ESTÁ FUNCIONAL //
+        /*
+        $producer = $this->findModel($producer_id);
+        $user = User::findOne($producer->user_id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'producer_id' => $model->producer_id]);
+        if ($this->request->isPost && $producer->load($this->request->post()) && $user->load($this->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if ($user->save() && $producer->save()) {
+                    $transaction->commit();
+                    Yii::$app->session->setFlash('success', 'Produtor atualizado com sucesso.');
+                    return $this->redirect(['view', 'producer_id' => $producer->producer_id]);
+                }
+                $transaction->rollBack();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $user,
+            'producer' => $producer,
+
         ]);
+        */
+        //SPW-71 - https://lucassiqueira0763.atlassian.net/browse/SPW-71 alteração para suportar atualização do produtor sobre ele mesmo
+        $producer = $this->findModel($producer_id);
+        $user = User::findOne($producer->user_id);
+
+        if($this->request->isPost && $producer->load($this->request->post()) &&$user->load($this->request->post())){
+            $transaction = \Yii::$app->db->beginTransaction();
+            try {
+                if($user->save() && $producer->save()){
+                    $transaction->commit();
+                    \Yii::$app->session->setFlash('success','Suas atualizações foram efetuadas com sucesso');
+                    return $this->redirect(['view', 'producer_id'=> $producer->producer_id]);
+                }
+            }catch (\Exception $e){
+                $transaction->rollBack();
+                throw $e;
+            }
+        }
+         $producers = \Yii::$app->user->identity->producers;
+        if($producers){
+            echo $producers->producer_id;
+        }else{
+            echo "No producer found!";
+        }
+
+        return $this->render('update',[
+            //'model' => $user,
+            'model'=> $producer,
+            'producer' => $producer,
+            ]);
     }
 
     /**
@@ -125,10 +208,15 @@ class ProducersController extends Controller
      */
     protected function findModel($producer_id)
     {
-        if (($model = Producers::findOne(['producer_id' => $producer_id])) !== null) {
-            return $model;
-        }
+        $model = Producers::findOne(['producer_id'=>$producer_id]);
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        if($model === null){
+            throw new NotFoundHttpException("O modelo não foi encontrado para o id: {$producer_id}");
+        }
+        if($model->user_id != \Yii::$app->user->id){
+            throw new NotFoundHttpException("Você não tem permissão para acessar este produtor!");
+        }
+        return $model;
+        
     }
 }

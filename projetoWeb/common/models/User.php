@@ -58,7 +58,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
 
 
- public $password; // Campo temporário para o formulário
+    public $password; // Campo temporário para o formulário
 
     public function rules()
     {
@@ -347,59 +347,5 @@ class User extends ActiveRecord implements IdentityInterface
             }
         }
     }
-
-    public function activate()
-    {
-        if ($this->producerDetails) {
-            $this->producerDetails->status = 1;
-            return $this->producerDetails->save();
-        }
-
-        if ($this->consumerDetails) {
-            $this->consumerDetails->status = 1;
-            return $this->consumerDetails->save();
-        }
-
-        return false; // Não encontrou relação
-    }
-
-    public function deactivate()
-    {
-        if ($this->producerDetails) {
-            $this->producerDetails->status = 0;
-            return $this->producerDetails->save();
-        }
-
-        if ($this->consumerDetails) {
-            $this->consumerDetails->status = 0;
-            return $this->consumerDetails->save();
-        }
-
-        return false; // Não encontrou relação
-    }
-
-    public function saveWithDetails($detailsModel)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-
-        try {
-            if ($this->save() && $detailsModel->save()) {
-                $transaction->commit();
-                return true;
-            }
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            throw $e;
-        }
-
-        return false;
-    }
-
-    // Retorna o modelo de detalhes relacionado (produtor ou consumidor)
-    public function getDetails()
-    {
-        return $this->producerDetails ?? $this->consumerDetails;
-    }
-
 
 }

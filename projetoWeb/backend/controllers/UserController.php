@@ -19,9 +19,13 @@ class UserController extends Controller
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams); // Utilize o método search()
 
+        //definir a consulta dentro da query
+        $query = User::find();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'query' => $query,
         ]);
     }
 
@@ -104,7 +108,7 @@ class UserController extends Controller
                 Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso.');
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
-                Yii::$app->session->setFlash('error', 'Erro ao salvar os dados.');
+                Yii::$app->session->setFlash('error', 'Erro ao validar os dados.');
             }
         }
 

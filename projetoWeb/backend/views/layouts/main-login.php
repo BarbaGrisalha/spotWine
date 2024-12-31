@@ -25,7 +25,7 @@ dmstr\adminlte\web\AdminLteAsset::register($this);
 
     <div class="login-box">
         <div class="login-logo">
-            <?= Html::a('<b>Admin</b>LTE', ['/site/login']); ?>
+            <?= Html::a('<b>Spot</b>WINE', ['/site/login']); ?>
         </div>
 
         <?= \dmstr\adminlte\widgets\Alert::widget(); ?>

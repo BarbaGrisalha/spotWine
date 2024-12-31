@@ -1,9 +1,10 @@
 <?php
-/** @var yii\web\View $this */
 
 use backend\assets\AppAsset;
+use yii\data\Pagination;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
 /** @var \common\models\UserSearch $searchModel */
@@ -11,14 +12,15 @@ use yii\helpers\Html;
 
 $this->title = 'Gestão de Utilizadores';
 AppAsset::register($this);
+
 ?>
 <div class="site-index">
     <div class="text-center bg-transparent">
-        <?= Html::tag('h1', Html::encode($this->title)) ?>
+
     </div>
     <div class="body-content">
         <p>
-            <?= Html::a('Create User', ['user/create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Criar Utilizador', ['user/create'], ['class' => 'btn btn-success']) ?>
         </p>
 
         <?= GridView::widget([
@@ -28,7 +30,6 @@ AppAsset::register($this);
                 'id',
                 'username',
                 'email',
-                // Colunas de detalhes do consumidor ou produtor
                 [
                     'attribute' => 'nif',
                     'value' => function ($model) {
@@ -66,6 +67,7 @@ AppAsset::register($this);
                     ],
                     'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'],
                 ],
+
                 // Coluna de status
                 [
                     'attribute' => 'status',
@@ -88,7 +90,7 @@ AppAsset::register($this);
                         1 => 'Ativo',
                         0 => 'Inativo',
                     ],
-                    'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'],
+                    'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'Todos'], // Adiciona um placeholder
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
@@ -131,5 +133,10 @@ AppAsset::register($this);
                 ],
             ],
         ]); ?>
+
+    <?php $pagination = new Pagination([
+            'defaultPageSize'=>5,
+            'totalCount'=> $query->count(),
+    ]); ?>
     </div>
 </div>

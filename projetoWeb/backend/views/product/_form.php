@@ -1,5 +1,10 @@
 <?php
 
+
+
+use common\models\Categories;
+use common\models\User;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -9,39 +14,47 @@ use yii\widgets\ActiveForm;
 /** @var common\models\User $user */
 ?>
 
+
 <div class="product-form">
     <?php $form = ActiveForm::begin() ?>
+   <?php $user = Yii::$app->user->identity; ?>
 
-    <?php if ($user->role === 'admin'):  ?>
-        <!-- DropDownList para o administrador ou quem tenha a role dele -->
 
+    <?php if ($user === null) {
+    throw new \yii\web\ForbiddenHttpException('Usuário não autenticado.');
+    }?>
+    <?php
+    if (Yii::$app->user->can('admin')): ?>
+        <?= $form->field($model, 'producer_id')->dropDownList(
+            ArrayHelper::map(
+                User::find()
+                   // ->where(['role' => 'producer'])
+                    ->all(),
+                'id', // ID do produtor
+                'username' // Nome do produtor
+            ),
+            ['prompt' => 'Select Producer'] // Texto inicial
+        ) ?>
     <?php else: ?>
         <!-- Campo oculto para produtores -->
         <?= $form->field($model, 'producer_id')->hiddenInput([
             'value' => $user->id, // Preenche com o ID do produtor logado
         ])->label(false) ?>
     <?php endif; ?>
-    <!-- Substituir textInput para category_id por dropdown ou outro widget -->
+
     <?= $form->field($model, 'category_id')->dropDownList(
-        \yii\helpers\ArrayHelper::map(
-            \common\models\Categories::find()->asArray()->all(),
-            'id', // ID da categoria
-            'name' // Nome da categoria
+        ArrayHelper::map(
+            Categories::find()->asArray()->all(),
+            'category_id',
+            'name'
         ),
         ['prompt' => 'Select Category']
     ) ?>
 
-
-    <?= $form->field($model, 'category_id')->textInput() ?>
-
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
-
     <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'stock')->textInput() ?>
-
     <?= $form->field($model, 'image_url')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
@@ -49,5 +62,4 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>

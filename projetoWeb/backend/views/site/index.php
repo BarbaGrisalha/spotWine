@@ -2,8 +2,10 @@
 /** @var yii\web\View $this */
 
 /** @var yii\web\View $this */
-/** @var \common\models\UserSearch $searchModel */
+/** @var UserSearch $searchModel */// \common\models\UserSearch $searchModel
 /** @var yii\data\ActiveDataProvider $dataProvider */
+
+use common\models\UserSearch;
 
 $this->title = 'SpotWine_Backend';
 ?>
