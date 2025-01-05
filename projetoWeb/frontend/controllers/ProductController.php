@@ -2,11 +2,10 @@
 
 namespace frontend\controllers;
 
+use common\models\CartItems;
 use common\models\Categories;
 use common\models\Product;
-use common\models\Promotions;
 use common\models\Reviews;
-use frontend\models\CartItems;
 use frontend\models\ProductFrontSearch;
 use frontend\models\promocoesViewModel;
 use Yii;

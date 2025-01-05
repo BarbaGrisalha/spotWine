@@ -20,5 +20,10 @@ class ModuleAPI extends \yii\base\Module
         parent::init();
 
         // custom initialization code goes here
+        parent::init();
+        \Yii::$app->user->enableSession = false;
+
+        // Faz a conversão para JSON
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     }
 }

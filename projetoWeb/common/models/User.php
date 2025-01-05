@@ -110,18 +110,11 @@ class User extends ActiveRecord implements IdentityInterface
      * Relacionamento com ProducerDetails
      * (Para usuários do tipo produtor).
      */
-    public function getProducerDetails()
-    {
-        return $this->hasOne(ProducerDetails::class, ['user_id' => 'id']);
-    }
+
 
     /**
      * Identifica se o usuário é um produtor.
      */
-    public function isProducer()
-    {
-        return $this->getProducerDetails()->exists();
-    }
 
     /**
      * Identifica se o usuário é um consumidor.
@@ -203,7 +196,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['auth_key' => $token]);
     }
 
     /**
@@ -302,7 +295,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getProducers()
     {
-        return $this->hasOne(Producers::class,['user_id'=> 'id']);
+        return $this->hasOne(ProducerDetails::class,['user_id'=> 'id']);
     }
 
     public function getProducerId()
@@ -333,7 +326,7 @@ class User extends ActiveRecord implements IdentityInterface
 
             if ($userDetails->save()) {
                 // Cria o registro na tabela 'Producers' para associar com o novo usuário
-                $producer = new Producers(); // Assumindo que você tem um modelo `Producers`
+                $producer = new ProducerDetails(); // Assumindo que você tem um modelo `Producers`
                 $producer->user_id = $model->id;
                 $producer->save();
 

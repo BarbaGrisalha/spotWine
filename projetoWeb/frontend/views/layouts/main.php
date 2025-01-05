@@ -6,17 +6,12 @@
 
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
-use frontend\models\Cart;
-use frontend\models\CartItems;
-use frontend\models\promocoesViewModel;
 use yii\bootstrap4\BootstrapAsset;
 use yii\bootstrap5\Breadcrumbs;
-//use yii\bootstrap5\Html;
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
-use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+
+//use yii\bootstrap5\Html;
 
 
 BootstrapAsset::register($this);

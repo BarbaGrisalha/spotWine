@@ -2,10 +2,10 @@
 
 namespace frontend\widgets;
 
-use frontend\models\Cart;
-use yii\base\Widget;
-use frontend\models\CartItems;
+use common\models\Cart;
+use common\models\CartItems;
 use frontend\models\PromocoesViewModel;
+use yii\base\Widget;
 
 class CartWidget extends Widget
 {

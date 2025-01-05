@@ -1,9 +1,7 @@
 <?php
 
-namespace frontend\models;
+namespace common\models;
 
-use common\models\Product;
-use common\models\User;
 use Yii;
 
 /**
@@ -132,6 +130,39 @@ class Cart extends \yii\db\ActiveRecord
         return $cartItem;
     }
 
+    public static function migrateCartForUser($sessionId, $userId)
+    {
+        $guestCart = self::findOne(['session_id' => $sessionId]);
+        if ($guestCart) {
+            // Verificar se já existe um carrinho associado ao usuário logado
+            $userCart = self::findOne(['user_id' => $userId]);
+            if ($userCart) {
+                // Migrar os itens do carrinho de guest para o carrinho logado
+                foreach ($guestCart->cartItems as $item) {
+                    $existingItem = CartItems::findOne([
+                        'cart_id' => $userCart->id,
+                        'product_id' => $item->product_id,
+                    ]);
+                    if ($existingItem) {
+                        // Atualiza a quantidade do produto
+                        $existingItem->quantity += $item->quantity;
+                        $existingItem->save();
+                    } else {
+                        // Move o item para o carrinho do usuário
+                        $item->cart_id = $userCart->id;
+                        $item->save();
+                    }
+                }
+                // Remove o carrinho de guest
+                $guestCart->delete();
+            } else {
+                // Se não existe um carrinho para o usuário, vincula o carrinho do guest
+                $guestCart->user_id = $userId;
+                $guestCart->session_id = null; // Remove o vínculo com session_id
+                $guestCart->save();
+            }
+        }
+    }
 
 
 

@@ -2,16 +2,15 @@
 
 namespace frontend\controllers;
 
+use common\models\CartItems;
 use common\models\ProducerDetails;
-use common\models\Product;
-use frontend\models\CartItems;
 use frontend\models\ProducerSearch;
 use frontend\models\ProductFrontSearch;
 use frontend\models\promocoesViewModel;
 use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProducersController implements the CRUD actions for Producers model.

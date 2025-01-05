@@ -5,7 +5,8 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 ?>
-<a href="<?= Url::to(['product/view', 'id' => $model->product->product_id]) ?>" class="product-link text-decoration-none">
+<a href="<?= Url::to(['product/view', 'id' => $model->product->product_id]) ?>"
+   class="product-link text-decoration-none">
     <div class="product-item bg-light mb-4 d-flex flex-column align-items-stretch" style="cursor: pointer;">
         <div class="product-img position-relative overflow-hidden">
             <?= Html::img('@web/img/wineBottle.png', [
@@ -55,27 +56,5 @@ use yii\widgets\ActiveForm;
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
-        <span class="h6 text-decoration-none text-truncate"><?= Html::encode($model->name) ?></span>
-        <div class="d-flex align-items-center justify-content-center mt-2">
-            <small>Categoria: <?= Html::encode($model->categories->name ?? 'N/A') ?></small>
-        </div>
-        <div class="d-flex align-items-center justify-content-center mt-2">
-            <small>Email do Usuário: <?= Html::encode($model->producers->user->email ?? 'N/A') ?></small>
-        </div>
-        <div class="d-flex align-items-center justify-content-center mb-1">
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star text-primary mr-1"></small>
-            <small class="fa fa-star-half-alt text-primary mr-1"></small>
-            <small class="far fa-star text-primary mr-1"></small>
-            <small>(99)</small>
-        </div>
-        <div class="d-flex align-items-center justify-content-center mt-2">
-            <h5 class="text-primary"><?= Html::encode($model->price) ?> €</h5>
-        </div>
-        <!-- Botão ou Link separado -->
-        <?= Html::a(Html::tag('span','Ver Produto', ['class' => 'text-white']), ['product/view', 'id' => $model->product_id], [
-            'class' => 'btn btn-primary mt-2',
-        ]) ?>
     </div>
 </a>

@@ -37,6 +37,8 @@ class Invoices extends \yii\db\ActiveRecord
             [['order_id'], 'integer'],
             [['invoice_date', 'created_at', 'updated_at'], 'safe'],
             [['invoice_number'], 'string', 'max' => 255],
+            ['invoice_date', 'date', 'format' => 'php:Y-m-d'],
+            ['total_amount', 'number', 'min' => 0],
             [['invoice_number'], 'unique'],
             [['status'], 'string'],
             [['total_amount'], 'number'],
@@ -79,9 +81,9 @@ class Invoices extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOrder()
+    public function getOrders()
     {
-        return $this->hasOne(Orders::class, ['id' => 'invoice_id']);
+        return $this->hasOne(Orders::class, ['id' => 'order_id']);
     }
 
 }

@@ -2,16 +2,13 @@
 
 namespace frontend\controllers;
 
-use common\models\Product;
-use frontend\models\Cart;
-use frontend\models\CartItems;
-use frontend\models\promocoesViewModel;
+use common\models\Cart;
+use common\models\CartItems;
 use Yii;
-use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * CartController implements the CRUD actions for Cart model.

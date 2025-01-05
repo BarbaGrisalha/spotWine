@@ -44,7 +44,7 @@ class Product extends \yii\db\ActiveRecord
 
             [['producer_id', 'category_id', 'stock'], 'integer'],
             [['producer_id'],'required'],
-            [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Producers::class, 'targetAttribute' => ['producer_id' => 'producer_id']],
+            [['producer_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProducerDetails::class, 'targetAttribute' => ['producer_id' => 'id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_id' => 'category_id']],
             [['description'], 'string'],
             [['price'], 'number'],
@@ -130,9 +130,6 @@ class Product extends \yii\db\ActiveRecord
      *
      * Gets query for [prodcer] Criado agora 2024-12-17 22:27
      */
-    public function getProducer(){
-        return $this->hasOne(ProducersDetails::class,['producer_id'=> 'producer_id']);
-    }
     /**
      * Gets query for [[Promotions]].
      *s
@@ -161,12 +158,12 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        $user = Yii::$app->user->identity;
-        return $this->hasOne(User::class, ['id' => 'producer_id'])->via('producer');//user_id
+        return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');//user_id
     }
 
     public static function findByProducer($producerId)
     {
         return static::find()->where(['producer_id' => $producerId]);
     }
+
 }

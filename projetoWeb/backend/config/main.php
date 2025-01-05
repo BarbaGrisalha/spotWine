@@ -19,15 +19,15 @@ return [
 
     'components' => [
     'errorHandler' => [
-        'errorAction' => 'site/error', // Define qual ação será chamada para erros
-        //'class' => 'yii\error\ErrorHandler',
+        'errorAction' => 'site/error',
     ],
     
-    'request' => [
+    'request' =>[
+        'enableCsrfValidation' => false,
         'csrfParam' => '_csrf-backend',
         'parsers' => [
             'application/json' => 'yii\web\JsonParser',
-        ]
+        ],
     ],
     'user' => [
         'identityClass' => 'common\models\User',
@@ -35,16 +35,68 @@ return [
         'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
     ],
     'session' => [
-        'name' => 'advanced-backend', // Diferente do frontend
+        'name' => 'advanced-backend',
     ],
-    'urlManager' => [
-        'enablePrettyUrl' => true,
-        'showScriptName' => false,
-        'rules' => [
-            // Regras de URL
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/user',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET list-all' => 'list-all',
+                        'GET view/{id}' => 'view',
+                        'POST login' => 'login',
+                        'POST registo' => 'registo',
+                        'PUT editar' => 'editar',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/cart'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET {id}' => 'index',
+                        'GET {id}/items' => 'items',
+                        'POST add' => 'add',
+                        'PUT update/{id}' => 'update',
+                        'DELETE delete/{id}' => 'delete',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/invoice'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST' => 'create',
+                        'PUT update-status/{id}' => 'update-status',
+                        'GET all' => 'all',
+                        'GET my-invoices' => 'my-invoices',
+                        'GET {id}' => 'view',
+                        'PUT {id}' => 'update',
+                        'DELETE {id}' => 'delete',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/checkout'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST {invoiceId}' => 'checkout',
+                        'POST payment/{invoiceId}' => 'payment',
+                        'GET confirmation/{orderId}' => 'confirmation',
+                    ],
+                ],
+
+            ],
         ],
+
+
+
+
     ],
-],
 
 
 

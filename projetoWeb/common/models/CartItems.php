@@ -1,9 +1,6 @@
 <?php
 
-namespace frontend\models;
-
-use common\models\Product;
-use Yii;
+namespace common\models;
 
 /**
  * This is the model class for table "cart_items".

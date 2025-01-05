@@ -10,7 +10,7 @@ use Yii;
  * @property int $promotion_id
  * @property int $product_id
  *
- * @property Products $product
+ * @property Product $product
  * @property Promotions $promotion
  */
 class PromotionProduct extends \yii\db\ActiveRecord

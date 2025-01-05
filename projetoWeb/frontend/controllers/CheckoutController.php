@@ -2,13 +2,13 @@
 
 namespace frontend\controllers;
 
-use frontend\models\Cart;
+use common\models\Cart;
+use common\models\CartItems;
+use common\models\Invoices;
+use common\models\OrderItems;
+use common\models\Orders;
 use Yii;
 use yii\web\Controller;
-use frontend\models\CartItems;
-use common\models\Orders;
-use common\models\OrderItems;
-use common\models\Invoices;
 
 class CheckoutController extends Controller
 {

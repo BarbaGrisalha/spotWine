@@ -29,6 +29,7 @@ class UserController extends Controller
         ]);
     }
 
+    //TODO: DAR UMA OLHADA AQUI E VER SE TEM QUE USAR O SAVEUSER(OU SAVEPRODUCER) DO MODELO USER
     public function actionCreate()
     {
         // Verifica se o usuário tem permissão para criar

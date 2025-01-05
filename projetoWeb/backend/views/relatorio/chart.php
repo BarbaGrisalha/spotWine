@@ -12,7 +12,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
 ?>
     <div class="relatorio-produtor">
 
-        <p><strong> Produtor:</strong> <?= Html::encode($produtor->username) ?></p>
+        <p><strong> Produtor:</strong> <?= Html::encode($produtor->winery_name) ?></p>
 
         <!-- Tabela de dados -->
         <table class="table table-bordered">

@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
+use common\models\ProducerDetails;
 use Yii;
-use common\models\Producers;
 use common\models\Product;
 use common\models\ProductSearch;
 use yii\web\Controller;
@@ -63,14 +63,9 @@ class ProductController extends Controller
      */
     public function actionIndex()
     {
-        // Obtém o usuário logado
-        $producer = Yii::$app->user->identity->producers;
-
-
         $searchModel = new ProductSearch();
 
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->query->andWhere(['producers_details.producer_id'=>$producer->producer_id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -104,6 +99,7 @@ class ProductController extends Controller
         $model = new Product();
         // obter o utilizador logado
         $user = Yii::$app->user;//aqui busco o utilizador logado.
+        $producer = ProducerDetails::findOne(['user_id' => $user->id]);
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -111,7 +107,7 @@ class ProductController extends Controller
             //Validamos se é um produtor logado
 
             if (\Yii::$app->user->can('producer')) {
-                $model->producer_id = $user->id;
+                $model->producer_id = $producer->id;
             }
             if ($model->save()) {
                 return $this->redirect(['view', 'product_id' => $model->product_id]);

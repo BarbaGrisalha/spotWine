@@ -75,6 +75,22 @@ class RbacController extends Controller
         $createUsers->description = 'Criar utilizadores';
         $auth->add($createUsers);
 
+        // Permissão para gerenciar promoções do próprio produtor (com regra)
+        $ownPromotion = $auth->createPermission('ownPromotion');
+        $ownPromotion->description = 'Gerenciar suas próprias promoções';
+        $ownPromotion->ruleName = 'isOwnPromotion'; // Nome da regra associada
+        $auth->add($ownPromotion);
+    }
+    
+
+    /**
+     * Adiciona roles ao sistema de RBAC e associa permissões.
+     *
+     * @param \yii\rbac\ManagerInterface $auth
+     */
+    private function addRoles($auth)
+    {
+        // Role: Consumer
         // Criar roles Consumidor
         $consumer = $auth->createRole('consumer');
         $auth->add($consumer);
@@ -82,6 +98,8 @@ class RbacController extends Controller
         // Criar roles Produtor
         $producer = $auth->createRole('producer');
         $auth->add($producer);
+        $auth->addChild($producer, $auth->getPermission('manageProducts')); // Associa gerenciar produtos
+        $auth->addChild($producer, $auth->getPermission('ownPromotion')); 
         $auth->addChild($producer,$createProducts);
         $auth->addChild($producer,$readProducts);
         $auth->addChild($producer,$updateProducts);

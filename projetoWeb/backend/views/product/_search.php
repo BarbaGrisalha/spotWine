@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     // Apply filter for signed-in user
     if ($currentUserId !== null) {
         $query->joinWith('producers') // Ensure the relationship is loaded
-        ->andWhere(['producers_details.user_id' => $currentUserId]);
+        ->andWhere(['producer_details.user_id' => $currentUserId]);
     }
     $dataProvider = new ActiveDataProvider([
         'query' => $query,
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <?php
     // Busca todos os produtores com a relação para 'user' carregada
-    $producers = \common\models\Producers::find()
+    $producers = \common\models\ProducerDetails::find()
         ->joinWith('user') // Carrega dados da tabela 'user'
         ->all();
     // Transforma os dados dos produtores em um array de chave-valor para o dropDownList
