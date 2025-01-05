@@ -126,15 +126,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ProducerDetails::class, ['id' => 'producer_id']);
     }
-<<<<<<< Updated upstream
-    /**
-     *
-     * Gets query for [prodcer] Criado agora 2024-12-17 22:27
-     */
-=======
-
-
->>>>>>> Stashed changes
+    
     /**
      * Gets query for [[Promotions]].
      *s
