@@ -50,6 +50,8 @@ class ProductSearch extends Product
         //Aqui eu garanto que os produtos filtrados sejam do produtor logado
 
         $query->andWhere(['producer_details.user_id' => $loggedInProducerId]);
+
+        $query->andWhere(['producer_details.user_id' => $loggedInProducerId]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
