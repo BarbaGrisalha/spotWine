@@ -48,9 +48,13 @@ class ProductSearch extends Product
         $query = Product::find()->joinWith(['producers', 'categories']);
 
         //Aqui eu garanto que os produtos filtrados sejam do produtor logado
+<<<<<<< Updated upstream
         $query->andWhere(['producer_details.user_id' => $loggedInProducerId]);
 
 
+=======
+        $query->andWhere(['producer_details.user_id'=>$loggedInProducerId]);//mudei de producer_id para id e agora p
+>>>>>>> Stashed changes
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

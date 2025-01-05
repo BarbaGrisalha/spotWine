@@ -73,16 +73,17 @@ class Cart extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
-    public static function findOrCreateCart($userId = null)
+    public static function findOrCreateCart($userId)
     {
         if ($userId) {
             // Buscar carrinho pelo user_id
             $cart = self::findOne(['user_id' => $userId]);
+
             if (!$cart) {
                 $cart = new self([
                     'user_id' => $userId,
                     'session_id' => null, // Não precisa de session_id para usuários logados
-                    'created_at' => time(),
+                    'created_at' => date('Y-m-d H:i:s',time()),
                 ]);
                 $cart->save();
             }
@@ -94,7 +95,7 @@ class Cart extends \yii\db\ActiveRecord
                 $cart = new self([
                     'user_id' => null,
                     'session_id' => $sessionId,
-                    'created_at' => time(),
+                    'created_at' =>date('Y-m-d H:i:s',time()),
                 ]);
                 $cart->save();
             }

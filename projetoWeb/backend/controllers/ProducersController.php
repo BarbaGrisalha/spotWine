@@ -171,7 +171,7 @@ class ProducersController extends Controller
                 throw $e;
             }
         }
-         $producers = \Yii::$app->user->identity->producers;
+         $producers = \Yii::$app->user->identity;//producers
         if($producers){
             echo $producers->producer_id;
         }else{

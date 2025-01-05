@@ -110,7 +110,14 @@ class User extends ActiveRecord implements IdentityInterface
      * Relacionamento com ProducerDetails
      * (Para usuários do tipo produtor).
      */
+<<<<<<< Updated upstream
 
+=======
+    public function getProducers()
+    {
+        return $this->hasOne(ProducerDetails::class, ['user_id' => 'id']);
+    }
+>>>>>>> Stashed changes
 
     /**
      * Identifica se o usuário é um produtor.
@@ -293,11 +300,14 @@ class User extends ActiveRecord implements IdentityInterface
         return $scenarios;
     }
 
+<<<<<<< Updated upstream
     public function getProducers()
     {
         return $this->hasOne(ProducerDetails::class,['user_id'=> 'id']);
     }
 
+=======
+>>>>>>> Stashed changes
     public function getProducerId()
     {
         return $this->producerDetails ? $this->producerDetails->id : null;

@@ -126,10 +126,15 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ProducerDetails::class, ['id' => 'producer_id']);
     }
+<<<<<<< Updated upstream
     /**
      *
      * Gets query for [prodcer] Criado agora 2024-12-17 22:27
      */
+=======
+
+
+>>>>>>> Stashed changes
     /**
      * Gets query for [[Promotions]].
      *s
@@ -158,7 +163,12 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
+<<<<<<< Updated upstream
         return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');//user_id
+=======
+        $user = Yii::$app->user->identity;
+        return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');
+>>>>>>> Stashed changes
     }
 
     public static function findByProducer($producerId)

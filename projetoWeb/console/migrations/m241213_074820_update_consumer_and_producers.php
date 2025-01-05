@@ -12,23 +12,13 @@ class m241213_074820_update_consumer_and_producers extends Migration
      */
     public function safeUp()
     {
-        // Renomear a tabela `user_details` para `consumer_details`
-        $this->renameTable('{{%user_details}}', '{{%consumer_details}}');
 
-        // Renomear a tabela `producers` para `producer_details`
-        $this->renameTable('{{%producers}}', '{{%producer_details}}');
-
-        // Alterar estrutura da tabela `producer_details`
         // Renomear `producer_id` para `id`
         $this->renameColumn('{{%producer_details}}', 'producer_id', 'id');
 
-        // Adicionar colunas `nif` e `status`
-        $this->addColumn('{{%producer_details}}', 'nif', $this->string(15)->notNull()->after('user_id'));
+        // Adicionar colunas e `status`
         $this->addColumn('{{%producer_details}}', 'status', $this->string(10)->defaultValue('active')->after('nif'));
 
-        // Remover colunas `contact_number` e `role`
-        $this->dropColumn('{{%producer_details}}', 'contact_number');
-        $this->dropColumn('{{%producer_details}}', 'role');
     }
 
     /**

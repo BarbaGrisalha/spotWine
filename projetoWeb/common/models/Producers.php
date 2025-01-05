@@ -2,30 +2,24 @@
 
 namespace common\models;
 
+use backend\models\Users;
 use Yii;
 
 /**
- * This is the model class for table "producer_details".
+ * This is the model class for table "producers".
  *
  * @property int $producer_id
  * @property int|null $user_id
  * @property string|null $winery_name
  * @property string|null $location
- * @property string|null $nif
- * @property string $address Endereço
- * @property string|null $number Número
- * @property string|null $complement Complemento
- * @property string|null $postal_code Código Postal
- * @property string|null $region Região
- * @property string $city Cidade
- * @property string|null $phone Telefone
- * @property string|null $mobile Telemóvel
- * @property string|null $notes Anotações sobre o produtor
+ * @property string|null $document_id
  *
+ * @property ContestParticipations[] $contestParticipations
+ * @property Products[] $products
  * @property Subscriptions[] $subscriptions
- * @property User $user
+ * @property Users $user
  */
-class ProducersSearch extends \yii\db\ActiveRecord
+class Producers extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -42,14 +36,13 @@ class ProducersSearch extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'integer'],
-            [['address', 'city'], 'required'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['winery_name', 'location', 'nif', 'address','number','complement', 'postal_code', 'region', 'city','phone','notes'], 'required'],
+            [['winery_name', 'location', 'region', 'address'], 'string', 'max' => 255],
+            [['phone'], 'string', 'max' => 15],
             [['notes'], 'string'],
-            [['winery_name', 'region', 'city'], 'string', 'max' => 100],
-            [['location', 'nif', 'address', 'complement'], 'string', 'max' => 255],
-            [['number'], 'string', 'max' => 10],
-            [['postal_code', 'phone', 'mobile'], 'string', 'max' => 20],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
+
     }
 
     /**
@@ -64,15 +57,32 @@ class ProducersSearch extends \yii\db\ActiveRecord
             'location' => 'Location',
             'nif' => 'Nif',
             'address' => 'Address',
-            'number' => 'Number',
-            'complement' => 'Complement',
             'postal_code' => 'Postal Code',
             'region' => 'Region',
             'city' => 'City',
             'phone' => 'Phone',
-            'mobile' => 'Mobile',
             'notes' => 'Notes',
         ];
+    }
+
+    /**
+     * Gets query for [[ContestParticipations]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getContestParticipations()
+    {
+        return $this->hasMany(ContestParticipations::class, ['producer_id' => 'producer_id']);
+    }
+
+    /**
+     * Gets query for [[Products]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Products::class, ['producer_id' => 'producer_id']);
     }
 
     /**
@@ -93,5 +103,9 @@ class ProducersSearch extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getProducersDetails(){
+        return $this->hasOne(Producers::class,['producer_id'=>'id']);
     }
 }

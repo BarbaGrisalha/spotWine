@@ -101,7 +101,13 @@
                             'label' => 'Gestão de Vinícola',
                             'icon' => 'wine-glass',
                             'url' => Yii::$app->user->identity->producers ?
+<<<<<<< Updated upstream
                                 ['producers/update', 'producer_id' => Yii::$app->user->identity->producers->id] : '#',
+=======
+
+                                ['producers/update', 'producer_id' => Yii::$app->user->identity->producers->id] : '#',
+
+>>>>>>> Stashed changes
                             'items' => [
                                 [
                                     'label' => 'Minha Vinícola',
@@ -114,7 +120,7 @@
                             ],
                         ],
                 ],
-               ]); ?>
+               ]);   ?>
         </nav>
     </div>
 </aside>

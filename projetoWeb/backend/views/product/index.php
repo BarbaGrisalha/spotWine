@@ -10,13 +10,13 @@ use yii\grid\GridView;
 /** @var common\models\ProductSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Products index linha 13';
+$this->title = 'Lista de Produtos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-index">
 
     <p>
-        <?= Html::a('Create Product1', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Adicionar Produto', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -40,12 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'name',
             'description:ntext',
-            'price',
+            'price:currency',
             'stock',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Product $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'product_id' => $model->product_id]);
+                    return Url::toRoute([$action, 'product_id' => $model->product_id]);//mudei de product_id para id
                 }
             ],
         ],

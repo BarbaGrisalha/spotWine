@@ -1,6 +1,6 @@
 <?php
 /** @var yii\web\View $this */
-/** @var backend\models\Users $produtor */
+/** @var common\models\User $produtor */
 /** @var array $categorias */
 
 use yii\helpers\Html;
@@ -9,6 +9,10 @@ $this->title="Relatório por Categoria"
 <div class="relatorio-produtor">
 
     <p><strong> Produtor:</strong><?=Html::encode($produtor->winery_name) ?></p>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     <?=Html::a('Ver Gráfico',['relatorio/chart','id'=> $produtor->id],['class'=>'btn btn-primary']) ?>
     <table class="table table-bordered">
         <thead>

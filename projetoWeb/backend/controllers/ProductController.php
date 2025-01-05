@@ -4,6 +4,10 @@ namespace backend\controllers;
 
 use common\models\ProducerDetails;
 use Yii;
+<<<<<<< Updated upstream
+=======
+use common\models\ProducerDetails;
+>>>>>>> Stashed changes
 use common\models\Product;
 use common\models\ProductSearch;
 use yii\web\Controller;
@@ -66,6 +70,10 @@ class ProductController extends Controller
         $searchModel = new ProductSearch();
 
         $dataProvider = $searchModel->search($this->request->queryParams);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -99,8 +107,12 @@ class ProductController extends Controller
         $model = new Product();
         // obter o utilizador logado
         $user = Yii::$app->user;//aqui busco o utilizador logado.
+<<<<<<< Updated upstream
         $producer = ProducerDetails::findOne(['user_id' => $user->id]);
 
+=======
+        $producer = ProducerDetails::findOne(['user_id'=>$user->id]); //incluída pois esá assim no Lucas
+>>>>>>> Stashed changes
         if ($model->load(Yii::$app->request->post())) {
 
             // $model->product_id = Yii::$app->user->identity->producers->producer_id;
@@ -110,6 +122,7 @@ class ProductController extends Controller
                 $model->producer_id = $producer->id;
             }
             if ($model->save()) {
+
                 return $this->redirect(['view', 'product_id' => $model->product_id]);
             } else {
                // dd($model);
