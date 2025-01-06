@@ -155,12 +155,7 @@ class Product extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-<<<<<<< Updated upstream
         return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');//user_id
-=======
-        $user = Yii::$app->user->identity;
-        return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');
->>>>>>> Stashed changes
     }
 
     public static function findByProducer($producerId)

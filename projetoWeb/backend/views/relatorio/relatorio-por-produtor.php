@@ -9,10 +9,6 @@ $this->title="Relatório por Categoria"
 <div class="relatorio-produtor">
 
     <p><strong> Produtor:</strong><?=Html::encode($produtor->winery_name) ?></p>
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
     <?=Html::a('Ver Gráfico',['relatorio/chart','id'=> $produtor->id],['class'=>'btn btn-primary']) ?>
     <table class="table table-bordered">
         <thead>

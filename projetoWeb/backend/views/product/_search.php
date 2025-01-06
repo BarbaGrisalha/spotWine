@@ -29,15 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     // Apply filter for signed-in user
     if ($currentUserId !== null) {
-<<<<<<< Updated upstream
-        $query->joinWith('producers') // Ensure the relationship is loaded
-        ->andWhere(['producer_details.user_id' => $currentUserId]);
-=======
         $query->joinWith('producers') // alterei de producers para producerDetails
         ->andWhere(['producer_details.id' => $currentUserId])//mudei de user_id para id deu me erro.
         ->all();
         //dd($currentUserId);
->>>>>>> Stashed changes
     }
     $dataProvider = new ActiveDataProvider([
         'query' => $query,
