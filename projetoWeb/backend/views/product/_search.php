@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     // Buscando se corrente ID está logado corretamente
     $currentUserId = Yii::$app->user->isGuest ? null : Yii::$app->user->id;
-
+//dd($currentUserId);
 
     // Configurando o DataProvider com paginação e filtro pelo usuário autenticado
     $query = \common\models\Product::find();//linha 28
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     // Apply filter for signed-in user
     if ($currentUserId !== null) {
         $query->joinWith('producers') // alterei de producers para producerDetails
-        ->andWhere(['producer_details.id' => $currentUserId])//mudei de user_id para id deu me erro.
+        ->andWhere(['producer_details.id' => $currentUserId])//mudei de user_id para id deu me erro.$currentUserId
         ->all();
         //dd($currentUserId);
     }

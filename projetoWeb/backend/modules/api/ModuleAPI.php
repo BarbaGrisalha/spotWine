@@ -1,29 +1,29 @@
 <?php
 
-namespace backend\modules\api;
-
-/**
- * api module definition class
- */
-class ModuleAPI extends \yii\base\Module
-{
-    /**
-     * {@inheritdoc}
-     */
-    public $controllerNamespace = 'backend\modules\api\controllers';
+    namespace backend\modules\api;
 
     /**
-     * {@inheritdoc}
+     * api module definition class
      */
-    public function init()
+    class ModuleAPI extends \yii\base\Module
     {
-        parent::init();
+        /**
+         * {@inheritdoc}
+         */
+        public $controllerNamespace = 'backend\modules\api\controllers';
 
-        // custom initialization code goes here
-        parent::init();
-        \Yii::$app->user->enableSession = false;
+        /**
+         * {@inheritdoc}
+         */
+        public function init()
+        {
+            parent::init();
 
-        // Faz a conversão para JSON
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            // custom initialization code goes here
+            parent::init();
+            \Yii::$app->user->enableSession = false;
+
+            // Faz a conversão para JSON
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        }
     }
-}

@@ -3,10 +3,11 @@
 namespace backend\controllers;
 
 use common\models\ProducerDetails;
+use common\models\User;
+use common\models\Producers;
 use yii\data\Pagination;
 use yii\web\Controller;
 use common\models\Product;
-use common\models\User;
 use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -90,6 +91,7 @@ class RelatorioController extends Controller
         ]);
     }
 
+
     public function actionRelatorioPorProdutor()//$producerId
     {
         //Verifica se o utilizador tem autorização para logar.
@@ -158,6 +160,7 @@ class RelatorioController extends Controller
             throw new NotFoundHttpException('Produtor não encontrado.');
         }
 
+
         // Consulta para obter categorias e totais de produtos do produtor logado
         $categorias = (new \yii\db\Query())
             ->select(['categories.name AS category_name', 'SUM(products.stock) AS total_stock'])
@@ -166,7 +169,10 @@ class RelatorioController extends Controller
             ->where(['products.producer_id' => $produtor->id])
             ->groupBy('categories.name')
             ->all();
+
+
         // Renderizar a view e enviar os dados
+
         return $this->render('chart', [
             'produtor' => $produtor,
             'categorias' => $categorias,
