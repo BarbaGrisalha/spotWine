@@ -2,7 +2,7 @@
 
 namespace frontend\models;
 
-class maisVendidosViewModel extends BaseProductViewModel
+class MaisVendidosViewModel extends BaseProductViewModel
 {
     public function isOnPromotion()
     {
