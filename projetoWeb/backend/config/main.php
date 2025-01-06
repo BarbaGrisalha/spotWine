@@ -89,6 +89,32 @@ return [
                         'GET confirmation/{orderId}' => 'confirmation',
                     ],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/order'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET all' => 'all', // Apenas admin
+                        'GET my-orders' => 'my-orders', // Apenas usuário logado ou admin
+                        'GET {id}' => 'view', // Ordem específica (Admin ou usuário dono)
+                        'PUT {id}' => 'update', // Apenas admin
+                        'DELETE {id}' => 'delete', // Apenas admin
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/review'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET all' => 'all', // Mostrar todas as reviews (admin)
+                        'GET product-reviews/{productId}' => 'product-reviews', // Reviews de um produto
+                        'POST create' => 'create', // Criar review
+                        'PUT update/{id}' => 'update', // Atualizar review
+                        'DELETE delete/{id}' => 'delete', // Deletar review
+                    ],
+                ],
+
+
 
             ],
         ],

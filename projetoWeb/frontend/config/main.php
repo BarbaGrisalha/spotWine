@@ -49,7 +49,6 @@ return [
                 'product/<id:\d+>' => 'product/view',         // Visualizar produto pelo ID
                 'producers/<producer_id:\d+>' => 'producers/view', // Visualizar produtor pelo ID
                 'reviews/<productId:\d+>' => 'reviews/index', // Avaliações de um produto
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>', // Regra genérica
             ],
         ],
 
