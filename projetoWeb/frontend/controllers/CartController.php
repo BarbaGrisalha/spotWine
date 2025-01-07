@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Cart;
 use common\models\CartItems;
+use common\models\Product;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
@@ -49,13 +50,31 @@ class CartController extends Controller
 
             if (!$productId) {
                 Yii::$app->session->setFlash('error', 'Produto inválido.');
-                return $this->redirect(['site/index']); // Ajuste conforme necessário
+                return $this->redirect(['site/index']);
             }
 
             try {
                 // Identificar o carrinho do usuário
                 $cart = Cart::findOrCreateCart(Yii::$app->user->id);
                 $cart->addItem($productId, $quantity);
+
+                // Obter detalhes do produto
+                $product = Product::findOne($productId);
+                $user = Yii::$app->user->identity;
+
+                if ($product) {
+                    // Notificar via MQTT
+                    $mensagem = [
+                        'titulo' => mb_convert_encoding('Produto Adicionado ao Carrinho!', 'UTF-8', 'auto'),
+                        'descricao' => mb_convert_encoding("{$user->username} adicionou o produto '{$product->name}' ao carrinho.", 'UTF-8', 'auto'),
+                        'produto_id' => mb_convert_encoding($product->product_id, 'UTF-8', 'auto'),
+                        'quantidade' => mb_convert_encoding($quantity, 'UTF-8', 'auto'),
+                        'preco_unitario' => mb_convert_encoding('€' . number_format($product->price, 2), 'UTF-8', 'auto'),
+                        'data' => mb_convert_encoding(date('Y-m-d H:i:s'), 'UTF-8', 'auto'),
+                    ];
+
+                    \common\services\MqttServices::FazPublishNoMosquitto('spotwine/carrinho', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                }
 
                 Yii::$app->session->setFlash('success', 'Produto adicionado ao carrinho.');
             } catch (\Exception $e) {

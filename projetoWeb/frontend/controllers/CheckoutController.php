@@ -16,7 +16,6 @@ class CheckoutController extends Controller
     {
         $userId = Yii::$app->user->id;
 
-        // Buscar itens do carrinho do usuário logado
         $cartItems = CartItems::find()
             ->with('product')
             ->where(['cart_id' => Cart::findOrCreateCart($userId)->id])
@@ -31,7 +30,6 @@ class CheckoutController extends Controller
         }, 0);
 
         if (Yii::$app->request->isPost) {
-            // Criar o pedido
             $order = new Orders([
                 'user_id' => $userId,
                 'total_price' => $totalAmount,
@@ -52,9 +50,8 @@ class CheckoutController extends Controller
                     }
                 }
 
-                // Gerar a fatura e associar ao pedido
                 $invoice = new Invoices([
-                    'order_id' => $order->id, // Associando a fatura ao pedido
+                    'order_id' => $order->id,
                     'invoice_number' => uniqid('INV-'),
                     'invoice_date' => date('Y-m-d'),
                     'total_amount' => $order->total_price,
@@ -62,6 +59,17 @@ class CheckoutController extends Controller
                 ]);
 
                 if ($invoice->save()) {
+                    // Notificar sobre a criação da fatura
+                    $mensagem = [
+                        'titulo' => mb_convert_encoding('Nova Fatura Criada!', 'UTF-8', 'auto'),
+                        'descricao' => mb_convert_encoding("Fatura número {$invoice->invoice_number} criada para o pedido #{$order->id}.", 'UTF-8', 'auto'),
+                        'valor_total' => mb_convert_encoding('€' . number_format($invoice->total_amount, 2), 'UTF-8', 'auto'),
+                        'status' => mb_convert_encoding($invoice->status, 'UTF-8', 'auto'),
+                        'data_criacao' => mb_convert_encoding($invoice->invoice_date, 'UTF-8', 'auto'),
+                    ];
+
+                    \common\services\MqttServices::FazPublishNoMosquitto('spotwine/faturas', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+
                     return $this->redirect(['payment', 'orderId' => $order->id]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Erro ao gerar a fatura.');
@@ -77,6 +85,7 @@ class CheckoutController extends Controller
         ]);
     }
 
+
     public function actionPayment($orderId)
     {
         $order = Orders::findOne($orderId);
@@ -88,10 +97,22 @@ class CheckoutController extends Controller
         if (Yii::$app->request->isPost) {
             $order->status = 'completed';
 
-            $invoice = $order->invoice; // Obter a fatura associada ao pedido
+            $invoice = $order->invoice;
             if ($invoice) {
                 $invoice->status = 'paid';
-                if (!$invoice->save(false)) {
+                if ($invoice->save(false)) {
+                    // Notificar sobre o pagamento da fatura
+                    $mensagem = [
+                        'titulo' => mb_convert_encoding('Fatura Paga!', 'UTF-8', 'auto'),
+                        'descricao' => mb_convert_encoding("Fatura número {$invoice->invoice_number} foi paga.", 'UTF-8', 'auto'),
+                        'pedido_id' => mb_convert_encoding($order->id, 'UTF-8', 'auto'),
+                        'valor_total' => mb_convert_encoding('€' . number_format($invoice->total_amount, 2), 'UTF-8', 'auto'),
+                        'status' => mb_convert_encoding($invoice->status, 'UTF-8', 'auto'),
+                        'data_pagamento' => mb_convert_encoding(date('Y-m-d H:i:s'), 'UTF-8', 'auto'),
+                    ];
+
+                    \common\services\MqttServices::FazPublishNoMosquitto('spotwine/faturas/pagamento', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                } else {
                     Yii::$app->session->setFlash('error', 'Erro ao atualizar a fatura.');
                 }
             }
@@ -107,6 +128,7 @@ class CheckoutController extends Controller
             'order' => $order,
         ]);
     }
+
 
     public function actionConfirmation($orderId)
     {
