@@ -1,6 +1,7 @@
 <?php
 
 namespace backend\controllers;
+header('Content-Type: application/json; charset=utf-8');
 
 use common\models\ProducerDetails;
 use Yii;
@@ -95,39 +96,44 @@ class ProductController extends Controller
      */
     public function actionCreate()
     {
+        header('Content-Type: application/json; charset=utf-8');
 
         $model = new Product();
-        // obter o utilizador logado
-        $user = Yii::$app->user;//aqui busco o utilizador logado.
-
-        $producer = ProducerDetails::findOne(['user_id' => $user->id]);
-
-
-        $producer = ProducerDetails::findOne(['user_id'=>$user->id]); //incluída pois esá assim no Lucas
+        $user = Yii::$app->user; // Obter o utilizador logado
+        $producer = ProducerDetails::findOne(['user_id' => $user->id]); // Obter o produtor associado
 
         if ($model->load(Yii::$app->request->post())) {
-
-            // $model->product_id = Yii::$app->user->identity->producers->producer_id;
-            //Validamos se é um produtor logado
-
+            // Validar se o utilizador tem permissão de produtor
             if (\Yii::$app->user->can('producer')) {
                 $model->producer_id = $producer->id;
             }
-            if ($model->save()) {
 
+            if ($model->save()) {
+                // Notificar via MQTT
+                $mensagem = [
+                    'titulo' => mb_convert_encoding('Novo Produto Criado!', 'UTF-8', 'auto'),
+                    'descricao' => mb_convert_encoding("Produto '{$model->name}' foi adicionado pelo produtor {$producer->winery_name}.", 'UTF-8', 'auto'),
+                    'categoria' => mb_convert_encoding($model->categories->name, 'UTF-8', 'auto'),
+                    'preco' => mb_convert_encoding('€' . number_format($model->price, 2), 'UTF-8', 'auto'),
+                    'data_criacao' => mb_convert_encoding(date('Y-m-d H:i:s'), 'UTF-8', 'auto'),
+                ];
+
+
+                \common\services\MqttServices::FazPublishNoMosquitto('spotwine/produtos', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+
+                // Redirecionar após o sucesso
                 return $this->redirect(['view', 'product_id' => $model->product_id]);
             } else {
-                // dd($model);
-                Yii::$app->session->setFlash('error', 'Não foi possível guardar o produto criado. Verifique 
-                e tente novamente.');
+                Yii::$app->session->setFlash('error', 'Não foi possível guardar o produto criado. Verifique e tente novamente.');
             }
         }
+
         return $this->render('create', [
             'model' => $model,
             'user' => $user,
         ]);
-
     }
+
 
     /**
      * Updates an existing Product model.

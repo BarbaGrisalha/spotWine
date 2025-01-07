@@ -94,6 +94,11 @@
                                     'icon' => 'dot-circle',
                                     'url' =>['/product/index'],
                                 ],
+                                ['label' => 'Gestão das promoções',
+                                    'iconType' => 'far',
+                                    'icon' => 'dot-circle',
+                                    'url' =>['/promotions/index'],
+                                ],
 
                             ],
                         ],

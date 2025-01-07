@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+
 use common\models\ProducerDetails;
 use common\models\Producers;
 use common\models\Product;
@@ -74,7 +75,8 @@ class PromotionsController extends Controller
     public function actionIndex()
     {
         // Verificar se o usuário logado é um produtor
-        $producer = Yii::$app->user->identity->producerDetails;
+        $user = Yii::$app->user->identity;
+        $producer = ProducerDetails::findOne(['user_id' => $user->getId()]);
         if (!$producer) {
             throw new \yii\web\ForbiddenHttpException('Você precisa ser um produtor para acessar esta página.');
         }
@@ -115,6 +117,8 @@ class PromotionsController extends Controller
      */
     public function actionCreate()
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         $model = new Promotions();
         $producer = ProducerDetails::findOne(['user_id' => Yii::$app->user->id]);
 
@@ -125,7 +129,25 @@ class PromotionsController extends Controller
         $model->producer_id = $producer->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->savePromotion()) {
+            // Mensagem personalizada para os inscritos
+            $mensagem = [
+                'titulo' => mb_convert_encoding($model->name, 'UTF-8', 'auto'),
+                'descricao' => $model->promotion_type === 'direct'
+                    ? mb_convert_encoding('Promoção aplicada diretamente aos produtos selecionados!', 'UTF-8', 'auto')
+                    : mb_convert_encoding('Promoção disponível mediante condições específicas.', 'UTF-8', 'auto'),
+                'tipo' => $model->promotion_type,
+                'desconto' => $model->discount_type === 'percent'
+                    ? mb_convert_encoding($model->discount_value . '%', 'UTF-8', 'auto')
+                    : mb_convert_encoding('€' . $model->discount_value, 'UTF-8', 'auto'),
+                'validade' => mb_convert_encoding('De ' . $model->start_date . ' até ' . $model->end_date, 'UTF-8', 'auto'),
+            ];
+
+// Publica a mensagem no canal MQTT
+            \common\services\MqttServices::FazPublishNoMosquitto('spotwine/promocoes', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+
+
             Yii::$app->session->setFlash('success', 'Promoção criada com sucesso.');
+
             return $this->redirect(['view', 'promotion_id' => $model->promotion_id]);
         }
 
