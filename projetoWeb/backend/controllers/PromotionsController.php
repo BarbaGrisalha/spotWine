@@ -4,18 +4,13 @@ namespace backend\controllers;
 
 
 use common\models\ProducerDetails;
-use common\models\Producers;
 use common\models\Product;
-use common\models\PromotionProduct;
 use common\models\Promotions;
 use backend\models\PromotionSearch;
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PromotionsController implements the CRUD actions for Promotions model.

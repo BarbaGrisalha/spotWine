@@ -94,6 +94,7 @@ class SiteController extends Controller
         foreach ($produtosEmPromocao as $product) {
             $promocoesViewModel[] = new PromocoesViewModel($product);
         }
+
         return $this->render('index', [
             'produtosMaisVendidos' => $maisVendidosViewModels,
             'produtosEmPromocao' => $promocoesViewModel,

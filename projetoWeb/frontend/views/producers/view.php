@@ -5,7 +5,7 @@ use yii\widgets\DetailView;
 use yii\widgets\ListView;
 
 /** @var yii\web\View $this */
-/** @var common\models\Producers $model */
+/** @var common\models\ProducerDetails $model */
 
 $this->title = $model->winery_name . ', ' . $model->region;
 $this->params['breadcrumbs'][] = ['label' => 'Producers', 'url' => ['index']];

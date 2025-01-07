@@ -158,6 +158,16 @@ class Product extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id'])->via('producer');//user_id
     }
 
+    public function getFavorites()
+    {
+        return $this->hasMany(Favorites::class, ['product_id' => 'product_id']);
+    }
+
+    public function isFavorited()
+    {
+       return Favorites::find()->where(['user_id' => Yii::$app->user->identity->id, 'product_id' => $this->product_id])->exists();
+    }
+
     public static function findByProducer($producerId)
     {
         return static::find()->where(['producer_id' => $producerId]);

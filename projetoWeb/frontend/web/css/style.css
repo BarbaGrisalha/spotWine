@@ -9306,6 +9306,10 @@ button.bg-dark:focus {
   color: gold !important;
 }
 
+.text-heart {
+  color: #ff2e2e !important;
+}
+
 .text-primary {
   color: var(--primary)!important;
 }

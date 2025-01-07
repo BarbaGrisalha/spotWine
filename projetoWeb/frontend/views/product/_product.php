@@ -1,13 +1,30 @@
 <?php
 
+use common\models\Favorites;
+use common\models\Product;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
+$productId = $model->product->product_id;
 ?>
-<a href="<?= Url::to(['product/view', 'id' => $model->product->product_id]) ?>"
+<div class="position-absolute" style="top: 10px; right: 30px; z-index: 10;">
+    <?php if (!Yii::$app->user->isGuest): ?>
+        <?php  $product = Product::findOne($productId)?>
+
+        <a href="<?= Url::to(['favorites/toggle-favorite', 'productId' => $productId]) ?>" class="btn btn-link">
+            <?php if ($product->isFavorited()): ?>
+                <i class="fa fa-heart fa-lg text-muted"></i>
+            <?php else: ?>
+                <i class="fa fa-heart fa-lg text-danger"></i>
+            <?php endif; ?>
+        </a>
+    <?php endif; ?>
+</div>
+<a href="<?= Url::to(['product/view', 'id' => $productId]) ?>"
    class="product-link text-decoration-none">
-    <div class="product-item bg-light mb-4 d-flex flex-column align-items-stretch" style="cursor: pointer;">
+    <div class="product-item bg-light mb-4 d-flex flex-column align-items-stretch position-relative" style="cursor: pointer;">
+        <!-- Imagem do Produto -->
         <div class="product-img position-relative overflow-hidden">
             <?= Html::img('@web/img/wineBottle.png', [
                 'class' => 'img-fluid w-100',
@@ -20,6 +37,8 @@ use yii\widgets\ActiveForm;
                 </div>
             <?php endif; ?>
         </div>
+
+        <!-- Conteúdo do Produto -->
         <div class="text-center py-4 flex-grow-1 d-flex flex-column justify-content-between">
             <!-- Nome do Produto -->
             <div>

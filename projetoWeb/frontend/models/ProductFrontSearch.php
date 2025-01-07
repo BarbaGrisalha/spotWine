@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\Favorites;
 use common\models\OrderItems;
 use common\models\Promotions;
 use yii\base\Model;
@@ -45,7 +46,7 @@ class ProductFrontSearch extends Product
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $producerId = null)
+    public function search($params, $producerId = null, $userId= null)
     {
         $query = Product::find();
 
@@ -53,6 +54,16 @@ class ProductFrontSearch extends Product
             $query->andWhere(['producer_id' => $producerId]);
         }
 
+        if ($userId !== null) {
+            $query->where([
+                'exists',
+                Favorites::find()
+                    ->select('id') // Opcional, melhora a performance
+                    ->where('favorites.user_id = :userId')
+                    ->andWhere('favorites.product_id = products.product_id'),
+            ])->addParams([':userId' => $userId]);
+
+        }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

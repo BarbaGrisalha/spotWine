@@ -6,6 +6,7 @@ use common\models\Producers;
 use common\models\ProducersSearch;
 use common\models\User;
 
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

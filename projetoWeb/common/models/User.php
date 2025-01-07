@@ -196,6 +196,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $assignment ? array_keys($assignment)[0] : 'Sem Role';
     }
 
+    public function getFavorites()
+    {
+        return $this->hasMany(Favorites::class, ['user_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      */

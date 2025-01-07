@@ -4,7 +4,6 @@ namespace backend\controllers;
 
 use common\models\ProducerDetails;
 use common\models\User;
-use common\models\Producers;
 use yii\data\Pagination;
 use yii\web\Controller;
 use common\models\Product;
