@@ -2,10 +2,7 @@
 namespace backend\controllers;
 
 use common\models\ProducerDetails;
-use common\models\Producers;
-use common\models\Product;
 use common\models\User;
-use common\models\UserDetails;
 use common\models\UserSearch;
 use Yii;
 use yii\web\Controller;
@@ -97,15 +94,15 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $producerDetails = $model->getDetails();
+        $userDetails = $model->getDetails();
 
-        if (!$producerDetails) {
+        if (!$userDetails) {
             throw new NotFoundHttpException('Detalhes do usuário não encontrados.');
         }
 
-        if ($model->load(Yii::$app->request->post()) && $producerDetails->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $userDetails->load(Yii::$app->request->post())) {
             // Salva o usuário e os detalhes
-            if ($model->saveWithDetails($producerDetails)) {
+            if ($model->saveWithDetails($userDetails)) {
                 Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso.');
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -115,7 +112,7 @@ class UserController extends Controller
 
         return $this->render('update',[
             'model' => $model,
-            'userDetails' => $producerDetails,
+            'userDetails' => $userDetails,
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\rbac\OwnPostRule;
 use Yii;
 use yii\console\Controller;
 use common\rbac\OwnPromotionRule;
@@ -36,6 +37,9 @@ class RbacController extends Controller
     {
         $ownPromotionRule = new OwnPromotionRule();
         $auth->add($ownPromotionRule);
+
+        $ownPostRule = new OwnPostRule();
+        $auth->add($ownPostRule);
     }
 
     /**
@@ -83,13 +87,14 @@ class RbacController extends Controller
 
         $updateOwnPost = $auth->createPermission('updateOwnPost');
         $updateOwnPost->description = 'Atualizar seus próprios posts';
-        $updateOwnPost->ruleName = 'isOwnPromotion'; // Regra associada
+        $updateOwnPost->ruleName = 'isOwnPost'; // Regra associada
         $auth->add($updateOwnPost);
 
         $deleteOwnPost = $auth->createPermission('deleteOwnPost');
         $deleteOwnPost->description = 'Deletar seus próprios posts';
-        $deleteOwnPost->ruleName = 'isOwnPromotion'; // Regra associada
+        $deleteOwnPost->ruleName = 'isOwnPost'; // Associa a regra
         $auth->add($deleteOwnPost);
+
 
         $deleteAllPosts = $auth->createPermission('deleteAllPosts');
         $deleteAllPosts->description = 'Deletar qualquer post';
@@ -120,7 +125,7 @@ class RbacController extends Controller
         $producer = $auth->createRole('producer');
         $auth->add($producer);
 
-        $permissions = ['manageProducts', 'ownPromotion', 'createPosts', 'updateOwnPost', 'deleteOwnPost', 'commentOnPosts'];
+        $permissions = ['manageProducts', 'ownPromotion', 'createPosts', 'updateOwnPost', 'deleteOwnPost', 'commentOnPosts', 'accessBackend'];
         foreach ($permissions as $permissionName) {
             $permission = $auth->getPermission($permissionName);
             if ($permission) {

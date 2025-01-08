@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var common\models\User $model */
-/** @var common\models\Producers $producerDetails */
+/** @var common\models\ProducerDetails $producerDetails */
 
 $this->title = 'Create Users';
 $this->params['breadcrumbs'][] = ['label' => 'User', 'url' => ['index']];
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $user = Yii::$app->user->identity; ?>
     <?= $this->render('_form', [
         'model' => $model,
-        'producerDetails' => $producerDetails,
+        'userDetails' => $producerDetails,
     ]) ?>
 
 </div>

@@ -7,6 +7,7 @@ use common\models\Comments;
 use Yii;
 use common\models\BlogPosts;
 use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -18,19 +19,42 @@ class BlogPostController extends Controller
     {
         return [
             'access' => [
-                'class' => \yii\filters\AccessControl::class,
+                'class' => AccessControl::class,
                 'rules' => [
+                    // Regra para ações públicas (apenas visualização)
                     [
+                        'actions' => ['index', 'view'],
                         'allow' => true,
-                        'roles' => ['admin', 'producer'], // Restringe acesso
+                        'roles' => ['?', '@'], // Ações visíveis para todos (não autenticados e autenticados)
                     ],
+                    // Regra para criar post (somente produtores e admins)
                     [
-                        'allow' => false,
+                        'actions' => ['create', 'comment'],
+                        'allow' => true,
+                        'roles' => ['createPosts', 'commentsOnPosts'], // Permissões associadas às roles
                     ],
+                    // Regra para deletar/atualizar posts próprios
+                    [
+                        'actions' => ['delete', 'update'],
+                        'allow' => true,
+                        'roles' => ['@'], // Apenas usuários autenticados
+                        'matchCallback' => function ($rule, $action) {
+                            $postId = Yii::$app->request->get('id');
+                            $post = BlogPosts::findOne($postId);
+                            return $post && Yii::$app->user->can($action->id . 'OwnPost', ['post' => $post]);
+                        },
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'], // Delete só pode ser realizado por POST
                 ],
             ],
         ];
     }
+
 
     public function actionIndex()
     {
@@ -84,8 +108,8 @@ class BlogPostController extends Controller
     {
         $model = $this->findModel($id);
 
-        // Permitir apenas o dono ou admin atualizar o post
-        if ($model->user_id !== Yii::$app->user->id && !Yii::$app->user->can('admin')) {
+        // Verificar permissão para atualizar o post
+        if (!Yii::$app->user->can('updateOwnPost', ['post' => $model]) && !Yii::$app->user->can('admin')) {
             throw new ForbiddenHttpException('Você não tem permissão para editar este post.');
         }
 
@@ -102,15 +126,19 @@ class BlogPostController extends Controller
     {
         $model = $this->findModel($id);
 
-        // Apenas admin pode deletar qualquer post
-        if (!Yii::$app->user->can('admin')) {
+        // Verificar permissão para deletar o post
+        if (!Yii::$app->user->can('deleteOwnPost', ['post' => $model]) && !Yii::$app->user->can('admin')) {
             throw new ForbiddenHttpException('Você não tem permissão para deletar este post.');
         }
 
         $model->delete();
+        Yii::$app->session->setFlash('success', 'Post deletado com sucesso.');
         return $this->redirect(['index']);
     }
 
+
+
+    //TODO: Fix produtor nao está tendo permissao para comentar
     public function actionComment($id)
     {
         $model = BlogPosts::findOne($id);

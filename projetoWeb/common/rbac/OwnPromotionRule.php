@@ -12,7 +12,7 @@ class OwnPromotionRule extends Rule
         if (isset($params['promotion'])) {
             $promotion = $params['promotion'];
             // Verifica se a promoção pertence ao produtor logado
-            return $promotion->producer_id === \Yii::$app->user->identity->producers->producer_id;
+            return $promotion->producer_id === \Yii::$app->user->identity->producerDetails->producer_id;
         }
         return false;
     }

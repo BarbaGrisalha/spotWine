@@ -105,15 +105,15 @@
                         [
                             'label' => 'Gestão de Vinícola',
                             'icon' => 'wine-glass',
-                            'url' => Yii::$app->user->identity->producers ?
-                                ['producers/update', 'producer_id' => Yii::$app->user->identity->producers->id] : '#',
+                            'url' => Yii::$app->user->identity->producerDetails ?
+                                ['producers/update', 'producer_id' => Yii::$app->user->identity->producerDetails->id] : '#',
                             'items' => [
                                 [
                                     'label' => 'Minha Vinícola',
                                     'iconType' => 'far',
                                     'icon' => 'building',
-                                    'url' => Yii::$app->user->identity->producers ?
-                                        ['producers/update', 'producer_id' => Yii::$app->user->identity->producers->id] : '#',
+                                    'url' => Yii::$app->user->identity->producerDetails ?
+                                        ['producers/update', 'producer_id' => Yii::$app->user->identity->producerDetails->id] : '#',
                                     'visible' => Yii::$app->user->identity->role === 'producer',
                                 ],
                             ],
