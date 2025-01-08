@@ -1,0 +1,12 @@
+suite_namespace: frontend\tests\acceptance
+actor: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver:
+            url: 'http://localhost:8888/projetoweb/frontend/web/'
+            browser: chrome
+            compatibilities:
+                goog:chromeOptions:
+                    args: [  ]
+        - Yii2:
+            part: init
