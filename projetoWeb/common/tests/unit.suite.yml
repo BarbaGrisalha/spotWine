@@ -1,7 +1,11 @@
 suite_namespace: common\tests\unit
 actor: UnitTester
-bootstrap: false
 modules:
     enabled:
         - Yii2:
-            part: fixtures
+              part: fixtures
+        - Asserts  # Adicionando o módulo de assert para permitir a verificação de condições nos testes
+    config:
+        Yii2:
+        # Defina qualquer configuração adicional do Yii2 aqui, se necessário
+        # Como, por exemplo, a configuração de DB ou ambiente de testes
