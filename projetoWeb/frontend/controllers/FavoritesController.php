@@ -17,18 +17,14 @@ class FavoritesController extends \yii\web\Controller
     }
 
     public function actionIndex()
-    {//TODO: Testar verificar se e guest colocando so a variavel do $app->userIdentity etc
-        if(Yii::$app->user->isGuest)
-        {
-            return $this->render('/site/login', [
-                'model' => new LoginForm(),
-            ]);
-
-        }
-
+    {
         $user = Yii::$app->user->identity;
 
+        if (!$user) {
+            Yii::$app->session->setFlash('danger', 'Você precisa fazer login para favoritar um produto.');
 
+            return $this->redirect(['/site/login']);
+        }
         $searchModel = new ProductFrontSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, null, $user->id);
 

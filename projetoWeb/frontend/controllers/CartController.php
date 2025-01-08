@@ -5,11 +5,14 @@ namespace frontend\controllers;
 use common\models\Cart;
 use common\models\CartItems;
 use common\models\Product;
+use common\services\MqttServices;
+use Exception;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * CartController implements the CRUD actions for Cart model.
@@ -54,30 +57,38 @@ class CartController extends Controller
             }
 
             try {
-                // Identificar o carrinho do usuário
+                // Identificar o carrinho do usuário ou da sessão
                 $cart = Cart::findOrCreateCart(Yii::$app->user->id);
                 $cart->addItem($productId, $quantity);
 
                 // Obter detalhes do produto
                 $product = Product::findOne($productId);
-                $user = Yii::$app->user->identity;
+
+                // Obter informações do usuário ou visitante
+                $user = Yii::$app->user->isGuest ? null : Yii::$app->user->identity;
 
                 if ($product) {
                     // Notificar via MQTT
                     $mensagem = [
                         'titulo' => mb_convert_encoding('Produto Adicionado ao Carrinho!', 'UTF-8', 'auto'),
-                        'descricao' => mb_convert_encoding("{$user->username} adicionou o produto '{$product->name}' ao carrinho.", 'UTF-8', 'auto'),
+                        'descricao' => mb_convert_encoding(
+                            $user
+                                ? "{$user->username} adicionou o produto '{$product->name}' ao carrinho."
+                                : "Um visitante adicionou o produto '{$product->name}' ao carrinho.",
+                            'UTF-8',
+                            'auto'
+                        ),
                         'produto_id' => mb_convert_encoding($product->product_id, 'UTF-8', 'auto'),
                         'quantidade' => mb_convert_encoding($quantity, 'UTF-8', 'auto'),
                         'preco_unitario' => mb_convert_encoding('€' . number_format($product->price, 2), 'UTF-8', 'auto'),
                         'data' => mb_convert_encoding(date('Y-m-d H:i:s'), 'UTF-8', 'auto'),
                     ];
 
-                    \common\services\MqttServices::FazPublishNoMosquitto('spotwine/carrinho', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                    MqttServices::FazPublishNoMosquitto('spotwine/carrinho', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
                 }
 
                 Yii::$app->session->setFlash('success', 'Produto adicionado ao carrinho.');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Yii::$app->session->setFlash('error', $e->getMessage());
             }
 
@@ -86,6 +97,7 @@ class CartController extends Controller
 
         throw new BadRequestHttpException('Requisição inválida.');
     }
+
 
 
 
@@ -159,7 +171,7 @@ class CartController extends Controller
     /**
      * Creates a new Cart model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -182,7 +194,7 @@ class CartController extends Controller
      * Updates an existing Cart model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
@@ -202,7 +214,7 @@ class CartController extends Controller
      * Deletes an existing Cart model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
 

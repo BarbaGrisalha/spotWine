@@ -19,6 +19,11 @@ use yii\helpers\Url;
         <li class="nav-item d-none d-sm-inline-block">
             <a href="<?= Url::to(['/site/contact']) ?>" class="nav-link">Contact</a>
         </li>
+        <li class="nav-item">
+            <a href="<?=Url::to(['blog-post/index']) ?>" class="nav-link">Gerenciar Blog</a>
+        </li>
+
+
     </ul>
 
     <!-- SEARCH FORM -->

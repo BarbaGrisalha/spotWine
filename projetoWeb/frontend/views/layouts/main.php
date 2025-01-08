@@ -160,7 +160,7 @@ $user = Yii::$app->user->identity;
                             <?= Html::a('Produtores', Url::to(['/producers/index']), ['class' => 'nav-item nav-link']) ?>
                             <a href="#" class="nav-item nav-link">Promoções</a>
                             <a href="#" class="nav-item nav-link">Concurso</a>
-                            <a href="#" class="nav-item nav-link">Blogue</a>
+                            <?= Html::a('Blogue', Url::to(['/blog-post/index']), ['class' => 'nav-item nav-link']) ?>
                             <!-- Para um item com mais opções
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">

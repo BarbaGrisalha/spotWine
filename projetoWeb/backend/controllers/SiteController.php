@@ -182,6 +182,7 @@ class SiteController extends Controller
         ]);*/
         return$produtores;
     }
+
     /**
      * Check DB Connection action.
      *

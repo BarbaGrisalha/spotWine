@@ -45,13 +45,13 @@ class RbacController extends Controller
      */
     private function addPermissions($auth)
     {
-        // Permissão para gerenciar produtos
+        // Permissões de produtos
         $manageProducts = $auth->createPermission('manageProducts');
         $manageProducts->description = 'Gerenciar produtos';
         $auth->add($manageProducts);
 
         $createProducts = $auth->createPermission('createProducts');
-        $createProducts->description='Criar produtos';
+        $createProducts->description = 'Criar produtos';
         $auth->add($createProducts);
 
         $readProducts = $auth->createPermission('readProducts');
@@ -66,7 +66,8 @@ class RbacController extends Controller
         $deleteProducts->description = 'Deletar produtos';
         $auth->add($deleteProducts);
 
-        $accessBackend = $auth->createPermission('accessBackend');//Ok esse está correto.
+        // Permissão para acessar backend
+        $accessBackend = $auth->createPermission('accessBackend');
         $accessBackend->description = 'Acessar painel administrativo';
         $auth->add($accessBackend);
 
@@ -75,13 +76,29 @@ class RbacController extends Controller
         $createUsers->description = 'Criar utilizadores';
         $auth->add($createUsers);
 
-        // Permissão para gerenciar promoções do próprio produtor (com regra)
-        $ownPromotion = $auth->createPermission('ownPromotion');
-        $ownPromotion->description = 'Gerenciar suas próprias promoções';
-        $ownPromotion->ruleName = 'isOwnPromotion'; // Nome da regra associada
-        $auth->add($ownPromotion);
+        // Permissões específicas do blog
+        $createPosts = $auth->createPermission('createPosts');
+        $createPosts->description = 'Criar posts no blog';
+        $auth->add($createPosts);
+
+        $updateOwnPost = $auth->createPermission('updateOwnPost');
+        $updateOwnPost->description = 'Atualizar seus próprios posts';
+        $updateOwnPost->ruleName = 'isOwnPromotion'; // Regra associada
+        $auth->add($updateOwnPost);
+
+        $deleteOwnPost = $auth->createPermission('deleteOwnPost');
+        $deleteOwnPost->description = 'Deletar seus próprios posts';
+        $deleteOwnPost->ruleName = 'isOwnPromotion'; // Regra associada
+        $auth->add($deleteOwnPost);
+
+        $deleteAllPosts = $auth->createPermission('deleteAllPosts');
+        $deleteAllPosts->description = 'Deletar qualquer post';
+        $auth->add($deleteAllPosts);
+
+        $commentOnPosts = $auth->createPermission('commentOnPosts');
+        $commentOnPosts->description = 'Comentar em posts';
+        $auth->add($commentOnPosts);
     }
-    
 
     /**
      * Adiciona roles ao sistema de RBAC e associa permissões.
@@ -91,28 +108,42 @@ class RbacController extends Controller
     private function addRoles($auth)
     {
         // Role: Consumer
-        // Criar roles Consumidor
         $consumer = $auth->createRole('consumer');
         $auth->add($consumer);
 
-        // Criar roles Produtor
+        $commentOnPosts = $auth->getPermission('commentOnPosts');
+        if ($commentOnPosts) {
+            $auth->addChild($consumer, $commentOnPosts); // Consumidor pode comentar em posts
+        }
+
+        // Role: Producer
         $producer = $auth->createRole('producer');
         $auth->add($producer);
-        $auth->addChild($producer, $auth->getPermission('manageProducts')); // Associa gerenciar produtos
-        $auth->addChild($producer, $auth->getPermission('ownPromotion')); 
-        $auth->addChild($producer,$createProducts);
-        $auth->addChild($producer,$readProducts);
-        $auth->addChild($producer,$updateProducts);
-        $auth->addChild($producer,$deleteProducts);
 
-        // Criar roles Administrador
+        $permissions = ['manageProducts', 'ownPromotion', 'createPosts', 'updateOwnPost', 'deleteOwnPost', 'commentOnPosts'];
+        foreach ($permissions as $permissionName) {
+            $permission = $auth->getPermission($permissionName);
+            if ($permission) {
+                $auth->addChild($producer, $permission);
+            }
+        }
+
+        // Role: Admin
         $admin = $auth->createRole('admin');
         $auth->add($admin);
+
+        $permissionsForAdmin = ['accessBackend', 'createUsers', 'deleteAllPosts'];
+        foreach ($permissionsForAdmin as $permissionName) {
+            $permission = $auth->getPermission($permissionName);
+            if ($permission) {
+                $auth->addChild($admin, $permission);
+            }
+        }
+
         $auth->addChild($admin, $producer); // Admin herda permissões de produtor
-        $auth->addChild($admin, $accessBackend); // Admin pode acessar o backend
-        $auth->addChild($admin, $createUsers);// Admin pode criar utilizadores.
-        $auth->addChild($admin, $createProducts); //Admin pode criar produtos.
 
         echo "Roles e permissões configuradas com sucesso.\n";
     }
+
+
 }
