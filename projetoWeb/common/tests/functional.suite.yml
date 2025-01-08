@@ -1,0 +1,25 @@
+suite_namespace: common\tests\unit
+actor: UnitTester
+modules:
+    enabled:
+        - Yii2:
+              part: fixtures
+        - Asserts  # Adicionando o módulo de assert para permitir a verificação de condições nos testes
+    config:
+        Yii2:
+        # Defina qualquer configuração adicional do Yii2 aqui, se necessário
+        # Como, por exemplo, a configuração de DB# tests/functional.suite.yml
+        #class_name: FunctionalTester
+        #actor: FunctionalTester
+        #path: tests/functional
+        #modules:
+        #    enabled:
+        #        - Yii2:
+        #            part: [orm, db, fixtures]  # Aqui você pode definir quais partes do Yii2 precisa
+        #        - \Helper\Functional
+        #        - Asserts  # Adicionando módulo de assert para verificações
+        #
+        ## Aqui você pode adicionar configurações específicas do Yii2, caso necessário
+        #config:
+        #    Yii2:
+        #        # Se necessário, defina configurações específicas do Yii2 aqui. ou ambiente de testes
