@@ -19,6 +19,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Criar Post', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+    <div class="filter-buttons">
+        <p>
+            <?= Html::a('Mostrar Todos', ['index', 'showAll' => 1], [
+                'class' => $showAll ? 'btn btn-primary' : 'btn btn-secondary',
+            ]) ?>
+            <?= Html::a('Mostrar Meus Posts', ['index', 'showAll' => 0], [
+                'class' => !$showAll ? 'btn btn-primary' : 'btn btn-secondary',
+            ]) ?>
+        </p>
+    </div>
+
     <div class="row">
         <?= ListView::widget([
             'dataProvider' => $dataProvider,

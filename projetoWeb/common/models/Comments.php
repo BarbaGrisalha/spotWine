@@ -51,7 +51,7 @@ class Comments extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'blog_post_id' => 'Blog Post ID',
-            'comment_text' => 'Comment Text',
+            'comment_text' => 'Comentário',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

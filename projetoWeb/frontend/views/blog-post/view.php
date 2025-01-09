@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <div class="mb-4 p-3 bg-light rounded">
-        <p class="fs-5"><?= nl2br(Html::encode($model->content)) ?></p>
+        <h4 class="fs-2"><?= nl2br(Html::encode($model->content)) ?></h4>
     </div>
 
     <hr>
@@ -61,7 +61,29 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php foreach ($commentsDataProvider->models as $comment): ?>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <p><?= Html::encode($comment->comment_text) ?></p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p><?= Html::encode($comment->comment_text) ?></p>
+                            <?php if ($comment->user_id === Yii::$app->user->id): ?>
+                                <div class="form-group">
+                                    <?= Html::a('<i class="fas fa-trash me-1"></i> Deletar',
+                                        ['/comment-post/delete', 'id' => $comment->id],
+                                        ['class' => 'btn btn-danger',
+                                            'data' => [
+                                                'confirm' => 'Tem certeza de que deseja deletar este post?',
+                                                'method' => 'post',
+                                                'params' => [
+                                                    Yii::$app->request->csrfParam => Yii::$app->request->csrfToken,
+                                                ],
+                                            ],
+                                        ]
+                                    ) ?>
+
+                                    <?= Html::a('Atualizar',
+                                        ['/comment-post/update', 'id' => $comment->id],
+                                        ['class' => 'btn btn-warning',])?>
+                                </div>
+                            <?php endif?>
+                        </div>
                         <p class="text-muted">
                             <i class="fas fa-user"></i> <?= Html::encode($comment->user->username ?? 'Anônimo') ?> |
                             <i class="far fa-clock"></i> <?= Yii::$app->formatter->asRelativeTime($comment->created_at) ?>
@@ -78,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h4>Deixe um comentário</h4>
 
-    <?php $form = ActiveForm::begin(['action' => ['comment', 'id' => $model->id]]); ?>
+    <?php $form = ActiveForm::begin(['action' => ['/comment-post/create', 'id' => $model->id]]); ?>
     <?= $form->field($newComment, 'comment_text')->textarea(['rows' => 4, 'placeholder' => 'Escreva seu comentário aqui...'])->label(false) ?>
     <div class="form-group">
         <?= Html::submitButton('Comentar', ['class' => 'btn btn-primary']) ?>

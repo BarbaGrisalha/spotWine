@@ -29,9 +29,9 @@ class BlogPostController extends Controller
                     ],
                     // Regra para criar post (somente produtores e admins)
                     [
-                        'actions' => ['create', 'comment'],
+                        'actions' => ['create'],
                         'allow' => true,
-                        'roles' => ['createPosts', 'commentsOnPosts'], // Permissões associadas às roles
+                        'roles' => ['createPosts'], // Permissões associadas às roles
                     ],
                     // Regra para deletar/atualizar posts próprios
                     [
@@ -41,7 +41,9 @@ class BlogPostController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             $postId = Yii::$app->request->get('id');
                             $post = BlogPosts::findOne($postId);
-                            return $post && Yii::$app->user->can($action->id . 'OwnPost', ['post' => $post]);
+                            return $post && (
+                                    Yii::$app->user->can('manageAllPosts') ||
+                                    Yii::$app->user->can($action->id . 'OwnPost', ['post' => $post]));
                         },
                     ],
                 ],
@@ -59,11 +61,14 @@ class BlogPostController extends Controller
     public function actionIndex()
     {
         $searchModel = new BlogPostSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $showAll = Yii::$app->request->get('showAll', true);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $showAll);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'showAll' => $showAll,
         ]);
     }
 
@@ -80,7 +85,7 @@ class BlogPostController extends Controller
         ]);
 
         // Modelo para um novo comentário
-        $newComment = new \common\models\Comments();
+        $newComment = new Comments();
         $newComment->blog_post_id = $model->id;
 
         return $this->render('view', [
@@ -137,36 +142,12 @@ class BlogPostController extends Controller
     }
 
 
-
-    //TODO: Fix produtor nao está tendo permissao para comentar
-    public function actionComment($id)
-    {
-        $model = BlogPosts::findOne($id);
-        if (!$model) {
-            throw new NotFoundHttpException('O post não foi encontrado.');
-        }
-
-        $newComment = new Comments();
-        $newComment->blog_post_id = $id;
-        $newComment->user_id = Yii::$app->user->id;
-
-        if ($newComment->load(Yii::$app->request->post()) && $newComment->save()) {
-            Yii::$app->session->setFlash('success', 'Comentário adicionado com sucesso.');
-            return $this->redirect(['view', 'id' => $id]);
-        }
-
-        Yii::$app->session->setFlash('error', 'Não foi possível adicionar o comentário.');
-        return $this->redirect(['view', 'id' => $id]);
-    }
-
-
-
     protected function findModel($id)
     {
         if (($model = BlogPosts::findOne($id)) !== null) {
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Post não encontrado.');
     }
 }

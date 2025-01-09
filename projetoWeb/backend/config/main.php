@@ -21,7 +21,8 @@ return [
     'errorHandler' => [
         'errorAction' => 'site/error',
     ],
-    
+
+
     'request' =>[
         'enableCsrfValidation' => false,
         'csrfParam' => '_csrf-backend',

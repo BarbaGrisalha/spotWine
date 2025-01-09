@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\rbac\OwnCommentRule;
 use common\rbac\OwnPostRule;
 use Yii;
 use yii\console\Controller;
@@ -40,6 +41,8 @@ class RbacController extends Controller
 
         $ownPostRule = new OwnPostRule();
         $auth->add($ownPostRule);
+        $ownCommentRule = new OwnCommentRule();
+        $auth->add($ownCommentRule);
     }
 
     /**
@@ -96,13 +99,25 @@ class RbacController extends Controller
         $auth->add($deleteOwnPost);
 
 
-        $deleteAllPosts = $auth->createPermission('deleteAllPosts');
-        $deleteAllPosts->description = 'Deletar qualquer post';
-        $auth->add($deleteAllPosts);
+        $manageAllPosts = $auth->createPermission('manageAllPosts');
+        $manageAllPosts->description = 'Deletar e atualizar qualquer post';
+        $auth->add($manageAllPosts);
 
         $commentOnPosts = $auth->createPermission('commentOnPosts');
         $commentOnPosts->description = 'Comentar em posts';
         $auth->add($commentOnPosts);
+
+        $updateOwnComment = $auth->createPermission('updateOwnComment');
+        $updateOwnComment->description = 'Atualizar seus próprios comentários';
+        $auth->add($updateOwnComment);
+
+        $deleteOwnComment = $auth->createPermission('deleteOwnComment');
+        $deleteOwnComment->description = 'Deletar seus próprios comentários';
+        $auth->add($deleteOwnComment);
+
+        $manageAllComments = $auth->createPermission('manageAllComments');
+        $manageAllComments->description = 'Deletar e atualizar qualquer comentário';
+        $auth->add($manageAllComments);
     }
 
     /**
@@ -125,7 +140,8 @@ class RbacController extends Controller
         $producer = $auth->createRole('producer');
         $auth->add($producer);
 
-        $permissions = ['manageProducts', 'ownPromotion', 'createPosts', 'updateOwnPost', 'deleteOwnPost', 'commentOnPosts', 'accessBackend'];
+        $permissions = ['manageProducts', 'ownPromotion', 'createPosts', 'updateOwnPost', 'deleteOwnPost', 'commentOnPosts',
+                        'accessBackend', 'updateOwnComment','deleteOwnComment'];
         foreach ($permissions as $permissionName) {
             $permission = $auth->getPermission($permissionName);
             if ($permission) {
@@ -137,7 +153,7 @@ class RbacController extends Controller
         $admin = $auth->createRole('admin');
         $auth->add($admin);
 
-        $permissionsForAdmin = ['accessBackend', 'createUsers', 'deleteAllPosts'];
+        $permissionsForAdmin = ['accessBackend', 'createUsers', 'manageAllPosts', 'manageAllComments'];
         foreach ($permissionsForAdmin as $permissionName) {
             $permission = $auth->getPermission($permissionName);
             if ($permission) {

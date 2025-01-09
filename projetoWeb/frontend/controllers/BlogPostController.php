@@ -8,11 +8,12 @@ use common\models\Comments;
 use common\models\Product;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UnauthorizedHttpException;
 
-class BlogPostController extends \yii\web\Controller
+class BlogPostController extends Controller
 {
     public function actionIndex()
     {
@@ -111,27 +112,6 @@ class BlogPostController extends \yii\web\Controller
             'newComment' => $newComment,
             'commentsDataProvider' => $commentsDataProvider,
         ]);
-    }
-
-    public function actionComment($id)
-    {
-        $model = BlogPosts::findOne($id);
-
-        if (!$model) {
-            throw new NotFoundHttpException('O post solicitado não foi encontrado.');
-        }
-
-        $comment = new Comments();
-        $comment->blog_post_id = $id;
-        $comment->user_id = Yii::$app->user->id;
-
-        if ($comment->load(Yii::$app->request->post()) && $comment->save()) {
-            Yii::$app->session->setFlash('success', 'Comentário adicionado com sucesso.');
-        } else {
-            Yii::$app->session->setFlash('error', 'Não foi possível adicionar o comentário. Verifique os dados e tente novamente.');
-        }
-
-        return $this->redirect(['view', 'id' => $id]);
     }
 
 
