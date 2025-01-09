@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UnauthorizedHttpException;
+use yii\web\UploadedFile;
 
 class BlogPostController extends Controller
 {
@@ -35,19 +36,15 @@ class BlogPostController extends Controller
     public function actionCreate()
     {
         $model = new BlogPosts();
-        $user = Yii::$app->user->identity;
 
-        if (!$user) {
-            throw new UnauthorizedHttpException('Você precisa estar logado para criar um post.');
-        }
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile'); // Captura o arquivo enviado
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // Define o ID do usuário logado no modelo
-
-            if ($model->save()) {
+            if ($model->upload() && $model->save()) {
+                Yii::$app->session->setFlash('success', 'Post criado com sucesso!');
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
-                Yii::$app->session->setFlash('error', 'Não foi possível criar o post. Verifique e tente novamente.');
+                Yii::$app->session->setFlash('error', 'Erro ao salvar o post.');
             }
         }
 
@@ -55,7 +52,6 @@ class BlogPostController extends Controller
             'model' => $model,
         ]);
     }
-
 
     public function actionUpdate($id)
     {

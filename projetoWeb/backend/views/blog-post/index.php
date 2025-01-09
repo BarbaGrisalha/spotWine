@@ -6,7 +6,7 @@ use yii\widgets\ListView;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
-/** @var common\models\BlogPostsSearch $searchModel */
+/** @var common\models\BlogPostSearch $searchModel */
 
 $this->title = 'Posts do Blog';
 $this->params['breadcrumbs'][] = $this->title;
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $this->render('_post', ['model' => $model]);
             },
             'layout' => "<div class='row'>{items}</div>\n{pager}", // Configuração de layout
-            'itemOptions' => ['class' => 'col-lg-4 col-md-6 mb-4'], // Classes de estilo para os cards
+            'itemOptions' => ['class' => 'col-lg-6 col- md-6 mb-4'], // Classes de estilo para os cards
         ]) ?>
     </div>
 </div>

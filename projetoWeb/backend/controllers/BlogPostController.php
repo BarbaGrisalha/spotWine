@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 
 class BlogPostController extends Controller
 {
@@ -98,10 +99,16 @@ class BlogPostController extends Controller
     public function actionCreate()
     {
         $model = new BlogPosts();
-        $model->user_id = Yii::$app->user->id; // Define o ID do produtor logado
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile'); // Captura o arquivo enviado
+
+            if ($model->upload() && $model->save()) {
+                Yii::$app->session->setFlash('success', 'Post criado com sucesso!');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Erro ao salvar o post.');
+            }
         }
 
         return $this->render('create', [

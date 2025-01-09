@@ -1,28 +1,23 @@
 <?php
 
-use common\models\BlogPosts;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 use yii\widgets\ListView;
 
 /** @var yii\web\View $this */
-/** @var common\models\BlogPostSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var common\models\BlogPostSearch $searchModel */
 
-$this->title = 'Blog Posts';
+$this->title = 'Posts do Blog';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="blog-posts-index">
+<div class="blog-post-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Blog Posts', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Post', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <div class="filter-buttons">
         <p>
@@ -35,16 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     </div>
 
-    <?= ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemView' => '_post', // Arquivo de template para exibir cada produto
-//        'viewParams' => [
-//            'cartItemModel' => $cartItemModel, // Passa o modelo do carrinho para cada item
-//        ],
-        'layout' => "<div class='row'>{items}</div>\n{pager}", // Estrutura dos produtos
-        'itemOptions' => ['class' => 'col-lg-3 col-md-4 col-sm-6 mb-4'], // Classes dos cartões
-
-    ]); ?>
-
-
+    <div class="row">
+        <?= ListView::widget([
+            'dataProvider' => $dataProvider,
+            'itemView' => function ($model) {
+                return $this->render('_post', ['model' => $model]);
+            },
+            'layout' => "<div class='row'>{items}</div>\n{pager}", // Configuração de layout
+            'itemOptions' => ['class' => 'col-lg-6 col- md-6 mb-4'], // Classes de estilo para os cards
+        ]) ?>
+    </div>
 </div>

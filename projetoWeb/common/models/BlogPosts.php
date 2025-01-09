@@ -23,14 +23,13 @@ class BlogPosts extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $imageFile;
+
     public static function tableName()
     {
         return 'blog_posts';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -40,12 +39,10 @@ class BlogPosts extends \yii\db\ActiveRecord
             [['created_at'], 'safe'],
             [['title', 'image_url'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2], // Máximo 2MB
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -53,9 +50,35 @@ class BlogPosts extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'title' => 'Title',
             'content' => 'Content',
-            'image_url' => 'Image Url',
+            'image_url' => 'Image URL',
             'created_at' => 'Created At',
+            'imageFile' => 'Upload Image',
         ];
+    }
+
+    /**
+     * Realiza o upload da imagem
+     */
+    public function upload()
+    {
+        if (!$this->validate()) {
+            return false;
+        }
+
+        $uploadPath = Yii::getAlias('@webroot/uploads/blog');
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0775, true); // Cria o diretório, se necessário
+        }
+
+        $fileName = uniqid() . '.' . $this->imageFile->extension;
+        $filePath = $uploadPath . '/' . $fileName;
+
+        if ($this->imageFile->saveAs($filePath, false)) {
+            $this->image_url = '/uploads/blog/' . $fileName; // Caminho relativo para salvar no banco
+            return true;
+        }
+
+        return false;
     }
 
     /**

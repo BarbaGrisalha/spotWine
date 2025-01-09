@@ -1,23 +1,46 @@
 <?php
+
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var common\models\BlogPosts $model */
+
 ?>
 
-<?= Html::a(
-    "<div class='card h-100'>
-        <img src='{$model->image_url}' class='card-img-top' alt='" . Html::encode($model->title) . "'>
-        <div class='card-body'>
-            <h5 class='card-title'>" . Html::encode($model->title) . "</h5>
-            <p class='card-text text-muted'>" . Yii::$app->formatter->asNtext($model->content) . "</p>
+<div class="card h-100 shadow-lg">
+    <?php if (!empty($model->image_url)): ?>
+        <div class="card-img-top" style="height: 60%; overflow: hidden;">
+            <img src="<?= Url::to('@web' . $model->image_url) ?>"
+                 alt="<?= Html::encode($model->title) ?>"
+                 class="img-fluid w-100"
+                 style="object-fit: cover; height: 100%;">
         </div>
-        <div class='card-footer'>
-            <small class='text-muted'>
-                <i class='fas fa-user'></i> " . Html::encode($model->user->username ?? 'Autor Desconhecido') . " |
-                <i class='far fa-clock'></i> " . Yii::$app->formatter->asRelativeTime($model->created_at) . "
-            </small>
+    <?php endif; ?>
+
+    <div class="card-body d-flex flex-column justify-content-between">
+        <h5 class="card-title"><?= Html::encode($model->title) ?></h5>
+        <p class="card-text text-muted mb-3">
+            <i class="fas fa-user"></i> <?= Html::encode($model->user->username ?? 'Desconhecido') ?> |
+            <i class="far fa-clock"></i> <?= Yii::$app->formatter->asDate($model->created_at, 'long') ?>
+        </p>
+        <p class="card-text mb-4"><?= Html::encode(substr($model->content, 0, 100)) ?>...</p>
+        <div class="d-flex justify-content-between align-items-baseline mt-auto">
+            <?= Html::a('Ver Mais', ['view', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
+
+            <?php if (Yii::$app->user->id === $model->user_id || Yii::$app->user->can('admin')): ?>
+                <div class="d-flex justify-content-around">
+                    <?= Html::a('<i class="fas fa-edit fa-lg"></i>', ['update', 'id' => $model->id], [
+                        'class' => 'btn btn-warning btn-sm',
+                    ]) ?>
+                    <?= Html::a('<i class="fas fa-trash fa-lg"></i>', ['delete', 'id' => $model->id], [
+                        'class' => 'btn btn-danger btn-sm',
+                        'data' => [
+                            'confirm' => 'Tem certeza de que deseja deletar este post?',
+                            'method' => 'post',
+                        ],
+                    ]) ?>
+                </div>
+            <?php endif; ?>
         </div>
-    </div>",
-    ['view', 'id' => $model->id],
-    ['class' => 'text-decoration-none']
-) ?>
+    </div>
+</div>

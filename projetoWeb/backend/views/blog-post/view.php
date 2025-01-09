@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
@@ -30,6 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         <?php endif; ?>
     </h1>
+
+    <?php if (!empty($model->image_url)): ?>
+        <div class="mb-4 text-center">
+            <img src="<?= Url::to('@web' . $model->image_url) ?>"
+                 alt="<?= Html::encode($model->title) ?>"
+                 class="img-fluid rounded shadow-lg"
+                 style="max-height: 500px; width: 90%; object-fit: cover;">
+        </div>
+    <?php endif; ?>
 
     <p class="text-muted">
         <i class="fas fa-user"></i> <?= Html::encode($model->user->username ?? 'Desconhecido') ?> |

@@ -47,9 +47,11 @@ class BlogPostSearch extends BlogPosts
             $query->where(['user_id' => Yii::$app->user->id]);
         }
 
-        // DataProvider configurado para a consulta
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 9, // Número de itens por página
+            ],
         ]);
 
         $this->load($params);
