@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\ProducerDetails;
 use common\models\Producers;
 use common\models\ProducersSearch;
 use common\models\User;
@@ -156,8 +157,8 @@ class ProducersController extends Controller
         ]);
         */
         //SPW-71 - https://lucassiqueira0763.atlassian.net/browse/SPW-71 alteração para suportar atualização do produtor sobre ele mesmo
-        $producer = $this->findModel($producer_id);
-        $user = User::findOne($producer->user_id);
+        $user = $this->findModel($producer_id);
+        $producer = ProducerDetails::findOne(['user_id' => $user->id]);
 
         if($this->request->isPost && $producer->load($this->request->post()) &&$user->load($this->request->post())){
             $transaction = \Yii::$app->db->beginTransaction();
@@ -165,18 +166,12 @@ class ProducersController extends Controller
                 if($user->save() && $producer->save()){
                     $transaction->commit();
                     \Yii::$app->session->setFlash('success','Suas atualizações foram efetuadas com sucesso');
-                    return $this->redirect(['view', 'producer_id'=> $producer->producer_id]);
+                    return $this->redirect(['view', 'producer_id'=> $producer->id]);
                 }
             }catch (\Exception $e){
                 $transaction->rollBack();
                 throw $e;
             }
-        }
-         $producers = \Yii::$app->user->identity;//producers
-        if($producers){
-            echo $producers->producer_id;
-        }else{
-            echo "No producer found!";
         }
 
         return $this->render('update',[
@@ -209,7 +204,7 @@ class ProducersController extends Controller
      */
     protected function findModel($producer_id)
     {
-        $model = Producers::findOne(['producer_id'=>$producer_id]);
+        $model = ProducerDetails::findOne(['id'=>$producer_id]);
 
         if($model === null){
             throw new NotFoundHttpException("O modelo não foi encontrado para o id: {$producer_id}");

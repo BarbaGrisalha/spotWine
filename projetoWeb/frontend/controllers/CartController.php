@@ -84,7 +84,7 @@ class CartController extends Controller
                         'data' => mb_convert_encoding(date('Y-m-d H:i:s'), 'UTF-8', 'auto'),
                     ];
 
-                    MqttServices::FazPublishNoMosquitto('spotwine/carrinho', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                    //MqttServices::FazPublishNoMosquitto('spotwine/carrinho', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
                 }
 
                 Yii::$app->session->setFlash('success', 'Produto adicionado ao carrinho.');

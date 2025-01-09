@@ -7,8 +7,11 @@ use common\models\CartItems;
 use common\models\Invoices;
 use common\models\OrderItems;
 use common\models\Orders;
+use common\services\MqttServices;
+use frontend\models\promocoesViewModel;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class CheckoutController extends Controller
 {
@@ -22,7 +25,7 @@ class CheckoutController extends Controller
             ->all();
 
         $cartViewModels = array_map(function ($item) {
-            return new \frontend\models\promocoesViewModel($item->product, $item->quantity);
+            return new promocoesViewModel($item->product, $item->quantity);
         }, $cartItems);
 
         $totalAmount = array_reduce($cartViewModels, function ($sum, $model) {
@@ -68,7 +71,7 @@ class CheckoutController extends Controller
                         'data_criacao' => mb_convert_encoding($invoice->invoice_date, 'UTF-8', 'auto'),
                     ];
 
-                    \common\services\MqttServices::FazPublishNoMosquitto('spotwine/faturas', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                    //MqttServices::FazPublishNoMosquitto('spotwine/faturas', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
 
                     return $this->redirect(['payment', 'orderId' => $order->id]);
                 } else {
@@ -91,7 +94,7 @@ class CheckoutController extends Controller
         $order = Orders::findOne($orderId);
 
         if (!$order) {
-            throw new \yii\web\NotFoundHttpException('Pedido não encontrado.');
+            throw new NotFoundHttpException('Pedido não encontrado.');
         }
 
         if (Yii::$app->request->isPost) {
@@ -111,7 +114,7 @@ class CheckoutController extends Controller
                         'data_pagamento' => mb_convert_encoding(date('Y-m-d H:i:s'), 'UTF-8', 'auto'),
                     ];
 
-                    \common\services\MqttServices::FazPublishNoMosquitto('spotwine/faturas/pagamento', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                    //MqttServices::FazPublishNoMosquitto('spotwine/faturas/pagamento', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
                 } else {
                     Yii::$app->session->setFlash('error', 'Erro ao atualizar a fatura.');
                 }
@@ -135,7 +138,7 @@ class CheckoutController extends Controller
         $order = Orders::findOne($orderId);
 
         if (!$order) {
-            throw new \yii\web\NotFoundHttpException('Pedido não encontrado.');
+            throw new NotFoundHttpException('Pedido não encontrado.');
         }
 
         return $this->render('confirmation', [
