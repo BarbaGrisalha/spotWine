@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 
+use common\models\BlogPosts;
 use common\models\ProducerDetails;
 use common\models\Product;
 use common\models\Promotions;
@@ -44,14 +45,14 @@ class PromotionsController extends Controller
                             'roles' => ['producer'],
                         ],
                         [
+                            'actions' => ['delete', 'update'],
                             'allow' => true,
-                            'actions' => ['create', 'update', 'delete', 'index', 'view'],
-                            'roles' => ['manageOwnPromotions'],
+                            'roles' => ['@'], // Apenas usuários autenticados
                             'matchCallback' => function ($rule, $action) {
-                                $promotionId = Yii::$app->request->get('promotion_id');
-                                $model = $promotionId ? Promotions::findOne($promotionId) : null;
-
-                                return !$model || Yii::$app->user->can('manageOwnPromotions', ['promotion' => $model]);
+                                $userId = Yii::$app->request->get('id');
+                                $promotion = Promotions::findOne($userId);
+                                return $promotion && (
+                                        Yii::$app->user->can('ownPromotion', ['promotion' => $promotion]));
                             },
                         ],
                     ],
@@ -69,23 +70,18 @@ class PromotionsController extends Controller
      */
     public function actionIndex()
     {
-        // Verificar se o usuário logado é um produtor
         $user = Yii::$app->user->identity;
         $producer = ProducerDetails::findOne(['user_id' => $user->getId()]);
         if (!$producer) {
             throw new \yii\web\ForbiddenHttpException('Você precisa ser um produtor para acessar esta página.');
         }
 
-        // Cria um modelo de busca
         $searchModel = new PromotionSearch();
 
-        // Recupera os dados de promoções filtrados pelos parâmetros da requisição
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        // Filtra as promoções para incluir apenas as do produtor logado
         $dataProvider->query->andWhere(['producer_id' => $producer->id]);
 
-        // Renderiza a página com os dados
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

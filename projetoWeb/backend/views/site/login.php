@@ -7,10 +7,11 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = 'Login1';
+$this->title = 'Login';
 ?>
-<div class="site-login">
-    <div class="mt-5 offset-lg-3 col-lg-6">
+<div class="site-login d-flex flex-column align-items-center">
+
+        <img src="/frontend/web/img/logo.png" style="width: 200px; height: 200px;">
         <h1><?= Html::encode($this->title) ?></h1>
 
         <p>Preencha os campos</p>

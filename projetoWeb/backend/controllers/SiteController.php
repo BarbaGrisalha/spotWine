@@ -4,11 +4,13 @@ namespace backend\controllers;
 
 use backend\models\Producers;
 use common\models\LoginForm;
+use common\models\ProducerDetails;
 use common\models\UserSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 
@@ -117,13 +119,23 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+        if (! Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $user = Yii::$app->user->identity;
+
+            // Verificar status do produtor após login
+            if ($user->producerDetails && $user->producerDetails->status !== 1) {
+                Yii::$app->user->logout(); // Faz logout
+                Yii::$app->session->setFlash('error', 'Seu acesso foi desativado. Entre em contato com o administrador.');
+                return $this->goHome();
+            }
+
+
             return $this->goBack();
         }
 
@@ -133,6 +145,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
 
     /**
      * Logout action.

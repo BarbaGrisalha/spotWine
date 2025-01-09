@@ -2,6 +2,7 @@
 /** @var yii\web\View $this */
 /** @var array $produtos */
 
+use common\models\ProducerDetails;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
@@ -49,7 +50,7 @@ $this->title = "Relatório de Produtos linha 12";
 
 
             <?= Html::dropDownList('producer_id',null,
-                ArrayHelper::map(Producers::find()->asArray()->all(), 'producer_id','winery_name'),
+                ArrayHelper::map(ProducerDetails::find()->asArray()->all(), 'producer_id','winery_name'),
                 ['prompt'=> 'Select a Producer','class' => 'form-control'],
 
         )?>

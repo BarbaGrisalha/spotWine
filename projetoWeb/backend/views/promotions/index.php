@@ -16,20 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="promotions-index container mt-4">
 
-    <div class="row mb-4">
-        <div class="col">
-            <?= Breadcrumbs::widget([
-                'links' => $this->params['breadcrumbs'],
-            ]) ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1 class="display-4"><?= Html::encode($this->title) ?></h1>
-        </div>
-    </div>
-
     <div class="row mb-3">
         <div class="col-12 text-right">
             <?= Html::a('Criar Promoção', ['create'], ['class' => 'btn btn-success']) ?>

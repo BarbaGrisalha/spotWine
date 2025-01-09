@@ -50,7 +50,7 @@ class BlogPostSearch extends BlogPosts
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 9, // Número de itens por página
+                'pageSize' => 6, // Número de itens por página
             ],
         ]);
 

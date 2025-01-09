@@ -54,6 +54,9 @@ class ProductSearch extends Product
         $query->andWhere(['producer_details.user_id' => $loggedInProducerId]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 8,
+            ]
         ]);
 
         $this->load($params);

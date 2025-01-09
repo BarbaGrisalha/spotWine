@@ -3,6 +3,7 @@
 namespace backend\controllers;
 header('Content-Type: application/json; charset=utf-8');
 
+use common\models\BlogPosts;
 use common\models\ProducerDetails;
 use Yii;
 use common\models\Product;
@@ -37,18 +38,12 @@ class ProductController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'create', 'read', 'update', 'delete'],
-                            'roles' => ['@'], //Significa que somente os usuários autenticados.
-                            'matchCallback' => function ($rule, $action) {
-                                $user = Yii::$app->user->identity;
-
-                                return $user && $user->role === 'producer' &&
-                                    Yii::$app->authManager->checkAccess($user->id, $action->id . 'Product');
-                            },
+                            'actions' => [ 'create', 'update', 'delete'],
+                            'roles' => ['producer', ], //Significa que somente os usuários autenticados.
                         ],
                         [//As páginas que podem ser vistas.
                             'allow' => true,
-                            'actions' => ['index', 'view', 'create', 'logout','update','delete'],
+                            'actions' => ['index', 'view'],
                             'roles' => ['@'],
                         ]
                     ]
@@ -85,7 +80,6 @@ class ProductController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($product_id),
-            // dd($product_id)
         ]);
     }
 
@@ -148,7 +142,8 @@ class ProductController extends Controller
         $model = $this->findModel($product_id);//troquei $id por $product_id
 
         // Obtenha o usuário logado
-        $user = Yii::$app->user->identity;
+        $userId = Yii::$app->user->identity->id;
+        $producer = ProducerDetails::findOne(['user_id' => $userId]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'product_id' => $model->product_id]);//mudei de id para product_id
@@ -156,7 +151,7 @@ class ProductController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'user' => $user, // Passe o usuário para a view
+            'user' => $producer->id, // Passe o usuário para a view
         ]);
 
     }
@@ -191,12 +186,11 @@ class ProductController extends Controller
      */
     protected function findModel($product_id)//aqui eu mudei para id para acompanhar o update
     {
-
-        $model = Product::findOne(['product_id' => $product_id]);
-
-        if (!$model || $model->producer_id !== Yii::$app->user->id && Yii::$app->user->identity->role !== 'admin') {
-            throw new NotFoundHttpException('Você não tem permissão para acessar esse produto!');
+        if (($model = Product::findOne($product_id)) !== null) {
+            return $model;
         }
-        return $model;
+
+        throw new NotFoundHttpException('Produto não encontrado.');
     }
+
 }
