@@ -114,7 +114,28 @@ return [
                         'DELETE delete/{id}' => 'delete', // Deletar review
                     ],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' =>  ['api/blog-post'],
+                    'pluralize' => false,
 
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' =>  ['api/comment'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET post-comments/{id}' => 'post-comments',
+                        ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' =>  ['api/product'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET view/{product_id}' => 'view',
+                    ],
+                ]
 
 
             ],
