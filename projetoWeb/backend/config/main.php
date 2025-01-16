@@ -135,18 +135,11 @@ return [
                     'extraPatterns' => [
                         'GET view/{product_id}' => 'view',
                     ],
-                ]
-
-
+                ],
             ],
         ],
-
-
-
-
     ],
-
-
-
     'params' => $params,
 ];
+
+
