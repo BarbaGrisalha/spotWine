@@ -12,8 +12,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
 ?>
     <div class="relatorio-produtor">
 
-        <p><strong> Produtor:</strong> <?= Html::encode($produtor->winery_name) ?></p>
-
+        <h4> Estoque por categoria:</h4>
         <!-- Tabela de dados -->
         <table class="table table-bordered">
             <thead>
@@ -44,6 +43,21 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js',
 $labels = json_encode(array_column($categorias, 'category_name'));
 $data = json_encode(array_column($categorias, 'total_stock'));
 
+// Definindo as cores para as categorias específicas
+$cores = [
+    'Vinho Tinto' => '#8b0000',
+    'Vinho Branco' => '#f3e5ab',
+    'Vinho Rosé' => '#ffc0cb',
+];
+
+// Gerar o array de cores para as categorias
+$backgroundColors = [];
+foreach ($categorias as $categoria) {
+    $nomeCategoria = $categoria['category_name'];
+    $backgroundColors[] = $cores[$nomeCategoria] ?? 'rgba(75, 192, 192, 0.2)'; // Cor padrão se não for encontrada
+}
+$backgroundColorsJson = json_encode($backgroundColors);
+
 // Script para gerar o gráfico de pizza
 $js = <<<JS
     const ctx = document.getElementById('chartPizza').getContext('2d');
@@ -54,22 +68,8 @@ $js = <<<JS
             datasets: [{
                 label: 'Produtos por Categoria',
                 data: $data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
+                backgroundColor: $backgroundColorsJson,
+                borderColor: $backgroundColorsJson,
                 borderWidth: 1
             }]
         },

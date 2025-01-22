@@ -126,12 +126,16 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function isConsumer()
     {
-        return $this->getConsumerDetails()->exists();
+        return AuthAssignment::findOne(['user_id' => Yii::$app->user->id])->item_name == 'consumer';
     }
 
     public function isProducer()
     {
-        return $this->getProducerDetails()->exists();
+        return AuthAssignment::findOne(['user_id' => Yii::$app->user->id])->item_name == 'producer';
+    }
+
+    public function isAdmin(){
+        return AuthAssignment::findOne(['user_id' => Yii::$app->user->id])->item_name == 'admin';
     }
 
     public function getDetails()

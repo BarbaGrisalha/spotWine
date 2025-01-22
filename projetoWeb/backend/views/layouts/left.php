@@ -3,6 +3,7 @@
 /** @var \yii\web\View $this */
 /** @var string $directoryAsset */
 
+use common\models\User;
 use yii\helpers\Html;
 
 ?>
@@ -39,18 +40,6 @@ use yii\helpers\Html;
                     ],
 
                     [
-                        'label' => 'Administration Tools',
-                        'icon' => 'fa fa-cogs',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Gii', 'icon' => 'far fa-file-code', 'url' => ['/gii']],
-                            ['label' => 'Debug', 'icon' => 'fa fa-tachometer-alt', 'url' => ['/debug']],
-                            ['label' => 'Email', 'icon' => 'fa fa-envelope', 'url' => ['/site/developing']],
-                            ['label' => 'Calendar', 'icon' => 'fa fa-calendar', 'url' => ['/site/developing']],
-                        ],
-                    ],
-
-                    [
                         'label' => 'Database Relatório',
                         'icon' => 'fa fa-database',
                         'url' => '#',
@@ -67,11 +56,6 @@ use yii\helpers\Html;
                                 'url' => ['relatorio/relatorio-por-produtor'],
                             ],
                             [
-                                'label' => 'Relatório Quantidade/Categoria',
-                                'icon' => 'far fa-dot-circle',
-                                'url' => ['relatorio/relatorio-por-produtor'],
-                            ],
-                            [
                                 'label' => 'Relatório de Clientes',
                                 'icon' => 'far fa-dot-circle',
                                 'url' => ['relatorio/relatorio-clientes'],
@@ -83,25 +67,29 @@ use yii\helpers\Html;
                     ['label' => 'Gestão de Utilizadores', 'icon' => 'far fa-user', 'url' => ['/user/index'], 'visible' => Yii::$app->user->can('createUsers')],
                     ['label' => 'Gestão dos Produtos', 'icon' => 'far fa-box', 'url' => ['/product/index']],
                     ['label' => 'Gestão das Promoções', 'icon' => 'far fa-percentage', 'url' => ['/promotions/index']],
+                    ['label' => User::findOne(['id' => Yii::$app->user->id])->isAdmin() ?  'Gestão do Blog': 'Blog'  , 'icon' => 'far fa-blog', 'url' => (['blog-post/index'])],
+
+
 
                     [
                         'label' => 'Gestão de Vinícola',
                         'icon' => 'fa fa-wine-glass',
                         'url' => Yii::$app->user->identity->producerDetails ?
                             ['producers/update', 'producer_id' => Yii::$app->user->identity->producerDetails->id] : '#',
+                        'visible' => User::findOne(['id' => Yii::$app->user->id])->isProducer(),
                         'items' => [
                             [
                                 'label' => 'Minha Vinícola',
                                 'icon' => 'far fa-building',
                                 'url' => Yii::$app->user->identity->producerDetails ?
                                     ['producers/update', 'producer_id' => Yii::$app->user->identity->producerDetails->id] : '#',
-                                'visible' => Yii::$app->user->identity->role === 'producer',
                             ],
                         ],
                     ],
                 ],
             ]) ?>
-        </nav>
-        <!-- /.sidebar-menu -->
+
+
+        </nav><!-- /.sidebar-menu -->
     </div>
 </aside>

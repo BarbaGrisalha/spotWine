@@ -157,7 +157,7 @@ class ProducersController extends Controller
         ]);
         */
         //SPW-71 - https://lucassiqueira0763.atlassian.net/browse/SPW-71 alteração para suportar atualização do produtor sobre ele mesmo
-        $user = $this->findModel($producer_id);
+        $user = Yii::$app->user->identity;
         $producer = ProducerDetails::findOne(['user_id' => $user->id]);
 
         if($this->request->isPost && $producer->load($this->request->post()) &&$user->load($this->request->post())){

@@ -15,7 +15,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'imageFile')->fileInput() ?> <!-- Campo de upload -->
+    <!-- Campo de upload de arquivo -->
+    <div>
+        <?= $form->field($model, 'imageFile')->fileInput() ?>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

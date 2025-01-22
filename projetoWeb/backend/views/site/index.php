@@ -7,12 +7,15 @@
 
 
 
-$this->title = 'SpotWine_Backend';
+$this->title = 'Dashboard';
 ?>
 <div class="site-index">
     <div class="text-center bg-transparent">
-        <h1 class="display-4">Backend, Atenção!</h1>
-        <p class="lead">You have successfully accessed the backend in your Yii-powered application.</p>
+        <?= $this->render('@backend/views/relatorio/chart', [
+            'id' => $produtor->user_id,
+            'produtor' => $produtor,
+            'categorias' => $categorias,
+        ]) ?>
     </div>
 
 

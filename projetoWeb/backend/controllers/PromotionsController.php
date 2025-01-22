@@ -8,10 +8,14 @@ use common\models\ProducerDetails;
 use common\models\Product;
 use common\models\Promotions;
 use backend\models\PromotionSearch;
+use common\services\MqttServices;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * PromotionsController implements the CRUD actions for Promotions model.
@@ -27,13 +31,13 @@ class PromotionsController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => \yii\filters\VerbFilter::class,
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
                 ],
                 'access' => [
-                    'class' => \yii\filters\AccessControl::class,
+                    'class' => AccessControl::class,
                     'rules' => [
                         [
                             'allow' => true,
@@ -73,7 +77,7 @@ class PromotionsController extends Controller
         $user = Yii::$app->user->identity;
         $producer = ProducerDetails::findOne(['user_id' => $user->getId()]);
         if (!$producer) {
-            throw new \yii\web\ForbiddenHttpException('Você precisa ser um produtor para acessar esta página.');
+            throw new ForbiddenHttpException('Você precisa ser um produtor para acessar esta página.');
         }
 
         $searchModel = new PromotionSearch();
@@ -104,7 +108,7 @@ class PromotionsController extends Controller
     /**
      * Creates a new Promotions model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -119,7 +123,9 @@ class PromotionsController extends Controller
 
         $model->producer_id = $producer->id;
 
+
         if ($model->load(Yii::$app->request->post()) && $model->savePromotion()) {
+
             // Mensagem personalizada para os inscritos
             $mensagem = [
                 'titulo' => mb_convert_encoding($model->name, 'UTF-8', 'auto'),
@@ -134,7 +140,7 @@ class PromotionsController extends Controller
             ];
 
 // Publica a mensagem no canal MQTT
-            \common\services\MqttServices::FazPublishNoMosquitto('spotwine/promocoes', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+            MqttServices::FazPublishNoMosquitto('spotwine/promocoes', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
 
 
             Yii::$app->session->setFlash('success', 'Promoção criada com sucesso.');
@@ -153,7 +159,7 @@ class PromotionsController extends Controller
      * Updates an existing Promotions model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $promotion_id Promotion ID
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($promotion_id)
@@ -180,7 +186,7 @@ class PromotionsController extends Controller
      * Deletes an existing Promotions model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $promotion_id Promotion ID
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($promotion_id)

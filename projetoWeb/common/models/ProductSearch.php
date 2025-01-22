@@ -44,14 +44,15 @@ class ProductSearch extends Product
     public function search($params)
     {
         //Aqui eu busco a identidade do utilizador logado
-        $loggedInProducerId = Yii::$app->user->id;
+        $userId = Yii::$app->user->id;
         $query = Product::find()->joinWith(['producers', 'categories']);
 
         //Aqui eu garanto que os produtos filtrados sejam do produtor logado
 
-        $query->andWhere(['producer_details.user_id' => $loggedInProducerId]);
+        if(!User::findOne(['id' => $userId])->isAdmin()){
+            $query->andWhere(['producer_details.user_id' => $userId]);
+        }
 
-        $query->andWhere(['producer_details.user_id' => $loggedInProducerId]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [

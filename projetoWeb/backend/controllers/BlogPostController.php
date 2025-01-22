@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\helpers\FileUploadHelper;
 use common\models\BlogPostSearch;
 use common\models\Comments;
 use Yii;
@@ -101,9 +102,19 @@ class BlogPostController extends Controller
         $model = new BlogPosts();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile'); // Captura o arquivo enviado
+            // Gerenciar o upload de arquivo
+            $file = UploadedFile::getInstance($model, 'imageFile');
+            if ($file) {
+                $imageUrl = FileUploadHelper::upload($file, 'blog');
+                if ($imageUrl) {
+                    $model->image_url = $imageUrl;
+                } else {
+                    Yii::$app->session->setFlash('error', 'Erro ao fazer upload da imagem.');
+                    return $this->render('create', ['model' => $model]);
+                }
+            }
 
-            if ($model->upload() && $model->save()) {
+            if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Post criado com sucesso!');
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
@@ -111,10 +122,10 @@ class BlogPostController extends Controller
             }
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->render('create', ['model' => $model]);
     }
+
+
 
     public function actionUpdate($id)
     {
@@ -125,14 +136,30 @@ class BlogPostController extends Controller
             throw new ForbiddenHttpException('Você não tem permissão para editar este post.');
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // Gerenciar o upload de arquivo
+            $file = UploadedFile::getInstance($model, 'imageFile');
+            if ($file) {
+                $imageUrl = FileUploadHelper::upload($file, 'blog');
+                if ($imageUrl) {
+                    $model->image_url = $imageUrl;
+                } else {
+                    Yii::$app->session->setFlash('error', 'Erro ao fazer upload da imagem.');
+                    return $this->render('update', ['model' => $model]);
+                }
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Post atualizado com sucesso!');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Erro ao salvar o post.');
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->render('update', ['model' => $model]);
     }
+
 
     public function actionDelete($id)
     {

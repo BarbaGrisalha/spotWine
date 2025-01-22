@@ -102,14 +102,32 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $userId = Yii::$app->user->identity->id;
 
-       $searchModel = new UserSearch();
-       $dataProvider = $searchModel->search($this->request->queryParams);
+        //Busca o modelo do Produtor
+        //$producer = User::findOne($producerId);
+        $producer = ProducerDetails::findOne(['user_id'=> $userId]);
 
-       return $this->render('index', [
-           'searchModel' => $searchModel,
-           'dataProvider' => $dataProvider,
-       ]);
+        if($producer === null){
+            return $this->render('erro',[
+                'mensagem'=>'Produtor não encontrado',
+            ]);
+        }
+
+        // Consulta para obter categorias e totais de produtos do produtor logado
+        $categorias = (new \yii\db\Query())
+            ->select(['categories.name AS category_name', 'SUM(products.stock) AS total_stock'])
+            ->from('products')
+            ->leftJoin('categories', 'products.category_id = categories.category_id')
+            ->where(['products.producer_id' => $producer->id])
+            ->groupBy('categories.name')
+            ->all();
+
+        return $this->render('index',[
+            'produtor' => $producer,
+            'categorias' => $categorias,
+        ]);
+
     }
 
     /**

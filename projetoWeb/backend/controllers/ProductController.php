@@ -3,6 +3,7 @@
 namespace backend\controllers;
 header('Content-Type: application/json; charset=utf-8');
 
+use common\helpers\FileUploadHelper;
 use common\models\BlogPosts;
 use common\models\ProducerDetails;
 use Yii;
@@ -12,6 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -97,6 +99,18 @@ class ProductController extends Controller
         $producer = ProducerDetails::findOne(['user_id' => $user->id]); // Obter o produtor associado
 
         if ($model->load(Yii::$app->request->post())) {
+            $file = UploadedFile::getInstance($model, 'imageFile');
+
+            if($file){
+                $imageUrl = FileUploadHelper::upload($file, 'products');
+                if($imageUrl){
+                    $model->image_url = $imageUrl;
+                }else{
+                    Yii::$app->session->setFlash('error', 'Erro ao fazer upload da imagem.');
+                    return $this->render('create', ['model' => $model]);
+                }
+            }
+
             // Validar se o utilizador tem permissão de produtor
             if (\Yii::$app->user->can('producer')) {
                 $model->producer_id = $producer->id;
@@ -138,23 +152,48 @@ class ProductController extends Controller
      */
     public function actionUpdate($product_id)
     {
-
-        $model = $this->findModel($product_id);//troquei $id por $product_id
+        $model = $this->findModel($product_id);
 
         // Obtenha o usuário logado
         $userId = Yii::$app->user->identity->id;
         $producer = ProducerDetails::findOne(['user_id' => $userId]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'product_id' => $model->product_id]);//mudei de id para product_id
+        if (!$producer && \Yii::$app->user->can('producer')) {
+            Yii::$app->session->setFlash('error', 'Permissão negada. Você não é um produtor.');
+            return $this->redirect(['index']);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            // Gerenciar o upload de arquivo antes de salvar
+            $file = UploadedFile::getInstance($model, 'imageFile');
+            if ($file) {
+                $imageUrl = FileUploadHelper::upload($file, 'products');
+                if ($imageUrl) {
+                    $model->image_url = $imageUrl;
+                } else {
+                    Yii::$app->session->setFlash('error', 'Erro ao fazer upload da imagem.');
+                    return $this->render('update', ['model' => $model]);
+                }
+            }
+
+            // Atribuir produtor se o usuário for produtor
+            if (\Yii::$app->user->can('producer')) {
+                $model->producer_id = $producer->id;
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Produto atualizado com sucesso.');
+                return $this->redirect(['view', 'product_id' => $model->product_id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Erro ao salvar o produto.');
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
-            'user' => $producer->id, // Passe o usuário para a view
         ]);
-
     }
+
 
     /**
      * Deletes an existing Product model.
@@ -165,9 +204,15 @@ class ProductController extends Controller
      */
     public function actionDelete($product_id)
     {
+        $product = $this->findModel($product_id);
 
-        $this->findModel($product_id)->delete();
+        if ($product->getOrderItems()->exists()) {
+            Yii::$app->session->setFlash('error', 'Este produto está associado a pedidos e não pode ser excluído.');
+            return $this->redirect(['index']);
+        }
 
+        $product->delete();
+        Yii::$app->session->setFlash('success', 'Produto excluído com sucesso.');
         return $this->redirect(['index']);
     }
 

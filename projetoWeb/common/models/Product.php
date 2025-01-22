@@ -55,19 +55,6 @@ class Product extends \yii\db\ActiveRecord
         ];
     }
 
-    public function upload()
-    {
-        $user = Yii::$app->user->identity;
-        if ($this->validate()) {
-            $fileName = uniqid('product_', true) . '.' . $this->imageFile->extension;
-            $filePath = 'uploads/products/' . $fileName;
-            $this->imageFile->saveAs(\Yii::getAlias('@webroot') . '/' . $filePath);
-            $this->image_url = $filePath; // Salva o caminho no campo do banco
-            return true;
-        }
-        return false;
-    }
-
     /**
      * {@inheritdoc}
      */

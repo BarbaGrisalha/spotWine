@@ -59,27 +59,6 @@ class BlogPosts extends \yii\db\ActiveRecord
     /**
      * Realiza o upload da imagem
      */
-    public function upload()
-    {
-        if (!$this->validate()) {
-            return false;
-        }
-
-        $uploadPath = Yii::getAlias('@webroot/uploads/blog');
-        if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0775, true); // Cria o diretório, se necessário
-        }
-
-        $fileName = uniqid() . '.' . $this->imageFile->extension;
-        $filePath = $uploadPath . '/' . $fileName;
-
-        if ($this->imageFile->saveAs($filePath, false)) {
-            $this->image_url = '/uploads/blog/' . $fileName; // Caminho relativo para salvar no banco
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * Gets query for [[BlogTags]].

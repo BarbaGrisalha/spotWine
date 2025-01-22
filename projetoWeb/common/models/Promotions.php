@@ -39,7 +39,7 @@ class Promotions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'start_date', 'end_date', 'discount_type', 'promotion_type'], 'required'],
+            [['name', 'start_date', 'end_date', 'discount_type', 'promotion_type', 'discount_value'], 'required'],
             [['start_date', 'end_date'], 'date', 'format' => 'php:Y-m-d'],
             [['discount_value', 'condition_value'], 'number', 'min' => 0],
             [['producer_id'], 'integer'],
@@ -190,17 +190,29 @@ class Promotions extends \yii\db\ActiveRecord
 
     public function savePromotion()
     {
-        if ($this->promotion_type === 'direct' && empty($this->productsIds)) {
-            $this->addError('productsIds', 'Selecione ao menos um produto para a promoção direta.');
-            return false;
+        // 1️⃣ Validação para promoções diretas: deve ter pelo menos um produto selecionado
+        if ($this->promotion_type === 'direct') {
+            if (empty($this->productsIds)) {
+                $this->addError('productsIds', 'Selecione ao menos um produto para a promoção direta.');
+                return false;
+            }
+
+            // Define condition_type e condition_value como NULL para evitar erros no banco
+            $this->condition_type = null;
+            $this->condition_value = null;
         }
 
-        if ($this->promotion_type === 'conditional' && (empty($this->condition_type) || empty($this->condition_value))) {
-            $this->addError('condition_type', 'Tipo e valor da condição são obrigatórios para promoções condicionais.');
-            return false;
+        // 2️⃣ Validação para promoções condicionais: deve ter tipo e valor da condição
+        if ($this->promotion_type === 'conditional') {
+            if (empty($this->condition_type) || empty($this->condition_value)) {
+                $this->addError('condition_type', 'Tipo e valor da condição são obrigatórios para promoções condicionais.');
+                return false;
+            }
         }
 
+        // 3️⃣ Tenta salvar o modelo
         if ($this->save()) {
+            // 4️⃣ Se for promoção direta, associa os produtos selecionados
             if ($this->promotion_type === 'direct') {
                 $this->linkProducts($this->productsIds);
             }
@@ -209,6 +221,7 @@ class Promotions extends \yii\db\ActiveRecord
 
         return false;
     }
+
 
 
 
@@ -248,3 +261,4 @@ class Promotions extends \yii\db\ActiveRecord
         }
     }
 }
+
