@@ -12,7 +12,7 @@ use yii\helpers\Html;
     <!-- Brand Logo -->
     <?= Html::a(
         '<div class="d-flex align-items-center">
-            <img class="brand-image img-circle elevation-3 me-2" 
+            <img class="me-2" 
                  src="/frontend/web/img/logo.png" 
                  alt="APP" 
                  style="width: 50px; height: 50px;">
@@ -67,9 +67,11 @@ use yii\helpers\Html;
                     ['label' => 'Gestão de Utilizadores', 'icon' => 'far fa-user', 'url' => ['/user/index'], 'visible' => Yii::$app->user->can('createUsers')],
                     ['label' => 'Gestão dos Produtos', 'icon' => 'far fa-box', 'url' => ['/product/index']],
                     ['label' => 'Gestão das Promoções', 'icon' => 'far fa-percentage', 'url' => ['/promotions/index']],
-                    ['label' => User::findOne(['id' => Yii::$app->user->id])->isAdmin() ?  'Gestão do Blog': 'Blog'  , 'icon' => 'far fa-blog', 'url' => (['blog-post/index'])],
-
-
+                    ['label' => Yii::$app->user->identity->isAdmin() ?  'Gestão do Blog': 'Blog'  , 'icon' => 'far fa-blog', 'url' => (['blog-post/index'])],
+                    ['label' => 'Gestão de Concursos' , 'icon' => 'far fa-trophy', 'url' => (['contests/index']),
+                        'visible' =>  Yii::$app->user->identity->isAdmin()],
+                    ['label' => 'Concursos' , 'icon' => 'far fa-trophy', 'url' => (['contests/producer-index']),
+                        'visible' =>  Yii::$app->user->identity->isProducer(),],
 
                     [
                         'label' => 'Gestão de Vinícola',

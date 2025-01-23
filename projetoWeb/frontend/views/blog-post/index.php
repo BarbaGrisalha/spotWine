@@ -15,20 +15,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Criar Post', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <div class="filter-buttons">
+    <div class="d-flex justify-content-between align-items-center">
         <p>
-            <?= Html::a('Mostrar Todos', ['index', 'showAll' => 1], [
-                'class' => $showAll ? 'btn btn-primary' : 'btn btn-secondary',
-            ]) ?>
-            <?= Html::a('Mostrar Meus Posts', ['index', 'showAll' => 0], [
-                'class' => !$showAll ? 'btn btn-primary' : 'btn btn-secondary',
-            ]) ?>
+            <?= Html::a('Criar Post', ['create'], ['class' => 'btn btn-success']) ?>
         </p>
+
+        <div class="filter-buttons">
+            <p>
+                <?= Html::a('Mostrar Todos', ['index', 'showAll' => 1], [
+                    'class' => $showAll ? 'btn btn-primary' : 'btn btn-secondary',
+                ]) ?>
+                <?= Html::a('Mostrar Meus Posts', ['index', 'showAll' => 0], [
+                    'class' => !$showAll ? 'btn btn-primary' : 'btn btn-secondary',
+                ]) ?>
+            </p>
+        </div>
+
+
     </div>
+
 
     <div class="row">
         <?= ListView::widget([

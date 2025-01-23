@@ -71,7 +71,7 @@ class CheckoutController extends Controller
                         'data_criacao' => mb_convert_encoding($invoice->invoice_date, 'UTF-8', 'auto'),
                     ];
 
-                    //MqttServices::FazPublishNoMosquitto('spotwine/faturas', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                    MqttServices::FazPublishNoMosquitto('spotwine/faturas', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
 
                     return $this->redirect(['payment', 'orderId' => $order->id]);
                 } else {
@@ -114,7 +114,7 @@ class CheckoutController extends Controller
                         'data_pagamento' => mb_convert_encoding(date('Y-m-d H:i:s'), 'UTF-8', 'auto'),
                     ];
 
-                    //MqttServices::FazPublishNoMosquitto('spotwine/faturas/pagamento', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
+                    MqttServices::FazPublishNoMosquitto('spotwine/faturas/pagamento', json_encode($mensagem, JSON_UNESCAPED_UNICODE));
                 } else {
                     Yii::$app->session->setFlash('error', 'Erro ao atualizar a fatura.');
                 }

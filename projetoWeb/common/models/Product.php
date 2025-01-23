@@ -19,7 +19,7 @@ use Yii;
  * @property Categories $category
  * @property ContestParticipations[] $contestParticipations
  * @property OrderItems[] $orderItems
- * @property Producers $producer
+ * @property ProducerDetails $producer
  * @property Promotions[] $promotions
  * @property Reviews[] $reviews
  */

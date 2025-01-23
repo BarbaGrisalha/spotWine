@@ -4,7 +4,7 @@ use yii\bootstrap4\Breadcrumbs;
 use dmstr\adminlte\widgets\Alert;
 
 ?>
-<div class="content-wrapper">
+<div class="content-wrapper h-auto">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">

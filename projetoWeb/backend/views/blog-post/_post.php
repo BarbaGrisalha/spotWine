@@ -7,7 +7,7 @@ use yii\helpers\Url;
 
 ?>
 
-<div class="card h-100 shadow-lg">
+<div class="card h-auto shadow-lg">
     <?php if (!empty($model->image_url)): ?>
         <div class="card-img-top" style="height: 50%; overflow: hidden;">
             <img src="<?= Url::to('@web' . $model->image_url) ?>"
