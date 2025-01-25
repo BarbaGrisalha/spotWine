@@ -3,8 +3,14 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 
+$this->title = 'Concursos';
+
+/** @var $dataProvider */
+/** @var  $searchModel */
 ?>
-<?= GridView::widget([
+
+<?=
+GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
@@ -45,12 +51,12 @@ use yii\helpers\Html;
                 if ($now < strtotime($model->registration_end_date)) {
                     $diasRestantes = $formatter->asRelativeTime($model->registration_end_date, $now);
                     return '<i class="fas fa-calendar-check text-success"></i> Inscrições abertas (' .
-                        str_replace(['in ', 'a day', 'days'], ['', '1 dia', 'dias'], $diasRestantes) .
+                        str_replace(['in ', 'a day', 'days', 'hours'], ['', '1 dia', 'dias', 'horas'], $diasRestantes) .
                         ' restantes)';
                 } elseif ($now < strtotime($model->contest_start_date)) {
-                    return '<i class="bi bi-hourglass-split text-warning"></i> Aguardando início do concurso';
+                    return '<i class="fa fa-clock text-danger-emphasis"></i> Aguardando início do concurso';
                 } elseif ($now < strtotime($model->contest_end_date)) {
-                    return '<i class="fas fa-trophy text-yellow"></i> Concurso em andamento';
+                    return '<i class="fas fa-trophy text-warning"></i> Concurso em andamento';
                 } else {
                     return '<i class="fas fa-flag text-danger"></i> Concurso finalizado';
                 }
@@ -62,7 +68,7 @@ use yii\helpers\Html;
             'template' => '{register}', // Apenas ação de inscrição
             'buttons' => [
                 'register' => function ($url, $model) {
-                    return Html::a('Inscreva-se', ['register-producer', 'id' => $model->id], [
+                    return Html::a('Saber mais', ['details', 'id' => $model->id], [
                         'class' => 'btn btn-primary',
                     ]);
                 },

@@ -209,7 +209,7 @@ class ContestsController extends Controller
 
             if ($participation->save()) {
                 Yii::$app->session->setFlash('success', 'Inscrição realizada com sucesso!');
-                return $this->redirect(['confirmation', 'contestId' => $contest->id]);
+                return $this->redirect(['contests/confirmation', 'id' => $contest->id]);
 
             } else {
                 Yii::$app->session->setFlash('error', 'Erro ao salvar a inscrição.');
@@ -223,9 +223,16 @@ class ContestsController extends Controller
         ]);
     }
 
-    public function actionConfirmation($contestId)
+    public function actionDetails($id){
+        $contest = Contests::findOne($id);
+
+        return $this->render('details', [
+            'contest' => $contest]);
+    }
+
+    public function actionConfirmation($id)
     {
-        $contest = Contests::findOne($contestId);
+        $contest = Contests::findOne($id);
 
         if (!$contest) {
             throw new NotFoundHttpException('O concurso solicitado não foi encontrado.');
