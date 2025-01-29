@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\BadRequestHttpException;
 
 /**
  * This is the model class for table "contests".
@@ -75,6 +76,26 @@ class Contests extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
+
+    public function updateStatus()
+    {
+        $now = time();
+        $registrationStartDate = strtotime($this->registration_start_date);
+        $registrationEndDate = strtotime($this->registration_end_date);
+
+        if ($now < $registrationStartDate) {
+            $this->status = 'pending';
+        } elseif ($now >= $registrationStartDate && $now <= $registrationEndDate) {
+            $this->status = 'registration';
+        } elseif ($now > $registrationEndDate) {
+            $this->status = 'voting';
+        } else {
+            $this->status = 'finished';
+        }
+
+        return $this->save(false); // Salvar sem validação para evitar erros
+    }
+
     public function getCategories()
     {
         return $this->hasOne(Categories::class, ['category_id' => 'category_id']);
@@ -89,4 +110,31 @@ class Contests extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ContestParticipations::class, ['contest_id' => 'id']);
     }
+
+    public function actionDeclareWinner($id)
+    {
+        $contest = $this::findOne($id);
+
+        if (!$contest || $contest->status !== 'finished') {
+            throw new BadRequestHttpException('O concurso não está finalizado ainda.');
+        }
+
+        // Conta os votos e define o vencedor
+        $winner = ContestVotes::find()
+            ->select(['product_id', 'COUNT(*) AS vote_count'])
+            ->where(['contest_id' => $id])
+            ->groupBy('product_id')
+            ->orderBy(['vote_count' => SORT_DESC])
+            ->limit(1)
+            ->one();
+
+        if ($winner) {
+            $contest->winner_product_id = $winner->product_id;
+            $contest->save();
+        }
+
+        Yii::$app->session->setFlash('success', 'O vencedor foi definido!');
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
 }

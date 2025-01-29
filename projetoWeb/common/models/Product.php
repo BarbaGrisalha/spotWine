@@ -50,7 +50,7 @@ class Product extends \yii\db\ActiveRecord
             [['price'], 'number'],
             [['name'], 'string', 'max' => 100],
             [['image_url'], 'string', 'max' => 255],
-            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2], // Validação do upload
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 10 * 1024 * 1024, 'tooBig' => 'O arquivo não pode exceder 10 MB.'],
 
         ];
     }

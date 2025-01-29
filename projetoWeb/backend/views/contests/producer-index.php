@@ -9,8 +9,7 @@ $this->title = 'Concursos';
 /** @var  $searchModel */
 ?>
 
-<?=
-GridView::widget([
+<?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
@@ -24,7 +23,7 @@ GridView::widget([
                 // Ícones personalizados por categoria
                 $cores = [
                     'Vinho Tinto' => ['cor' => '#8B0000', 'icone' => '<i class="fas fa-wine-glass"></i>'],
-                    'Vinho Branco' => ['cor' => '#fcec71', 'icone' => '<i class="fas fa-wine-glass" ></i>'],
+                    'Vinho Branco' => ['cor' => '#fcec71', 'icone' => '<i class="fas fa-wine-glass"></i>'],
                     'Vinho Rose' => ['cor' => '#FF69B4', 'icone' => '<i class="fas fa-wine-glass"></i>'],
                 ];
 
@@ -45,31 +44,31 @@ GridView::widget([
             'attribute' => 'Fase do Concurso',
             'format' => 'raw',
             'value' => function ($model) {
-                $now = time();
-                $formatter = Yii::$app->formatter;
+                // Atualiza o status antes de exibir
+                $model->updateStatus();
 
-                if ($now < strtotime($model->registration_end_date)) {
-                    $diasRestantes = $formatter->asRelativeTime($model->registration_end_date, $now);
-                    return '<i class="fas fa-calendar-check text-success"></i> Inscrições abertas (' .
-                        str_replace(['in ', 'a day', 'days', 'hours'], ['', '1 dia', 'dias', 'horas'], $diasRestantes) .
-                        ' restantes)';
-                } elseif ($now < strtotime($model->contest_start_date)) {
-                    return '<i class="fa fa-clock text-danger-emphasis"></i> Aguardando início do concurso';
-                } elseif ($now < strtotime($model->contest_end_date)) {
-                    return '<i class="fas fa-trophy text-warning"></i> Concurso em andamento';
-                } else {
-                    return '<i class="fas fa-flag text-danger"></i> Concurso finalizado';
-                }
+                // Ícones e cores baseados no status atualizado
+                $statusLabels = [
+                    'pending' => ['label' => 'Aguardando início',  'icon' => '<i class="fa fa-clock text-secondary"></i>'],
+                    'registration' => ['label' => 'Inscrições abertas', 'icon' => '<i class="fas fa-calendar-check text-success"></i>'],
+                    'voting' => ['label' => 'Concurso em andamento', 'icon' => '<i class="fas fa-trophy text-warning"></i>'],
+                    'finished' => ['label' => 'Concurso finalizado',  'icon' => '<i class="fas fa-flag text-danger"></i>'],
+                ];
+
+                $status = $statusLabels[$model->status] ?? $statusLabels['pending'];
+
+                return "{$status['icon']} <span>{$status['label']}</span>";
             },
             'contentOptions' => ['class' => 'align-middle text-center'],
         ],
         [
             'class' => 'yii\grid\ActionColumn',
             'template' => '{register}', // Apenas ação de inscrição
+            'contentOptions' => ['class' => 'align-middle text-center'],
             'buttons' => [
                 'register' => function ($url, $model) {
-                    return Html::a('Saber mais', ['details', 'id' => $model->id], [
-                        'class' => 'btn btn-primary',
+                    return Html::a('<i class="fas fa-info mr-1"></i>Saber Mais', ['details', 'id' => $model->id], [
+                        'class' => 'btn btn-outline-info',
                     ]);
                 },
             ],

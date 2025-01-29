@@ -7,8 +7,10 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $productId = $model->product->product_id;
+
 ?>
-<div class="position-absolute" style="top: 10px; right: 30px; z-index: 10;">
+
+<div class="position-absolute " style="top: 10px; right: 30px; z-index: 10;">
     <?php if (!Yii::$app->user->isGuest): ?>
         <?php  $product = Product::findOne($productId)?>
 
@@ -25,11 +27,19 @@ $productId = $model->product->product_id;
    class="product-link text-decoration-none">
     <div class="product-item bg-light mb-4 d-flex flex-column align-items-stretch position-relative" style="cursor: pointer;">
         <!-- Imagem do Produto -->
-        <div class="product-img position-relative overflow-hidden">
-            <?= Html::img('@web/img/wineBottle.png', [
-                'class' => 'img-fluid w-100',
-                'alt' => 'Imagem garrafa de vinho',
-            ]) ?>
+
+
+        <div class="product-img position-relative overflow-hidden" style="height: 280px;">
+            <?= Html::img(
+                !empty($model->product->image_url)
+                    ? Yii::getAlias('@backendUrl') . '/uploads/products/' . basename($model->product->image_url)
+                    : Yii::getAlias('@web') . '/img/wineBottle.png',
+                [
+                    'class' => 'img-fluid w-100 h-100 object-fit-cover',
+                    'alt' => Html::encode($model->product->name),
+                ]
+            ) ?>
+
             <?php if ($model->isOnPromotion()): ?>
                 <div class="ribbon bg-danger text-white position-absolute"
                      style="top: 15px; left: -10px; transform: rotate(-45deg); padding: 5px 20px;">

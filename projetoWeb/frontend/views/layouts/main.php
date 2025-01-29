@@ -159,7 +159,7 @@ $user = Yii::$app->user->identity;
                             <?= Html::a('Vinhos', Url::to(['/product/index']), ['class' => 'nav-item nav-link']) ?>
                             <?= Html::a('Produtores', Url::to(['/producers/index']), ['class' => 'nav-item nav-link']) ?>
                             <a href="#" class="nav-item nav-link">Promoções</a>
-                            <a href="#" class="nav-item nav-link">Concurso</a>
+                            <?= Html::a('Concurso', Url::to(['/contest/index']), ['class' => 'nav-item nav-link']) ?>
                             <?= Html::a('Blogue', Url::to(['/blog-post/index']), ['class' => 'nav-item nav-link']) ?>
                             <!-- Para um item com mais opções
                             <div class="nav-item dropdown">

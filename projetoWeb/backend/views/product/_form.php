@@ -19,6 +19,8 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin() ?>
    <?php $user = Yii::$app->user->identity; ?>
 
+    <h1 class="text-center"><?=$this->title?></h1>
+
 
     <?php if ($user === null) {
     throw new \yii\web\ForbiddenHttpException('Usuário não autenticado.');

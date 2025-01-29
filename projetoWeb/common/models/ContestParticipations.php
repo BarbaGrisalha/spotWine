@@ -81,6 +81,6 @@ class ContestParticipations extends \yii\db\ActiveRecord
      */
     public function getProduct()
     {
-        return $this->hasOne(Products::class, ['product_id' => 'product_id']);
+        return $this->hasOne(Product::class, ['product_id' => 'product_id']);
     }
 }

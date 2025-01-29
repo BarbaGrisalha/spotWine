@@ -226,6 +226,12 @@ class ContestsController extends Controller
     public function actionDetails($id){
         $contest = Contests::findOne($id);
 
+        if (!$contest) {
+            throw new NotFoundHttpException('Concurso não encontrado.');
+        }
+
+        $contest->updateStatus();
+
         return $this->render('details', [
             'contest' => $contest]);
     }
@@ -242,7 +248,6 @@ class ContestsController extends Controller
             'contest' => $contest,
         ]);
     }
-
 
     /**
      * Finds the Contests model based on its primary key value.
