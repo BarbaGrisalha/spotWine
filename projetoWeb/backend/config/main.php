@@ -59,13 +59,14 @@ return [
                     'controller' => ['api/cart'],
                     'pluralize' => false,
                     'extraPatterns' => [
-                        'GET {id}' => 'index',
-                        'GET {id}/items' => 'items',
-                        'POST add' => 'add',
-                        'PUT update/{id}' => 'update',
-                        'DELETE delete/{id}' => 'delete',
+                        'GET ' => 'index',                         // Retorna o carrinho
+                        'POST items' => 'add',                     // Adiciona um item
+                        'PATCH items/{id}' => 'update',            // Atualiza a quantidade de um item
+                        'DELETE items/{id}' => 'delete',           // Remove um item
+                        'DELETE ' => 'clear-cart',                 // Esvazia o carrinho
                     ],
                 ],
+
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/invoice'],
@@ -85,7 +86,7 @@ return [
                     'controller' => ['api/checkout'],
                     'pluralize' => false,
                     'extraPatterns' => [
-                        'POST {invoiceId}' => 'checkout',
+                        'POST {id}' => 'checkout',
                         'POST payment/{invoiceId}' => 'payment',
                         'GET confirmation/{orderId}' => 'confirmation',
                     ],
@@ -108,10 +109,10 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'GET all' => 'all', // Mostrar todas as reviews (admin)
-                        'GET product-reviews/{productId}' => 'product-reviews', // Reviews de um produto
-                        'POST create' => 'create', // Criar review
-                        'PUT update/{id}' => 'update', // Atualizar review
-                        'DELETE delete/{id}' => 'delete', // Deletar review
+                        'GET {id}' => 'product-reviews', // Reviews de um produto
+                        'POST ' => 'create', // Criar review
+                        'PUT {id}' => 'update', // Atualizar review
+                        'DELETE {id}' => 'delete', // Deletar review
                     ],
                 ],
                 [
@@ -134,6 +135,16 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'GET view/{product_id}' => 'view',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' =>  ['api/favorite'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET ' => 'index',
+                        'POST {id}' => 'add',
+                        'DELETE {id}' => 'remove',
                     ],
                 ],
             ],

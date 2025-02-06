@@ -21,7 +21,7 @@ BootstrapAsset::register($this);
 AppAsset::register($this);
 
 $user = Yii::$app->user->identity;
-
+/** @var common\models\User $user */
 
 ?>
 <?php $this->beginPage() ?>
@@ -158,7 +158,7 @@ $user = Yii::$app->user->identity;
 
                             <?= Html::a('Vinhos', Url::to(['/product/index']), ['class' => 'nav-item nav-link']) ?>
                             <?= Html::a('Produtores', Url::to(['/producers/index']), ['class' => 'nav-item nav-link']) ?>
-                            <a href="#" class="nav-item nav-link">Promoções</a>
+                            <?= Html::a('Promoções', Url::to(['/product/index', 'ProductFrontSearch[filter]' => 'promocoes']), ['class' => 'nav-item nav-link']) ?>
                             <?= Html::a('Concurso', Url::to(['/contest/index']), ['class' => 'nav-item nav-link']) ?>
                             <?= Html::a('Blogue', Url::to(['/blog-post/index']), ['class' => 'nav-item nav-link']) ?>
                             <!-- Para um item com mais opções
@@ -248,13 +248,12 @@ $user = Yii::$app->user->identity;
                                                 ) ?>
                                                 <?= Html::a(
                                                     '<i class="fas fa-file-invoice fa-lg text-secondary mr-2"></i> Minhas Faturas',
-                                                    ['/fatura/index'],
+                                                    ['/account/invoices'],
                                                     ['class' => 'dropdown-item']
                                                 ) ?>
                                                 <?= Html::a(
                                                     '<i class="fas fa-key fa-lg text-secondary mr-2"></i> Alterar Password',
-                                                    ['/perfil/alterar-password'],
-                                                    ['class' => 'dropdown-item']
+                                                    ['/account/change-password'], ['class' => 'dropdown-item']
                                                 ) ?>
                                                 <?= Html::beginForm(['/site/logout'], 'post', ['id' => 'logout-form']) ?>
                                                 <?= Html::submitButton(

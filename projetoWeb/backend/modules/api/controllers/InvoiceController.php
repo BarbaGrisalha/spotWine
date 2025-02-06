@@ -10,35 +10,27 @@ use yii\rest\ActiveController;
 
 class InvoiceController extends ActiveController
 {
-    public $modelClass = 'common\models\Invoice';
+    public $modelClass = 'common\models\Invoices';
 
     public function behaviors()
     {
         $behaviors = parent::behaviors();
 
-        // Autenticação com QueryParamAuth
+        // Autenticação
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::class,
-            'except' => ['login', 'registo'], // Exclua ações públicas
         ];
 
-        // Controle de Acesso
+        // Controle de acesso
         $behaviors['access'] = [
             'class' => AccessControl::class,
             'ruleConfig' => [
                 'class' => \yii\filters\AccessRule::class,
             ],
             'rules' => [
-                // Ações para admin
                 [
                     'allow' => true,
-                    'actions' => ['all', 'delete', 'update', 'update-status'],
-                    'roles' => ['admin'],
-                ],
-                // Ações para usuários autenticados
-                [
-                    'allow' => true,
-                    'actions' => ['my-invoices', 'view', 'create', 'update-status'],
+                    'actions' => ['my-invoices', 'view', 'update-status'],
                     'roles' => ['@'], // Apenas usuários autenticados
                 ],
             ],
@@ -47,207 +39,100 @@ class InvoiceController extends ActiveController
         return $behaviors;
     }
 
-
     public function actions()
     {
         $actions = parent::actions();
-
-        // Remover ações que serão sobrescritas
-        unset($actions['view'], $actions['delete'], $actions['update'], $actions['create'], $actions['index'], $actions['updateStatus']);
-
+        unset($actions['view'], $actions['update']);
         return $actions;
     }
 
-    public function actionCreate()
-    {
-        $data = Yii::$app->request->post();
-
-        $invoice = new Invoices();
-
-        // Relacionar com uma ordem, se fornecido
-        if (isset($data['order_id'])) {
-            $invoice->order_id = $data['order_id'];
-        } else {
-            Yii::$app->response->statusCode = 400;
-            return ['error' => 'O campo "order_id" é obrigatório.'];
-        }
-
-        // Definir valores automáticos, se não fornecidos
-        $invoice->invoice_number = $data['invoice_number'] ?? uniqid('INV-');
-        $invoice->invoice_date = $data['invoice_date'] ?? date('Y-m-d');
-        $invoice->total_amount = $data['total_amount'] ?? 0;
-        $invoice->status = $data['status'] ?? 'pending';
-
-        if ($invoice->save()) {
-            return [
-                'message' => 'Fatura criada com sucesso.',
-                'invoice' => $invoice,
-            ];
-        }
-
-        Yii::$app->response->statusCode = 422; // Unprocessable Entity
-        return $invoice->errors;
-    }
-
-
-    public function actionUpdateStatus($id)
-    {
-        $invoice = Invoices::findOne($id);
-
-        if (!$invoice) {
-            throw new \yii\web\NotFoundHttpException('Fatura não encontrada.');
-        }
-
-        $user = Yii::$app->user->identity;
-
-        // Verificar permissão: dono da fatura ou admin
-        $isOwner = $invoice->orders->user_id === $user->id;
-        $isAdmin = Yii::$app->user->can('admin');
-
-        if (!$isOwner && !$isAdmin) {
-            throw new \yii\web\ForbiddenHttpException('Você não tem permissão para atualizar esta fatura.');
-        }
-
-        // Obter os dados enviados
-        $data = Yii::$app->request->post();
-        if (empty($data['status'])) {
-            Yii::$app->response->statusCode = 400; // Bad Request
-            return ['error' => 'O campo "status" é obrigatório.'];
-        }
-
-        // Permitir que o dono altere apenas para "paid"
-        if ($isOwner && $data['status'] !== 'paid') {
-            Yii::$app->response->statusCode = 403; // Forbidden
-            return ['error' => 'Você só pode alterar o status para "paid".'];
-        }
-
-        // Atualizar o status
-        $invoice->status = $data['status'];
-
-        if ($invoice->save()) {
-            // Atualizar o status do pedido para "completed" se a fatura for paga
-            if ($data['status'] === 'paid') {
-                $order = $invoice->orders;
-                $order->status = 'completed';
-                $order->save();
-            }
-
-            return [
-                'message' => 'Status da fatura atualizado com sucesso.',
-                'invoice' => $invoice,
-            ];
-        }
-
-        Yii::$app->response->statusCode = 422; // Unprocessable Entity
-        return ['error' => $invoice->errors];
-    }
-
-
-
-    // Mostrar todas as faturas (Apenas admin)
-    public function actionAll()
-    {
-        if (!Yii::$app->user->can('admin')) {
-            throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta ação.');
-        }
-
-        return Invoices::find()->all();
-    }
-
-    // Mostrar faturas do usuário logado
+    // Mostrar faturas do usuário autenticado
     public function actionMyInvoices()
     {
         $userId = Yii::$app->user->id;
 
-        // Busca as faturas relacionadas às ordens do usuário autenticado
+        // Busca as faturas com os itens do pedido e produtos em uma única consulta
         $invoices = Invoices::find()
-            ->joinWith('orders') // Assume que a relação 'order' está definida no modelo Invoice
+            ->joinWith([
+                'orders',
+                'orders.orderItems',
+                'orders.orderItems.product' // Relacionamento com a tabela `products`
+            ])
             ->where(['orders.user_id' => $userId])
             ->all();
 
         if (empty($invoices)) {
-            return [
-                'message' => 'Nenhuma fatura encontrada para o usuário logado.',
+            return ['message' => 'Nenhuma fatura encontrada.'];
+        }
+
+        // Monta a resposta
+        $invoicesWithProducts = [];
+        foreach ($invoices as $invoice) {
+            $products = [];
+            foreach ($invoice->orders->orderItems as $item) {
+                $products[] = [
+                    'product_id' => $item->product->product_id,
+                    'product_name' => $item->product->name,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->unit_price,
+                    'total_price' => $item->quantity * $item->unit_price,
+                ];
+            }
+
+            $invoicesWithProducts[] = [
+                'invoice_id' => $invoice->id,
+                'invoice_number' => $invoice->invoice_number,
+                'invoice_date' => $invoice->invoice_date,
+                'total_amount' => $invoice->total_amount,
+                'status' => $invoice->status,
+                'products' => $products,
             ];
         }
 
-        return $invoices;
+        return $invoicesWithProducts;
     }
 
-
+    // Ver uma fatura específica (somente se for do usuário autenticado)
     public function actionView($id)
     {
         $invoice = Invoices::find()
-            ->joinWith('orders') // Define o alias para acessar a tabela orders
+            ->joinWith('orders')
             ->where(['invoices.id' => $id])
             ->one();
 
-        if (!$invoice) {
+        if (!$invoice || $invoice->orders->user_id !== Yii::$app->user->id) {
             throw new \yii\web\NotFoundHttpException('Fatura não encontrada.');
-        }
-
-        // Verifica se o usuário é o dono da fatura ou admin
-        $userId = $invoice->orders->user_id ?? null; // Pega o user_id através da relação com Order
-        if ($userId !== Yii::$app->user->id && !Yii::$app->user->can('admin')) {
-            throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta fatura.');
         }
 
         return $invoice;
     }
 
-
-    // Atualizar uma fatura (Apenas admin)
-    public function actionUpdate($id)
+    // Atualizar status da fatura (Somente se for do usuário e apenas para "paid")
+    public function actionUpdateStatus($id)
     {
-        if (!Yii::$app->user->can('admin')) {
-            throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta ação.');
-        }
-
         $invoice = Invoices::findOne($id);
-
         if (!$invoice) {
             throw new \yii\web\NotFoundHttpException('Fatura não encontrada.');
+        }
+
+        if ($invoice->orders->user_id !== Yii::$app->user->id) {
+            throw new \yii\web\ForbiddenHttpException('Você não tem permissão.');
         }
 
         $data = Yii::$app->request->post();
-        $invoice->load($data, '');
+        if (empty($data['status']) || $data['status'] !== 'paid') {
+            return ['error' => 'Só é permitido alterar para "paid".'];
+        }
 
+        $invoice->status = 'paid';
         if ($invoice->save()) {
-            return [
-                'success' => true,
-                'invoice' => $invoice,
-            ];
+            $order = $invoice->orders;
+            $order->status = 'completed';
+            $order->save();
+
+            return ['message' => 'Pagamento realizado com sucesso.', 'invoice' => $invoice];
         }
 
-        return [
-            'success' => false,
-            'errors' => $invoice->errors,
-        ];
-    }
-
-    // Deletar uma fatura (Apenas admin)
-    public function actionDelete($id)
-    {
-        if (!Yii::$app->user->can('admin')) {
-            throw new \yii\web\ForbiddenHttpException('Você não tem permissão para acessar esta ação.');
-        }
-
-        $invoice = Invoices::findOne($id);
-
-        if (!$invoice) {
-            throw new \yii\web\NotFoundHttpException('Fatura não encontrada.');
-        }
-
-        if ($invoice->delete()) {
-            return [
-                'success' => true,
-                'message' => 'Fatura deletada com sucesso.',
-            ];
-        }
-
-        return [
-            'success' => false,
-            'message' => 'Erro ao deletar fatura.',
-        ];
+        return ['error' => 'Erro ao atualizar fatura.'];
     }
 }

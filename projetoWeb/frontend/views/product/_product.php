@@ -16,9 +16,9 @@ $productId = $model->product->product_id;
 
         <a href="<?= Url::to(['favorites/toggle-favorite', 'productId' => $productId]) ?>" class="btn btn-link">
             <?php if ($product->isFavorited()): ?>
-                <i class="fa fa-heart fa-lg text-muted"></i>
-            <?php else: ?>
                 <i class="fa fa-heart fa-lg text-danger"></i>
+            <?php else: ?>
+                <i class="fa fa-heart fa-lg text-muted"></i>
             <?php endif; ?>
         </a>
     <?php endif; ?>

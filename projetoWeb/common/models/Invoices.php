@@ -86,4 +86,16 @@ class Invoices extends \yii\db\ActiveRecord
         return $this->hasOne(Orders::class, ['id' => 'order_id']);
     }
 
+    // Relação com OrderItems (acessando via Order)
+    public function getOrderItems()
+    {
+        return $this->hasMany(OrderItems::class, ['order_id' => 'order_id'])
+            ->via('orders'); // Acessando via a Order
+    }
+    public function getProducts()
+    {
+        return $this->hasMany(Product::class, ['id' => 'product_id'])
+            ->via('orderItems');
+    }
+
 }

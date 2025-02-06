@@ -7,57 +7,25 @@ use Yii;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\AccessControl;
 use yii\rest\ActiveController;
+use function PHPUnit\Framework\throwException;
 
 class ReviewController extends ActiveController
 {
     public $modelClass = 'common\models\Reviews';
 
+
     public function behaviors()
     {
         $behaviors = parent::behaviors();
 
-        // Autenticação via token para actions protegidas
+        // Configura o QueryParamAuth para autenticar usando o token
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::class,
-            'except' => ['product-reviews'], // Nenhum token necessário para esta ação
-        ];
-
-        // Controle de Acesso
-        $behaviors['access'] = [
-            'class' => AccessControl::class,
-            'ruleConfig' => [
-                'class' => \yii\filters\AccessRule::class,
-            ],
-            'rules' => [
-                // Regra específica para donos do review ou admin
-                [
-                    'allow' => true,
-                    'roles' => ['@'], // Usuário autenticado
-                    'actions' => ['update', 'delete'],
-                    'matchCallback' => function ($rule, $action) {
-                        $reviewId = Yii::$app->request->get('id');
-                        $review = Reviews::findOne($reviewId);
-                        return $review && ($review->user_id === Yii::$app->user->id || Yii::$app->user->can('admin'));
-                    },
-                ],
-                // Regra para admin acessar 'all'
-                [
-                    'allow' => true,
-                    'roles' => ['admin'], // Apenas admin
-                    'actions' => ['all'],
-                ],
-                // Regra geral para usuários autenticados
-                [
-                    'allow' => true,
-                    'roles' => ['@'], // Apenas usuários autenticados
-                    'actions' => ['create'],
-                ],
-            ],
+            'except' => ['all', 'product-reviews'], // Exclui essas actions da necessidade de autenticação
         ];
 
         return $behaviors;
     }
-
     public function actions()
     {
         $actions = parent::actions();
@@ -75,9 +43,9 @@ class ReviewController extends ActiveController
     }
 
     // Mostrar todas as reviews de um determinado produto
-    public function actionProductReviews($productId)
+    public function actionProductReviews($id)
     {
-        return Reviews::find()->where(['product_id' => $productId])->all();
+        return Reviews::find()->where(['product_id' => $id])->all();
     }
 
     // Criar um review e associar a um produto
@@ -106,10 +74,15 @@ class ReviewController extends ActiveController
     // Atualizar um review (somente dono ou admin)
     public function actionUpdate($id)
     {
-        $review = Reviews::findOne($id);
+        $user = Yii::$app->user->identity;
+
+        if(!$user){
+            throw new \yii\web\UnauthorizedHttpException('Usuário não autenticado.');
+        }
+        $review = Reviews::findOne(['id' => $id, 'user_id' => $user->id]);
 
         if (!$review) {
-            throw new \yii\web\NotFoundHttpException('Review não encontrado.');
+            throw new \yii\web\NotFoundHttpException('Review não encontrado ou usuário proibido.');
         }
 
         $data = Yii::$app->request->post();
@@ -130,6 +103,12 @@ class ReviewController extends ActiveController
     // Deletar um review (somente dono ou admin)
     public function actionDelete($id)
     {
+        $user = Yii::$app->user->identity;
+
+        if(!$user){
+            throw new \yii\web\UnauthorizedHttpException('Usuário não autenticado.');
+        }
+
         $review = Reviews::findOne($id);
 
         if (!$review) {

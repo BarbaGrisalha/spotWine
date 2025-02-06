@@ -22,7 +22,7 @@ class UserController extends ActiveController
         // Configura o QueryParamAuth para autenticar usando o token
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::class,
-            'except' => ['login', 'signup'], // Exclui essas actions da necessidade de autenticação
+            'except' => ['login', 'registo'], // Exclui essas actions da necessidade de autenticação
         ];
 
         return $behaviors;

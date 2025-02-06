@@ -47,7 +47,7 @@ $data = json_encode(array_column($categorias, 'total_stock'));
 $cores = [
     'Vinho Tinto' => '#8b0000',
     'Vinho Branco' => '#f3e5ab',
-    'Vinho Rosé' => '#ffc0cb',
+    'Vinho Rose' => '#ffc0cb',
 ];
 
 // Gerar o array de cores para as categorias

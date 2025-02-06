@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Product;
+use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -49,9 +50,25 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'condition_value')->textInput(['type' => 'number', 'step' => '0.01', 'min' => 0]) ?>
     </div>
 
-    <?= $form->field($model, 'start_date')->input('date') ?>
 
-    <?= $form->field($model, 'end_date')->input('date') ?>
+    <?= $form->field($model, 'start_date')->widget(DatePicker::classname(), [
+        'language' => 'pt-BR',
+        'options' => ['placeholder' => 'Selecione a data de início'],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd',
+        ],
+    ]) ?>
+
+    <?= $form->field($model, 'end_date')->widget(DatePicker::classname(), [
+        'language' => 'pt-BR',
+        'options' => ['placeholder' => 'Selecione a data do término'],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd',
+        ],
+    ]) ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Salvar', ['class' => 'btn btn-success']) ?>
