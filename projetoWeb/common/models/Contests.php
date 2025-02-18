@@ -129,9 +129,6 @@ class Contests extends \yii\db\ActiveRecord
         return false;
     }
 
-
-
-
     public function updateStatus()
     {
         $now = time();

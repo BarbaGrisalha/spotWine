@@ -15,6 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-index">
 
+    <h1><?=$this->title?></h1>
+
     <p>
         <?= Html::a('Adicionar Produto', ['create'], ['class' => 'btn btn-success']) ?>
     </p>

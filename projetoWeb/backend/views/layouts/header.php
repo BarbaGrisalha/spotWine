@@ -134,19 +134,26 @@ use yii\helpers\Url;
         </li>
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
+                <img src="<?= Yii::getAlias('@web') ?>/img/user.png" class="user-image img-circle elevation-2" alt="User Image">
                 <span class="d-none d-md-inline"><?=Yii::$app->user->identity->username ?? 'Guest' ?></span>
 
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
                 <li class="user-header bg-primary">
-                    <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    <img src="<?= Yii::getAlias('@web') ?>/img/user.png" class="user-image img-circle elevation-2" alt="User Image">
 
                     <p>
-                        <?= Yii::$app->user->identity->username ?? 'Guest' ?> - <?= Yii::$app->user->identity->role ?? 'User Role' ?>
-                        <small>Member since <?= Yii::$app->user->identity->created_at ?? 'Date not available' ?></small>
+                        <?php
+                        $user = Yii::$app->user->identity;
+                        $username = $user ? $user->username : Yii::t('app', 'Guest');
+                        $role = $user ? ($user->isAdmin() ? Yii::t('app', 'Admin') : Yii::t('app', 'Produtor')) : Yii::t('app', 'Guest');
+                        $memberSince = $user ? Yii::$app->formatter->asDate($user->created_at, 'long') : Yii::t('app', 'Date not available');
+                        ?>
 
+                        <?= $username ?> - <?= $role ?>
+
+                        <small><?= Yii::t('app', 'Member since') ?> <?= $memberSince ?></small>
                     </p>
                 </li>
                 <!-- Menu Body -->

@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="blog-post-index">
 
+    <h1><?=$this->title?></h1>
     <div class="d-flex justify-content-between">
         <p>
             <?= Html::a('Criar Post', ['create'], ['class' => 'btn btn-success']) ?>

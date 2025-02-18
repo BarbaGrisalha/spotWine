@@ -8,7 +8,7 @@ $this->title = 'Concursos';
 /** @var $dataProvider */
 /** @var  $searchModel */
 ?>
-
+<h1><?=$this->title?></h1>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,

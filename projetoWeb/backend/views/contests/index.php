@@ -13,7 +13,9 @@ use yii\grid\GridView;
 $this->title = 'Concursos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="contests-index">
+    <h1><?=$this->title?></h1>
 
     <p>
         <?= Html::a('Create Contests', ['create'], ['class' => 'btn btn-success']) ?>

@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="promotions-index container mt-4">
 
+    <h1><?=$this->title?></h1>
     <div class="row mb-3">
         <div class="col-12 text-right">
             <?= Html::a('Criar Promoção', ['create'], ['class' => 'btn btn-success']) ?>
