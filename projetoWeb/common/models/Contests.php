@@ -38,7 +38,7 @@ class Contests extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id'], 'integer'],
+            [['category_id', 'winner_product_id'], 'integer'],
             [['description', 'status'], 'string'],
             [['registration_start_date', 'registration_end_date', 'contest_start_date', 'contest_end_date'], 'safe'],
             [['registration_start_date', 'registration_end_date', 'contest_start_date', 'contest_end_date'], 'date', 'format' => 'php:Y-m-d'], // Validações de data
@@ -77,24 +77,6 @@ class Contests extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
 
-    public function updateStatus()
-    {
-        $now = time();
-        $registrationStartDate = strtotime($this->registration_start_date);
-        $registrationEndDate = strtotime($this->registration_end_date);
-
-        if ($now < $registrationStartDate) {
-            $this->status = 'pending';
-        } elseif ($now >= $registrationStartDate && $now <= $registrationEndDate) {
-            $this->status = 'registration';
-        } elseif ($now > $registrationEndDate) {
-            $this->status = 'voting';
-        } else {
-            $this->status = 'finished';
-        }
-
-        return $this->save(false); // Salvar sem validação para evitar erros
-    }
 
     public function getCategories()
     {
@@ -111,30 +93,73 @@ class Contests extends \yii\db\ActiveRecord
         return $this->hasMany(ContestParticipations::class, ['contest_id' => 'id']);
     }
 
-    public function actionDeclareWinner($id)
+
+    public function getWinnerProduct()
     {
-        $contest = $this::findOne($id);
+        return $this->hasOne(Product::class, ['product_id' => 'winner_product_id']);
+    }
 
-        if (!$contest || $contest->status !== 'finished') {
-            throw new BadRequestHttpException('O concurso não está finalizado ainda.');
-        }
+    public function getContestVotes()
+    {
+        return $this->hasMany(ContestVotes::class, ['contest_id' => 'id']);
+    }
 
-        // Conta os votos e define o vencedor
+
+
+    public function determineWinner()
+    {
         $winner = ContestVotes::find()
-            ->select(['product_id', 'COUNT(*) AS vote_count'])
-            ->where(['contest_id' => $id])
+            ->select(['product_id', 'COUNT(product_id) as vote_count'])
+            ->where(['contest_id' => $this->id])
             ->groupBy('product_id')
             ->orderBy(['vote_count' => SORT_DESC])
-            ->limit(1)
+            ->asArray()
             ->one();
 
         if ($winner) {
-            $contest->winner_product_id = $winner->product_id;
-            $contest->save();
+            $this->winner_product_id = $winner['product_id'];
+
+            if ($this->save(false)) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
-        Yii::$app->session->setFlash('success', 'O vencedor foi definido!');
-        return $this->redirect(['view', 'id' => $id]);
+        return false;
     }
+
+
+
+
+    public function updateStatus()
+    {
+        $now = time();
+        $registrationStartDate = strtotime($this->registration_start_date);
+        $registrationEndDate = strtotime($this->registration_end_date);
+        $votingEndDate = strtotime($this->contest_end_date);
+
+        if ($now < $registrationStartDate) {
+            $newStatus = 'pending';
+        } elseif ($now >= $registrationStartDate && $now <= $registrationEndDate) {
+            $newStatus = 'registration';
+        } elseif ($now > $registrationEndDate && $now <= $votingEndDate) {
+            $newStatus = 'voting';
+        } else {
+            $newStatus = 'finished';
+        }
+
+        if ($this->status !== $newStatus) {
+            $this->status = $newStatus;
+            $this->save(false);
+        }
+
+        if ($this->status === 'finished') {
+            $this->determineWinner();
+        }
+
+        return true;
+    }
+
 
 }

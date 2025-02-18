@@ -84,6 +84,11 @@ class Product extends \yii\db\ActiveRecord
         return $this->hasOne(Categories::class, ['category_id' => 'category_id']);
     }
 
+    public function getContests()
+    {
+        return $this->hasOne(Contests::class, ['winner_product_id' => 'product_id']);
+    }
+
     /**
      * Gets query for [[ContestParticipations]].
      *

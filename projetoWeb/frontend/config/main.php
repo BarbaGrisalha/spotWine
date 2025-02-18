@@ -52,5 +52,8 @@ return [
 
 
     ],
-    'params' => $params,
+    'params' => array_merge(
+        $params,
+        ['caminhoBackend' => 'http://51.20.254.239:8080']
+    ),
 ];

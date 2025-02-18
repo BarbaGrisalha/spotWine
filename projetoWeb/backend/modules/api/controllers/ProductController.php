@@ -3,6 +3,7 @@
 namespace backend\modules\api\controllers;
 
 use common\models\Product;
+use http\Params;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBasicAuth;
@@ -16,10 +17,10 @@ class ProductController extends ActiveController
     public $modelClass = 'common\models\Product';
 
     public function behaviors(){
-        parent::behaviors();
+        $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::class,
-            'except' => ['index', 'view'],
+            'except' => ['all-products', 'view'],
         ];
         return $behaviors;
     }
@@ -27,7 +28,7 @@ class ProductController extends ActiveController
     public function actions(){
         $actions = parent::actions();
 
-        unset($actions['create'], $actions['update'], $actions['delete']);
+        unset($actions['create'], $actions['update'], $actions['delete'], $actions['index']);
 
         $actions['index']['prepareDataProvider'] = function ($action) {
             return new ActiveDataProvider([
@@ -52,6 +53,57 @@ class ProductController extends ActiveController
 
         return $actions;
     }
+
+    public function actionAllProducts()
+    {
+
+
+
+        $products = Product::find()->all();
+
+        // Estruturar a resposta
+        return array_map(function ($product) {
+            return [
+                'id' => $product->product_id,
+                'producer' => $product->producers->winery_name,
+                'name' => $product->name,
+                'description' => $product->description,
+                'category' => $product->categories->name,
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'image' => Yii::$app->params['baseUrl']. $product['image_url'],
+
+            ];
+        }, $products);
+
+
+    }
+
+//    public function actionIndex()
+//    {
+//        $response = [];
+//        $artigos = Product::find()->all();
+//        foreach ($artigos as $artigo) {
+//
+//            $data = [
+//                'id' => $artigo->id,
+//                'producer' => $artigo->producer->name,
+//                'name' => $artigo->name,
+//                'description' => $artigo->description,
+//                'category' => $artigo->category->name,
+//                'price' => $artigo->price,
+//                'stock' => $artigo->stock,
+//
+//                //'perfil' => $artigo->perfil->nome, não interessa saber isso na app
+//                'imagem' => 'http://51.20.254.239:8080/' . $artigo['image_url'],
+//                //'imagem' =>  $artigo->getImg(),
+//
+//            ];
+//            $response[] = $data;
+//        }
+//        return $response;
+//    }
+
 
     public function actionCreate()
     {

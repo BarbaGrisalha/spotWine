@@ -71,65 +71,91 @@ $user = Yii::$app->user->identity;
     <?php $this->beginBody(); ?>
     <body>
 
-    <div class="container-fluid ">
-        <div class="row bg-banner py-1 px-xl-5 text-center">
+    <div class="container-fluid p-0 ">
+        <div class=" bg-banner py-1 px-xl-5 text-center">
 
             <div class="col-12 d-flex align-items-center justify-content-center banner-none">
                 <i class="fas fa-wine-glass fa-lg text-dark"></i>
                 <?= Html::tag('span', 'O Mercado de Vinhos Diretamente das Caves', ['class' => 'text-black ml-2']) ?>
             </div>
 
-            <!--
-                <div class="col-lg-6 text-center text-lg-right">
-                    Moeda
-                    <div class="btn-group mx-2">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">EUR</button>
-                            <button class="dropdown-item" type="button">GBP</button>
-                            <button class="dropdown-item" type="button">CAD</button>
-                        </div>
-                    </div>
-                   -->
-            <!--Idiomas
-            <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <button class="dropdown-item" type="button">FR</button>
-                    <button class="dropdown-item" type="button">AR</button>
-                    <button class="dropdown-item" type="button">RU</button>
-                </div>
-            </div>
+            <div class="d-inline-flex align-items-center d-block d-lg-none d-flex justify-content-around w-100">
+                <div class="d-flex align-items-center">
 
-        </div>
-        -->
-            <div class="d-inline-flex align-items-center d-block d-lg-none">
-                <a href="" class="btn px-0 ml-2">
-                    <i class="fas fa-heart text-dark"></i>
-                    <span class="badge text-dark border border-dark rounded-circle"
-                          style="padding-bottom: 2px;">0</span>
-                </a>
-                <a href="" class="btn px-0 ml-2">
-                    <i class="fas fa-shopping-cart text-dark"></i>
-                    <span class="badge text-dark border border-dark rounded-circle"
-                          style="padding-bottom: 2px;">0</span>
-                </a>
-                <a href="" class="btn px-0 ml-2">
-                    <!-- User Dropdown -->
-                    <div class="btn-group ml-3 d-flex align-items-center">
-                        <button type="button" class="btn btn-sm dropdown-toggle text-white d-flex align-items-center"
-                                data-toggle="dropdown">
-                            <i class="fas fa-user fa-lg text-dark"></i>
-                            <h5 class="text-dark ml-2 mb-0">Account</h5>
+                        <a href="<?= Url::to(['/favorites/index']) ?>"
+                           class="btn px-0 ml-2">
+                            <i class="fas fa-heart fa-lg text-dark"></i>
+                            <span class="badge text-third border border-dark rounded-circle text-dark"
+                                  style="padding-bottom: 2px;">
+                                <?php if (!Yii::$app->user->isGuest): ?>
+                                <?= Yii::$app->user->identity->getFavorites()->count() ?>
+                                <?php else: ?>
+                                    0
+                                <?php endif; ?>
+                            </span>
+                        </a>
+
+                    <?= CartWidget::widget([
+                        'versaonova' => true, // ou false, dependendo da lógica da sua aplicação
+                    ]) ?>
+                </div>
+
+                <!-- User Dropdown -->
+                <div class="btn-group ml-3 d-flex align-items-center">
+                    <?php if (Yii::$app->user->isGuest): ?>
+                    <!-- Login e Registo -->
+                    <div class="d-flex align-items-center">
+                        <a href="<?= Url::to(['site/login']) ?>" class="btn btn-sm btn-primary mr-2">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="<?= Url::to(['site/signup']) ?>" class="btn btn-sm btn-secondary d-flex align-items-center">
+                            <i class="fas fa-user-plus"></i> Registo
+                        </a>
+                    </div>
+                </div>
+                <?php else: ?>
+                    <?php $idUser = Yii::$app->user->id; ?>
+                    <div class="btn-group">
+                        <button type="button"
+                                class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center"
+                                data-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle fa-lg mr-2 text-secondary"></i><?= $user->username ?>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">
-                                <?= Html::a('Logar', Url::to(['site/login']), ['class' => 'btn btn-primary']) ?>
-                            </button>
-                            <button class="dropdown-item" type="button">Sign up</button>
+                        <div class="dropdown-menu dropdown-menu-right position-absolute">
+                            <?= Html::a(
+                                '<i class="fas fa-user fa-lg text-secondary mr-2"></i> Ver Perfil',
+                                ['/perfil/view', 'id' => $idUser],
+                                ['class' => 'dropdown-item']
+                            ) ?>
+                            <?= Html::a(
+                                '<i class="fas fa-edit fa-lg text-secondary mr-2"></i> Alterar Dados',
+                                ['/perfil/update', 'id' => $idUser],
+                                ['class' => 'dropdown-item']
+                            ) ?>
+                            <?= Html::a(
+                                '<i class="fas fa-star fa-lg text-secondary mr-2"></i> Minhas Avaliações',
+                                ['/avaliacao/index'],
+                                ['class' => 'dropdown-item']
+                            ) ?>
+                            <?= Html::a(
+                                '<i class="fas fa-file-invoice fa-lg text-secondary mr-2"></i> Minhas Faturas',
+                                ['/account/invoices'],
+                                ['class' => 'dropdown-item']
+                            ) ?>
+                            <?= Html::a(
+                                '<i class="fas fa-key fa-lg text-secondary mr-2"></i> Alterar Password',
+                                ['/account/change-password'], ['class' => 'dropdown-item']
+                            ) ?>
+                            <?= Html::beginForm(['/site/logout'], 'post', ['id' => 'logout-form']) ?>
+                            <?= Html::submitButton(
+                                '<i class="fas fa-sign-out-alt fa-lg text-secondary mr-2"></i> Logout',
+                                ['class' => 'dropdown-item']
+                            ) ?>
+                            <?= Html::endForm() ?>
                         </div>
                     </div>
-                </a>
+                <?php endif; ?>
+
             </div>
         </div>
     </div>
@@ -152,7 +178,7 @@ $user = Yii::$app->user->identity;
                     </button>
 
                     <!-- Conteúdo da Navbar -->
-                    <div class="navbar-collapse justify-content-between collapse show" id="navbarCollapse">
+                    <div class="navbar-collapse justify-content-between collapse" id="navbarCollapse">
                         <!-- Links de Navegação -->
                         <div class="navbar-nav mx-auto">
 
@@ -161,20 +187,6 @@ $user = Yii::$app->user->identity;
                             <?= Html::a('Promoções', Url::to(['/product/index', 'ProductFrontSearch[filter]' => 'promocoes']), ['class' => 'nav-item nav-link']) ?>
                             <?= Html::a('Concurso', Url::to(['/contest/index']), ['class' => 'nav-item nav-link']) ?>
                             <?= Html::a('Blogue', Url::to(['/blog-post/index']), ['class' => 'nav-item nav-link']) ?>
-                            <!-- Para um item com mais opções
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Pages <i class="fa fa-angle-down mt-1"></i>
-
-                                </a>
-
-
-                                <div class="dropdown-menu bg-secondary rounded-0 border-0 m-0">
-                                    <a href="cart.html" class="dropdown-item text-primary">Shopping Cart</a>
-                                    <a href="checkout.html" class="dropdown-item text-primary">Checkout</a>
-
-                             </div>
-                                   -->
                         </div>
 
                     </div>

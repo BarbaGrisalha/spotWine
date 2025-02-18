@@ -45,6 +45,12 @@ class ContestController extends Controller
         $searchModel = new ContestsSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        // Atualiza o status de todos os concursos
+        foreach ($dataProvider->getModels() as $contest) {
+            $contest->updateStatus();
+        }
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -68,8 +74,10 @@ class ContestController extends Controller
         $contest->updateStatus();
 
         return $this->render('view', [
-            'contest' => $contest]);
+            'contest' => $contest,
+        ]);
     }
+
 
 
 

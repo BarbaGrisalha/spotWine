@@ -40,7 +40,6 @@ $status = $statusLabels[$contest->status];
         <p><strong>Início:</strong> <?= date('d/m/Y', strtotime($contest->contest_start_date)) ?> | <strong>Término:</strong> <?= date('d/m/Y', strtotime($contest->contest_end_date)) ?></p>
     </div>
 
-    <!-- Botão Inscreva-se (só aparece se status for "registration") -->
     <?php if ($contest->status === 'registration'): ?>
         <div class="mt-4">
             <?= Html::a('Inscreva-se', ['contests/register-producer', 'id' => $contest->id], [
@@ -49,24 +48,19 @@ $status = $statusLabels[$contest->status];
         </div>
     <?php endif; ?>
 
-    <h1 class="mt-5">Vinhos Inscritos</h1>
-    <div class="row">
-        <?php foreach ($contest->contestParticipations as $participation): ?>
-            <?php $product = $participation->product; ?>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card h-100">
-                    <!-- Imagem do Produto -->
-                    <img src="<?= Yii::getAlias('@web') .$product->image_url ?: '@web/img/wineBottle.png' ?>" class="card-img-top" alt="<?= $product->name ?>">
-
-                    <div class="card-body text-center">
-                        <h5 class="card-title"><?= $product->name ?></h5 class="card-title">
-                        <p class="card-text"><?= $product->producers->winery_name ?></p>
-
-                    </div>
-                </div>
+    <?php if ($contest->status === 'finished' && $contest->winner_product_id): ?>
+        <h2 class="mt-5 text-success">🏆 Vinho Vencedor</h2>
+        <div class="card mx-auto mt-3 shadow-lg" style="max-width: 300px;">
+            <?php $winnerProduct = $contest->winnerProduct; ?>
+            <img src="<?= Yii::getAlias('@web') . $winnerProduct->image_url ?>" class="card-img-top" alt="<?= $winnerProduct->name ?>">
+            <div class="card-body text-center">
+                <h4 class="card-title font-weight-bold"><?= Html::encode($winnerProduct->name) ?></h4>
+                <p class="card-text">🍇 Produtor: <?= Html::encode($winnerProduct->producers->winery_name) ?></p>
+                <span class="badge bg-warning text-dark p-2">Mais votado 🏅</span>
             </div>
-        <?php endforeach; ?>
-    </div>
+        </div>
+    <?php endif; ?>
+
 
 
 

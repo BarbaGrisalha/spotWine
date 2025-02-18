@@ -2,15 +2,26 @@
 
 namespace console\controllers;
 
-use common\models\Cart;
 use yii\console\Controller;
+use common\models\Contests;
 
 class TestController extends Controller
 {
-    public function actionRun()
+    public function actionDetermineWinner($contestId)
     {
-        $cart = Cart::findOne(1);
-        $items = $cart->getCartItems()->with('product')->all();
-        var_dump($items);
+        $contest = Contests::findOne($contestId);
+
+        if (!$contest) {
+            echo "Concurso não encontrado!\n";
+            return;
+        }
+
+        $result = $contest->determineWinner();
+
+        if ($result) {
+            echo "Vencedor determinado com sucesso!\n";
+        } else {
+            echo "Erro ao determinar o vencedor.\n";
+        }
     }
 }

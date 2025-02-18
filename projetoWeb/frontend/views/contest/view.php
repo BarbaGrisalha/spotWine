@@ -18,6 +18,11 @@ $statusLabels = [
 $status = $statusLabels[$contest->status];
 ?>
 
+<?php foreach (Yii::$app->session->getAllFlashes() as $type => $message): ?>
+    <div class="alert alert-<?= $type ?>"><?= $message ?></div>
+<?php endforeach; ?>
+
+
 <div class="container text-center">
     <!-- Nome do Concurso e Status -->
     <h1 class="mb-3 d-flex justify-content-center align-items-center">
@@ -26,7 +31,7 @@ $status = $statusLabels[$contest->status];
     </h1>
 
 
-    <div class="d-flex justify-content-around align-items-center">
+    <div class="d-flex justify-content-around align-items-start">
         <?= Html::img(
             !empty($contest->image_url)
                 ? Yii::getAlias('@backendUrl') . '/uploads/contests/' . basename($contest->image_url)
@@ -62,25 +67,31 @@ $status = $statusLabels[$contest->status];
                 </div>
             <?php endif; ?>
 
+
             <?php if ($contest->status === 'finished' && $contest->winner_product_id): ?>
-                <div class="mt-4 alert alert-success text-center">
-                    <h4>🏆 Vencedor: <?= Html::encode($contest->winnerProduct->name) ?> 🏆</h4>
-                    <p>Parabéns ao produtor <?= Html::encode($contest->winnerProduct->producers->winery_name) ?>!</p>
+                <h2 class="mt-5 text-success">🏆 Vinho Vencedor</h2>
+                <div class="card mx-auto mt-3 shadow-lg mb-5" style="max-width: 250px;">
+                    <?php $winnerProduct = $contest->winnerProduct; ?>
+                    <a href="<?= Url::to(['product/view', 'id' => $winnerProduct->product_id]) ?>">
+                        <img src="<?= Yii::getAlias('@backendUrl') . $winnerProduct->image_url ?>" class="card-img-top" alt="<?= Html::encode($winnerProduct->name) ?>">
+                    </a>
+                    <div class="card-body text-center">
+                        <h4 class="card-title font-weight-bold">
+                            <a href="<?= Url::to(['product/view', 'id' => $winnerProduct->product_id]) ?>" class="text-decoration-none text-dark">
+                                <?= Html::encode($winnerProduct->name) ?>
+                            </a>
+                        </h4>
+                        <p class="card-text">🍇 Produtor: <?= Html::encode($winnerProduct->producers->winery_name) ?></p>
+                        <a href="<?= Url::to(['product/view', 'id' => $winnerProduct->product_id]) ?>" class="btn btn-primary">
+                            Ver Produto
+                        </a>
+                    </div>
                 </div>
             <?php endif; ?>
 
-
-
         </div>
 
-
     </div>
-    <!-- Imagem do Concurso -->
-
-    <!-- Botão Inscreva-se (só aparece se status for "registration") -->
-
-
-
 
 
 

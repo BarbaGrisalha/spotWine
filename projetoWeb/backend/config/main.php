@@ -23,6 +23,7 @@ return [
     ],
 
 
+
     'request' =>[
         'enableCsrfValidation' => false,
         'csrfParam' => '_csrf-backend',
@@ -135,6 +136,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'GET view/{product_id}' => 'view',
+                        'GET' => 'all-products'
                     ],
                 ],
                 [

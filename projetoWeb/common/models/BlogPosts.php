@@ -39,7 +39,7 @@ class BlogPosts extends \yii\db\ActiveRecord
             [['created_at'], 'safe'],
             [['title', 'image_url'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2], // Máximo 2MB
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxSize' => 10 * 1024 * 1024, 'tooBig' => 'O arquivo não pode exceder 10 MB.'],
         ];
     }
 

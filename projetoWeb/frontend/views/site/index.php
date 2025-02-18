@@ -9,6 +9,7 @@ use yii\helpers\Url;
 
 $this->title = 'My Yii Application';
 
+
 AppAsset::register($this);
 ?>
 

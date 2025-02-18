@@ -14,6 +14,7 @@
           <option name="path" value="$PROJECT_DIR$/projetoWeb/common/tests" />
           <option name="mySuiteNamespaces">
             <map>
+              <entry key="functional" value="common\tests\unit" />
               <entry key="unit" value="common\tests\unit" />
             </map>
           </option>

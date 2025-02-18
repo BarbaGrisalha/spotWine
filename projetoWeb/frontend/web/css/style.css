@@ -2420,8 +2420,9 @@ fieldset:disabled a.btn {
 
 .btn-secondary {
   background-color: var(--white);
-  border-radius:15px;
+  border-radius: 15px !important;
   color: var(--primary);
+  padding: 10px !important;
 }
 
 .btn-secondary:hover {

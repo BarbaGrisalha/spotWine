@@ -7,10 +7,17 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="dropdown ml-3">
     <button id="dropdownCart" class="btn px-0 d-flex align-items-center" type="button">
+        <?php if($versaonova):?>
+        <i class="fas fa-shopping-cart fa-lg text-dark"></i>
+        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">
+            <?= count($cartItems) ?>
+        </span>
+        <?php else:?>
         <i class="fas fa-shopping-cart fa-lg text-secondary"></i>
         <span class="badge text-third border border-secondary rounded-circle" style="padding-bottom: 2px;">
             <?= count($cartItems) ?>
         </span>
+        <?php endif; ?>
     </button>
     <div class="cart-dropdown shadow-lg rounded" aria-labelledby="dropdownCart">
         <div class="d-flex justify-content-between align-items-baseline">

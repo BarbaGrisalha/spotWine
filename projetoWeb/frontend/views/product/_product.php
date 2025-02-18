@@ -32,7 +32,7 @@ $productId = $model->product->product_id;
         <div class="product-img position-relative overflow-hidden" style="height: 280px;">
             <?= Html::img(
                 !empty($model->product->image_url)
-                    ? Yii::getAlias('@backendUrl') . '/uploads/products/' . basename($model->product->image_url)
+                    ? Yii::getAlias('@backendUrl') . $model->product->image_url
                     : Yii::getAlias('@web') . '/img/wineBottle.png',
                 [
                     'class' => 'img-fluid w-100 h-100 object-fit-cover',
