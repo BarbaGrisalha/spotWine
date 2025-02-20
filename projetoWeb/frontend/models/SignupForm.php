@@ -66,6 +66,9 @@ class SignupForm extends Model
         $user->generateEmailVerificationToken();
         $user->generatePasswordResetToken();
 
+        // Definir o status como 10 (ativo)
+        $user->status = 10;
+
         if ($user->save()) {
             $consumerDetails = new ConsumerDetails();
             $consumerDetails->user_id = $user->id;
@@ -81,8 +84,8 @@ class SignupForm extends Model
             return $user;
         }
         return null;
-        // return $user->save() && $this->sendEmail($user);
     }
+
 
     /**
      * Sends confirmation email to user
@@ -99,7 +102,7 @@ class SignupForm extends Model
             )
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
             ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
+            ->setSubject('account registration at ' . Yii::$app->name)
             ->send();
     }
 }

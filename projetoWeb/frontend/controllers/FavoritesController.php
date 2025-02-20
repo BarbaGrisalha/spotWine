@@ -8,9 +8,35 @@ use common\models\LoginForm;
 use frontend\models\ProductFrontSearch;
 use frontend\models\PromocoesViewModel;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 
 class FavoritesController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['delete', 'index', 'toggleFavorites'],
+                'rules' => [
+
+                    [
+                        'actions' => ['delete', 'index', 'toggleFavorites'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
     public function actionDelete()
     {
         return $this->render('delete');

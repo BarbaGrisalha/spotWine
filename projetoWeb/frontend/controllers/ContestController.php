@@ -8,6 +8,7 @@ use common\models\ContestsSearch;
 use common\models\ContestVotes;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,17 +23,26 @@ class ContestController extends Controller
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['submitVote'],
+                'rules' => [
+
+                    [
+                        'actions' => ['submitVote'],
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
                 ],
-            ]
-        );
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -117,6 +127,11 @@ class ContestController extends Controller
         $existingVote = ContestVotes::find()
             ->where(['contest_id' => $contest_id, 'user_id' => $userId])
             ->exists();
+
+        if (!$userId) {
+            Yii::$app->session->setFlash('error', 'Você precisa se logar para votar!');
+            return $this->redirect(['vote', 'id' => $contest_id]);
+        }
 
         if ($existingVote) {
             Yii::$app->session->setFlash('error', 'Você já votou neste concurso.');

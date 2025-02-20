@@ -1,22 +1,21 @@
 (function ($) {
     "use strict";
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const cartButton = document.querySelector("#dropdownCart");
-        const cartMenu = document.querySelector(".cart-dropdown");
+    const cartButtons = document.querySelectorAll("#dropdownCart");
+    const cartMenus = document.querySelectorAll(".cart-dropdown");
 
-        if (cartButton && cartMenu) {
-            cartButton.addEventListener("click", function () {
-                cartMenu.classList.toggle("show");
-            });
+    cartButtons.forEach((button, index) => {
+        button.addEventListener("click", function () {
+            cartMenus[index].classList.toggle("show");
+        });
 
-            document.addEventListener("click", function (e) {
-                if (!cartMenu.contains(e.target) && !cartButton.contains(e.target)) {
-                    cartMenu.classList.remove("show");
-                }
-            });
-        }
+        document.addEventListener("click", function (e) {
+            if (!cartMenus[index].contains(e.target) && !button.contains(e.target)) {
+                cartMenus[index].classList.remove("show");
+            }
+        });
     });
+
 
 
     $(document).on('click', '.btn-plus, .btn-minus', function () {

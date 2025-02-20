@@ -158,10 +158,11 @@ class ProductController extends Controller
         $userId = Yii::$app->user->identity->id;
         $producer = ProducerDetails::findOne(['user_id' => $userId]);
 
-        if (!$producer && \Yii::$app->user->can('producer')) {
+        if (!$producer && \Yii::$app->user->can('admin')) {
             Yii::$app->session->setFlash('error', 'Permissão negada. Você não é um produtor.');
             return $this->redirect(['index']);
         }
+
 
         if ($model->load(Yii::$app->request->post())) {
             // Gerenciar o upload de arquivo antes de salvar
@@ -176,10 +177,15 @@ class ProductController extends Controller
                 }
             }
 
-            // Atribuir produtor se o usuário for produtor
-            if (\Yii::$app->user->can('producer')) {
-                $model->producer_id = $producer->id;
+            if(\Yii::$app->user->can('admin')) {
+                // Não precisa alterar nada, pois o dropdown já define o valor
+            } elseif (\Yii::$app->user->can('producer')) {
+                if ($model->producer_id !== $producer->id) {
+                    Yii::$app->session->setFlash('error', 'Você não pode alterar o produtor deste produto.');
+                    return $this->redirect(['index']);
+                }
             }
+
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Produto atualizado com sucesso.');
@@ -188,6 +194,7 @@ class ProductController extends Controller
                 Yii::$app->session->setFlash('error', 'Erro ao salvar o produto.');
             }
         }
+
 
         return $this->render('update', [
             'model' => $model,

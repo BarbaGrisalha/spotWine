@@ -15,7 +15,7 @@ AppAsset::register($this);
 
 <?php $this->beginPage() ?>
     <!-- Search and filter -->
-    <div class="container-fluid">
+   <!-- <div class="container-fluid">
         <div class="row align-items-center bg-body py-3 px-xl-5 d-none d-lg-flex justify-content-center">
 
             <div class="col-lg-3 d-none d-lg-block">
@@ -60,6 +60,7 @@ AppAsset::register($this);
 
         </div>
     </div>
+    -->
     <!-- Search and filter End -->
 
 <!-- Carousel Start -->

@@ -19,10 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <!-- Imagem do Produto -->
         <div class="col-md-6 text-center">
-            <?= Html::img('@web/img/wineBottle.png', [
-                'class' => 'img-fluid w-75',
-                'alt' => 'Imagem garrafa de vinho',
-            ]) ?>
+            <?= Html::img(
+                !empty($productView->product->image_url)
+                    ? Yii::getAlias('@backendUrl') . $productView->product->image_url
+                    : Yii::getAlias('@web') . '/img/wineBottle.png',
+                [
+                    'class' => 'img-fluid w-50',
+                    'alt' => Html::encode($productView->product->name),
+                ]
+            ) ?>
         </div>
 
         <!-- Detalhes do Produto -->

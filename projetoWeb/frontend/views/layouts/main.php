@@ -38,7 +38,7 @@ $user = Yii::$app->user->identity;
         <meta content="Free HTML Templates" name="description">
 
         <!-- Favicon -->
-        <?= Html::tag('link', '', ['rel' => 'icon', 'href' => Url::to('@web/img/favicon.ico')]) ?>
+        <?= Html::tag('link', '', ['rel' => 'icon', 'href' => Url::to('@web/img/logo.png')]) ?>
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -95,9 +95,7 @@ $user = Yii::$app->user->identity;
                             </span>
                         </a>
 
-                    <?= CartWidget::widget([
-                        'versaonova' => true, // ou false, dependendo da lógica da sua aplicação
-                    ]) ?>
+                    <?= CartWidget::widget(['id' => 'cart_widget_1', 'versaonova' => true]) ?>
                 </div>
 
                 <!-- User Dropdown -->
@@ -217,7 +215,9 @@ $user = Yii::$app->user->identity;
                                     </a>
                                 <?php endif; ?>
                                 <!-- CART -->
-                                <?= CartWidget::widget() ?>
+
+                                <?= CartWidget::widget(['id' => 'cart_widget_2', 'versaonova' => false]) ?>
+
 
                             </div>
 

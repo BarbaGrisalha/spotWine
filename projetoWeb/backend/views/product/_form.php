@@ -25,24 +25,21 @@ use yii\widgets\ActiveForm;
     <?php if ($user === null) {
     throw new \yii\web\ForbiddenHttpException('Usuário não autenticado.');
     }?>
-    <?php
-    if (Yii::$app->user->can('admin')): ?>
-        <?= $form->field($model, 'producer_id')->dropDownList(
+    <?php if (Yii::$app->user->can('admin')): ?>
+    <?= $form->field($model, 'producer_id')->dropDownList(
             ArrayHelper::map(
-                User::find()
-                   // ->where(['role' => 'producer'])
-                    ->all(),
-                'id', // ID do produtor
-                'username' // Nome do produtor
+                \common\models\ProducerDetails::find()->all(), // Pegando direto da tabela correta
+                'id',  // ID correto da tabela producer_details
+                'winery_name' // Nome da vinícola, ou outro campo adequado
             ),
-            ['prompt' => 'Select Producer'] // Texto inicial
-        ) ?>
+            ['prompt' => 'Select Producer']
+    ) ?>
     <?php else: ?>
-        <!-- Campo oculto para produtores -->
-        <?= $form->field($model, 'producer_id')->hiddenInput([
-            'value' => $user->id, // Preenche com o ID do produtor logado
-        ])->label(false) ?>
+    <?= $form->field($model, 'producer_id')->hiddenInput([
+        'value' => $user->isProducer() ? $user->id : null, // Apenas se for produtor
+    ])->label(false) ?>
     <?php endif; ?>
+
 
     <?= $form->field($model, 'category_id')->dropDownList(
         ArrayHelper::map(

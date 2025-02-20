@@ -48,7 +48,7 @@ class SignupFormTest extends \Codeception\Test\Unit
         verify($mail)->instanceOf('yii\mail\MessageInterface');
         verify($mail->getTo())->arrayHasKey('some_email@example.com');
         verify($mail->getFrom())->arrayHasKey(\Yii::$app->params['supportEmail']);
-        verify($mail->getSubject())->equals('Account registration at ' . \Yii::$app->name);
+        verify($mail->getSubject())->equals('account registration at ' . \Yii::$app->name);
         verify($mail->toString())->stringContainsString($user->verification_token);
     }
 

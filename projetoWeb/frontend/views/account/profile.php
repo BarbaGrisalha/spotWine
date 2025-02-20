@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th>Endereço:</th>
                <td>--><?php //= Html::encode($consumerDetails->address) ?><!--</td>-->
             </tr>
-            
+
 
         <?php endif; ?>
     </table>

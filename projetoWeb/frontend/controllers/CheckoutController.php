@@ -10,11 +10,37 @@ use common\models\Orders;
 use common\services\MqttServices;
 use frontend\models\promocoesViewModel;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class CheckoutController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index', 'payment', 'confirmation'],
+                'rules' => [
+
+                    [
+                        'actions' => ['index', 'payment', 'confirmation'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $userId = Yii::$app->user->id;

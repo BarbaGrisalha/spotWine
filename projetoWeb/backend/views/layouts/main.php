@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var \yii\web\View $this */
 /** @var string $content */
@@ -39,6 +40,7 @@ if (Yii::$app->controller->action->id === 'login') {
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+        <?= Html::tag('link', '', ['rel' => 'icon', 'href' => Url::to('@web/img/logo.png')]) ?>
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini">
